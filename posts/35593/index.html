@@ -1,0 +1,601 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Jelech的博客">
+    <title>QT学习笔记 - Jelech的博客</title>
+    <meta name="author" content="Jelech">
+    
+        <meta name="keywords" content="博客,算法,javascript,游戏,">
+    
+    
+        <link rel="icon" href="http://www.jelech.cn/assets/images/favicon.ico">
+        <link rel="Shortcut Icon" type="image/x-icon" href="http://www.jelech.cn/assets/images/favicon.ico">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n这次任务我主要使用了QT Creator已经足够，因此就从这个开始介绍吧\n\n界面介绍\n下图是QT的主要界面。其中模式选择是我们经常在编辑和设计之间进行切换的模块，构建调试有快捷键ctrl+r(构建并运行)。输出面板会在运行/调试的时候自动跳出。\n\n我们新建一个项目。截图界面如下：\n\n这就是我们常用的一个界面了。左边是项目文件，需要增加其他文件直接右键进行设置就行。项目文件中包括了一下几大类\n\n左边的项目文件中，头文件一般会写c++文件的引用，以及一些全局变量的声明。\n\n源文件中保存了我们所有的c++文件。\n\n界面文件是我们进行画图，构建界面的地方。没错我们的界面是画出来的。\n\n还会有一个资源文件，里面保存了我们需要引用的图片文件，文档文件等等。\n右边的代码编辑模块就是我们常写代码的地方啦。请开始你的表演吧。\n\n\n\n开始构建界面\n界面的编辑需要我们进入*.ui 文件进行编辑，注意的是界面的绘画尽量不要使用代码的形式，第一是格式qt可能不认识，第二是开发效率太慢。\n\n界面开发模块的左边是一些组件，里面包含了你几乎所有需要的类型。这次的课程设计我大部分使用的是Text Browser，label，Push button。调整各种组件后，应尽量在右侧的对象/类中进行对组件的命名，这就是以后代码中你的这个组件的类的名字，方便于以后的使用。注意到右下有一些组件的属性设置。大部分时候我们对text的设置和调用最多。如何使用我们在之后代码部分进行讨论。\n右键中有个编辑样式表，打开后可以对这个组件进行一些编辑。功能都很人性化，使用方法也只是点点，大家自己探索吧。这里提醒一下，在选择背景图片的时候会发现里面没有图片，可能是你没有把图片导入到你的项目中，这时候需要你进入编辑模块里右键你的项目导入现有文件。这样才能使用图片。\n当构思完一个界面后，你需要的是进行对各个模块进行绑定。换句话说，就是需要把你自己写的程序函数和这个按钮/文字框/表/…进行绑定。 右键点击需要绑定的组件选择转到槽就可以啦。\n\n代码.组件绑定\n选择转到槽之后，qt会自动转到编辑模块中指定的void函数中，他的.h文件也会自动更新，现在你需要做的就是编辑这个函数，或者在里面进行对其他函数的调用。\n在继续讲解之前，这里贴一些QT包装好的函数。因为QT中一般使用qDebug() 进行调试，这时候他是不支持String类型的，因此在和你c++文件中进行交流时候需要进行对字符串的修改。不过不得不说，他虽然增加了许多麻烦，但是QString却比String好用不知多少倍。\n\nQString s = QString::fromStdString(String);\nQString s = QString::number(number);\nstring s = qstring.toStdString();\nint a = qstring.toInt(0,10);\nfloat a = qstring.tofloat(0,10,2);\nQFile qfile &lt;&lt; qstring.toUtf8();\n\n经常使用的就是这一些转换。这里第6条是文件输出时候要转换为utf-8，不然文件中存的都是乱码。\n然后就开始对组件的绑定了。这次课程设计中我只使用了一些绑定的方法，毕竟项目比较小。\n\n第一种是点击按钮后弹出新的窗口，一般用于主界面。我们需要修改的文件有以下几个\n\n主窗口的mainWindow.h\n引用新窗口的头文件，这里我假设选择了refund.h。在private中添加 refund *wd_name 进行声明一个指针，这样弹出的窗口就不会突然弹出又消失;\n\n主窗口的mainWindow.cpp\n在相关按钮的槽函数(就是刚刚需要自己编辑的那个void函数)下写\n12wd_name = new refund(); wd_name.show();\n这个时候就完成了对按钮和创建新窗口的绑定。但是注意，refund.h是新建了一个界面后系统自动生成的。在进行绑定之前需要完成对这个窗口的构建。\n\n\n\n第二种是点击按钮后一个文本框文字的改变，这也是我们常用的一种方法。它可以很完美的绑定上需要读取的数据，进行处理后返回数据。我们需要修改的文件有以下几个\n\n按钮/文本框的refund.cpp文件\n和主窗口的弹出新窗口类似，我们也需要在这个槽函数中进行对数据的绑定和读取。这里得说一下，在窗口新建的时候，qt已经帮我们自动生成了一些代码，其中经常使用的是ui对象，它代表的是这个窗口中所有对象的合并，可以直接通过调用ui-&gt;CtName进行获取(修改)组件的属性。假设我们在refund中用了一个label，需要让他显示字符串”hello world” 那就在函数中写\n1ui-&gt;labelName-&gt;setText(\"hello world\");\n这样在我们点击按钮后就能修改这个label中的值。相似的属性还有很多，我列举一些我使用到的，其他类型的几乎都这样使用的，如果有其他的需要可以进网站https://qtguide.ustclug.org/进行查询\n1234567ui-&gt;tableWidget-&gt;setRowCount(0);//设置表单行数为0，即初始化为空ui-&gt;tableWidget-&gt;setSortingEnabled(true);//设置表单自动排列ui-&gt;tableWidget-&gt;sortByColumn(6, Qt::AscendingOrder);//设置表单初始依据排列根据，这里根据第6列int nOldRowCount = ui-&gt;tableWidget-&gt;rowCount();//获取当前表单的行数QTableWidgetItem *itemName = new QTableWidgetItem(qstring);//将一个QString声明为表单内容ui-&gt;tableWidget-&gt;setItem(nOldRowCount, i, itemName);//设置nOldRowCount行中第i位置的内容QString s = ui-&gt;labelName-&gt;Text();//获取一个标签的文字内容\n\n\n\n\n最近要开始组队训练…因此要暂时停更了qaq   加油加油\n TO BE CONTINUE……\n","dateCreated":"2018-03-27T17:15:09+08:00","dateModified":"2018-12-01T21:38:13+08:00","datePublished":"2018-03-27T17:15:09+08:00","description":"","headline":"QT学习笔记","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://www.jelech.cn/posts/35593/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"http://www.jelech.cn/posts/35593/","keywords":"笔记, c++框架"}</script>
+    <meta name="keywords" content="笔记,c++框架">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="QT学习笔记">
+<meta property="og:url" content="http://www.jelech.cn/posts/35593/index.html">
+<meta property="og:site_name" content="Jelech的博客">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:image" content="http://www.jelech.cn/image/qtUsingNote/1.jpg">
+<meta property="og:image" content="http://www.jelech.cn/image/qtUsingNote/2.jpg">
+<meta property="og:image" content="http://www.jelech.cn/image/qtUsingNote/3.jpg">
+<meta property="og:updated_time" content="2018-12-01T13:38:13.209Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="QT学习笔记">
+<meta name="twitter:image" content="http://www.jelech.cn/image/qtUsingNote/1.jpg">
+<meta name="twitter:creator" content="@twitter">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="http://www.jelech.cn/assets/images/avatar.jpg"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
+    <!--STYLES END-->
+    
+
+    
+    <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?c3b0944d9211544bb9fe9d25ce47bac7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">Jelech的博客</a>
+    </div>
+    
+        
+            <a class="header-right-picture " href="#about">
+        
+        
+            <img class="header-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+                </a>
+                <h4 class="sidebar-profile-name">Jelech</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>putty本无树,MinGW亦非台</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/ " title="首页">
+                    
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-categories" title="分类">
+                    
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">分类</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-tags" title="标签">
+                    
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-archives" title="归档">
+                    
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/game" title="游戏">
+                    
+                        <i class="sidebar-button-icon fas fa-gamepad" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">游戏</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="#about" title="关于">
+                    
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="https://github.com/jelech" target="_blank" rel="noopener" title="GitHub">
+                    
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/mailto" title="邮箱">
+                    
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">邮箱</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            QT学习笔记
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2018-03-27T17:15:09+08:00">
+	
+		    3月 27, 2018
+    	
+    </time>
+    
+        <span>发布在 </span>
+        
+    <a class="category-link" href="/categories/学习笔记/">学习笔记</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            
+            <h1 id="table-of-contents">目录</h1><ol class="toc"><li class="toc-item toc-level-3"><a class="toc-link" href="#界面介绍"><span class="toc-text">界面介绍</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#开始构建界面"><span class="toc-text">开始构建界面</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#代码-组件绑定"><span class="toc-text">代码.组件绑定</span></a></li></ol>
+<a id="more"></a>
+<p>这次任务我主要使用了QT Creator已经足够，因此就从这个开始介绍吧</p>
+<blockquote>
+<h3 id="界面介绍"><a href="#界面介绍" class="headerlink" title="界面介绍"></a>界面介绍</h3></blockquote>
+<p>下图是QT的主要界面。其中模式选择是我们经常在编辑和设计之间进行切换的模块，构建调试有快捷键ctrl+r(构建并运行)。输出面板会在运行/调试的时候自动跳出。</p>
+<p><img src="/image/qtUsingNote/1.jpg" alt=""></p>
+<p>我们新建一个项目。截图界面如下：</p>
+<p><img src="/image/qtUsingNote/2.jpg" alt=""></p>
+<p>这就是我们常用的一个界面了。左边是项目文件，需要增加其他文件直接右键进行设置就行。项目文件中包括了一下几大类</p>
+<ul>
+<li><p>左边的项目文件中，头文件一般会写c++文件的引用，以及一些全局变量的声明。</p>
+</li>
+<li><p>源文件中保存了我们所有的c++文件。</p>
+</li>
+<li><p>界面文件是我们进行画图，构建界面的地方。没错我们的界面是画出来的。</p>
+</li>
+<li><p>还会有一个资源文件，里面保存了我们需要引用的图片文件，文档文件等等。</p>
+<p>右边的代码编辑模块就是我们常写代码的地方啦。请开始你的表演吧。</p>
+</li>
+</ul>
+<blockquote>
+<h3 id="开始构建界面"><a href="#开始构建界面" class="headerlink" title="开始构建界面"></a>开始构建界面</h3></blockquote>
+<p>界面的编辑需要我们进入*.ui 文件进行编辑，注意的是界面的绘画尽量不要使用代码的形式，第一是格式qt可能不认识，第二是开发效率太慢。</p>
+<p><img src="/image/qtUsingNote/3.jpg" alt="3"></p>
+<p>界面开发模块的左边是一些组件，里面包含了你几乎所有需要的类型。这次的课程设计我大部分使用的是Text Browser，label，Push button。调整各种组件后，应尽量在右侧的对象/类中进行对组件的命名，这就是以后代码中你的这个组件的类的名字，方便于以后的使用。注意到右下有一些组件的属性设置。大部分时候我们对text的设置和调用最多。如何使用我们在之后代码部分进行讨论。</p>
+<p>右键中有个编辑样式表，打开后可以对这个组件进行一些编辑。功能都很人性化，使用方法也只是点点，大家自己探索吧。这里提醒一下，在选择背景图片的时候会发现里面没有图片，可能是你没有把图片导入到你的项目中，这时候需要你进入<em>编辑模块</em>里右键你的项目导入现有文件。这样才能使用图片。</p>
+<p>当构思完一个界面后，你需要的是进行对各个模块进行绑定。换句话说，就是需要把你自己写的程序函数和这个按钮/文字框/表/…进行绑定。 右键点击需要绑定的组件选择<em>转到槽</em>就可以啦。</p>
+<blockquote>
+<h3 id="代码-组件绑定"><a href="#代码-组件绑定" class="headerlink" title="代码.组件绑定"></a>代码.组件绑定</h3></blockquote>
+<p>选择转到槽之后，qt会自动转到编辑模块中指定的void函数中，他的.h文件也会自动更新，现在你需要做的就是编辑这个函数，或者在里面进行对其他函数的调用。</p>
+<p>在继续讲解之前，这里贴一些QT包装好的函数。因为QT中一般使用qDebug() 进行调试，这时候他是不支持String类型的，因此在和你c++文件中进行<em>交流</em>时候需要进行对字符串的修改。不过不得不说，他虽然增加了许多麻烦，但是QString却比String好用不知多少倍。</p>
+<ol>
+<li><em>QString s = QString::fromStdString(String);</em></li>
+<li><em>QString s = QString::number(number);</em></li>
+<li><em>string s = qstring.toStdString();</em></li>
+<li><em>int a = qstring.toInt(0,10);</em></li>
+<li><em>float a = qstring.tofloat(0,10,2);</em></li>
+<li>QFile qfile &lt;&lt; qstring.toUtf8();</li>
+</ol>
+<p>经常使用的就是这一些转换。这里第6条是文件输出时候要转换为utf-8，不然文件中存的都是乱码。</p>
+<p>然后就开始对组件的绑定了。这次课程设计中我只使用了一些绑定的方法，毕竟项目比较小。</p>
+<ol>
+<li><p>第一种是点击按钮后弹出新的窗口，一般用于主界面。我们需要修改的文件有以下几个</p>
+<ul>
+<li><p>主窗口的mainWindow.h</p>
+<p>引用新窗口的头文件，这里我假设选择了refund.h。在private中添加 refund *wd_name 进行声明一个指针，这样弹出的窗口就不会突然弹出又消失;</p>
+</li>
+<li><p>主窗口的mainWindow.cpp</p>
+<p>在相关按钮的槽函数(就是刚刚需要自己编辑的那个void函数)下写</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">wd_name = <span class="keyword">new</span> refund(); </span><br><span class="line">wd_name.show();</span><br></pre></td></tr></table></figure>
+<p>这个时候就完成了对按钮和创建新窗口的绑定。但是注意，refund.h是新建了一个界面后系统自动生成的。在进行绑定之前需要完成对这个窗口的构建。</p>
+</li>
+</ul>
+</li>
+<li><p>第二种是点击按钮后一个文本框文字的改变，这也是我们常用的一种方法。它可以很完美的绑定上需要读取的数据，进行处理后返回数据。我们需要修改的文件有以下几个</p>
+<ul>
+<li><p>按钮/文本框的refund.cpp文件</p>
+<p>和主窗口的弹出新窗口类似，我们也需要在这个槽函数中进行对数据的绑定和读取。这里得说一下，在窗口新建的时候，qt已经帮我们自动生成了一些代码，其中经常使用的是ui对象，它代表的是这个窗口中所有对象的合并，可以直接通过调用ui-&gt;CtName进行获取(修改)组件的属性。假设我们在refund中用了一个label，需要让他显示字符串”hello world” 那就在函数中写</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ui-&gt;labelName-&gt;setText(<span class="string">"hello world"</span>);</span><br></pre></td></tr></table></figure>
+<p>这样在我们点击按钮后就能修改这个label中的值。相似的属性还有很多，我列举一些我使用到的，其他类型的几乎都这样使用的，如果有其他的需要可以进网站<a href="https://qtguide.ustclug.org/" target="_blank" rel="noopener">https://qtguide.ustclug.org/</a>进行查询</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">ui-&gt;tableWidget-&gt;setRowCount(<span class="number">0</span>);<span class="comment">//设置表单行数为0，即初始化为空</span></span><br><span class="line">ui-&gt;tableWidget-&gt;setSortingEnabled(<span class="literal">true</span>);<span class="comment">//设置表单自动排列</span></span><br><span class="line">ui-&gt;tableWidget-&gt;sortByColumn(<span class="number">6</span>, Qt::AscendingOrder);<span class="comment">//设置表单初始依据排列根据，这里根据第6列</span></span><br><span class="line"><span class="keyword">int</span> nOldRowCount = ui-&gt;tableWidget-&gt;rowCount();<span class="comment">//获取当前表单的行数</span></span><br><span class="line">QTableWidgetItem *itemName = <span class="keyword">new</span> QTableWidgetItem(qstring);<span class="comment">//将一个QString声明为表单内容</span></span><br><span class="line">ui-&gt;tableWidget-&gt;setItem(nOldRowCount, i, itemName);<span class="comment">//设置nOldRowCount行中第i位置的内容</span></span><br><span class="line">QString s = ui-&gt;labelName-&gt;Text();<span class="comment">//获取一个标签的文字内容</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+</li>
+</ol>
+<p>最近要开始组队训练…因此要暂时停更了qaq   加油加油</p>
+<p> TO BE CONTINUE……</p>
+
+            
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">标签</span><br>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/c-框架/">c++框架</a> <a class="tag tag--primary tag--small t-link" href="/tags/笔记/">笔记</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/14339/" data-tooltip="洛谷天梯A组" aria-label="上一篇: 洛谷天梯A组">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="分享">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/35593/" title="分享到 Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/35593/" title="分享到 Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/35593/" title="分享到 Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <style media="screen">.v .vwrap{overflow: inherit;}</style>
+                <div id="vcomment"></div>
+                <a href="posts/35593/#vcomment" class="disqus-comment-count"></a>
+                <span class="valine-comment-count" data-xid="posts/35593/"></span>
+                <span> Comment</span>
+            
+        
+    </div>
+</article>
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2018 Jelech. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/14339/" data-tooltip="洛谷天梯A组" aria-label="上一篇: 洛谷天梯A组">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="分享">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/35593/" title="分享到 Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/35593/" title="分享到 Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/35593/" title="分享到 Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+    <i id="btn-close-shareoptions" class="fa fa-times"></i>
+    <ul class="share-options">
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/35593/">
+                    <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/35593/">
+                    <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/35593/">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+        
+            <h4 id="about-card-name">Jelech</h4>
+        
+            <div id="about-card-bio"><p>putty本无树,MinGW亦非台</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br>
+                <p>在校大学生一枚</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br>
+                CHINA.HRB.STU
+            </div>
+        
+
+        
+            <div id="about-card-job">
+                <i class="fa fa-envelope"></i>
+                <br>
+                jelech@hotmail.com
+            </div>
+        
+
+        
+            <div id="about-card-job">
+                <i class="fa fa-phone-square"></i>
+                <br>
+                18.......6
+            </div>
+        
+
+
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js" charset="utf-8"></script>
+        <script src="//unpkg.com/valine@latest/dist/Valine.min.js" charset="utf-8"></script>
+        <script>
+            var notify = 'false' == true ? true : false;
+            var verify = 'false' == true ? true : false;
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1;
+            });
+
+            guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+            window.valine = new Valine({
+                el:'#vcomment',
+                notify:notify,
+                verify:verify,
+                appId:'rwwVeUe3kpfbc0OkoxmgnTKM-gzGzoHsz',
+                appKey:'FcDDW6bpbs5QmH3A1B2Aqmae',
+                placeholder:'Just so so',
+                avatar:'mm',
+                guest_info:guest_info,
+                pageSize:'10'
+            });
+        </script>
+    
+
+
+
+    </body>
+</html>

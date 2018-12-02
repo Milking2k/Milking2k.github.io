@@ -1,0 +1,649 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Jelech的博客">
+    <title>mysql学习笔记 - Jelech的博客</title>
+    <meta name="author" content="Jelech">
+    
+        <meta name="keywords" content="博客,算法,javascript,游戏,">
+    
+    
+        <link rel="icon" href="http://www.jelech.cn/assets/images/favicon.ico">
+        <link rel="Shortcut Icon" type="image/x-icon" href="http://www.jelech.cn/assets/images/favicon.ico">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\nmysql设计关键词\n键：一个识别每一个特定用户的字段。\n外键：一个表引用了其他表中的主键，那么这个字段就是外键。\n模式：数据库整套表格的完整设计蓝图。\n关系：两个表格数据之间的关系，可以通过外键表达。\n\n设计时需要注意\n每个对象应该有自己的表。\n避免保存冗余的数据，比如相同的数据保存在了多个表当中（当然外键不算）。\n考虑耦合性，减少空属性的出现。如果出现了，尝试拆成多个表。\n使用原子列值，每一行的每个属性只储存一个数据。\n键要选择的有意义。\n考虑需要询问数据库时的问题，比如多值、多层查询时。\n注意表格的大体分类：描述世界的简单表、描述关系的关联表。\n\nmysql数据库的创建12345678910111213141516#----临时笔记处----##修改密码，注意mysql5.7中user表中密码改为了authentication_string    update mysql.user set authentication_string1=password(&apos;123456&apos;) where User=&quot;jelech&quot; and Host=&quot;localhost&quot;;    # 密码进入数据库，创建新数据库，授权新用户，刷新改动，设置根密码(初始使用一次就行)    mysql -u root -p  \tcreate database blog_db charset=utf8;    grant all on db_music.* to jelech@localhost identified by &quot;123456&quot;;    flush privileges;    set password for root@localhost=password(&quot;abccba&quot;);    # 修改表格格式信息    ALTER TABLE userInfo MODIFY password VARCHAR(100) NOT NULL;    # 删除表中所有内容，以及索引 用这种方法相当于重载了表格内容，全新的！    truncate table wp_comments;\n登录msyql -h hostname -u username -p\neg.msyql -u root -p\n\n-h 指定希望连接的主机，默认为localhost\n-u 指定用户名称，默认为登录操作系统的用户名\n-p 使用一个密码来连接他\n\n创建数据库create database dbname;\neg.create database db_music;\nmysql权限问题\n最少权限原则，一个用户不应该拥有超过他的功能的多余权限。\ngrant revoke 授予和收回权限\n\n授予权限12345grant privileges # 用逗号分开的权限：all, select, create...on item_name # 可控制的部分:*.*, item_name.*, item_name.th_tableto user_name # 授予一个用户：可附加通过密码 identified by &apos;password&apos;[require ssl_options] # 决定用户连接时，是否应该通过加密套接字连接[with grant potion] # 决定用户是否可以授权给别自己拥有的权限。\nwith语句也可以决定这个用户每小时可以访问的数量\nMAX_QUERIES_PER_HOUR n MAX_UPDATES_PER_HOUR n MAX_CONNECTIONS_PER_HOUR n\n这个在共享系统上限制单个用户的负载非常有用。\n\nmysql中分为3个基本权限：适用一般用户权限、适用赋予管理员权限、几个特定权限。mysql中存放了所有用户名、密码的地方，这里的访问权限不应随意授予。\n\n用户的权限\nselect：从表中选择行\ninsert：插入新行\nudpate：修改表行中值\ndelete：删除表中的行\nindex：创建和拖动特定表的索引\nalter：修改表的结构，比如添加列、重名列|表、修改列的数据类型…\ncreate：新建数据库|表，如果grant授予的特定的数据库，则他们只能创建该数据库|表，也就是他们需要先删除\ndrop：删除数据库和表\n\n管理员的权限\ncreate temporary tables：允许使用temporary关键字\nfile：允许将数据从文件中读入表、输出到文件\nlock table：允许使用lock table语句\nprocess：允许管理员查看属于所有用户的服务器进程\nreload：允许管理员重新载入授权表、清空授权、主机、日志和表\nreplication client：允许复制主机、使用show status\nreplication slave：允许复制从服务器连接到主服务器\nshow databases：允许查看所有数据库列表，没有这个权限，用户就只能看到他们自己的\nshutdown：允许关闭mysql服务器\nsuper：允许关闭属于任何用户的线程\n\n特别权限\nall：授予以上所有权限\nusage：不授予权限，只允许用户登录，但不能进行任何操作。这样做的目的是为了以后授予权限\n\n收回权限123revoke privileges # 收回某种权限on item # 从某个数据库或者表中from username #从一个用户中\n其余部分和授权相似。\n使用数据库use db_name\n在登录后应切换到需要使用的数据库\n使用数据库表1234567create table table_name(\t# 字段属性  table_id int auto_increment not null primary key,  table_name varchar(255) not null,  table_float float(6,2),  #...unsigned意思是他只能是0或者一个正数)\n\ntext：该类型用于表示更长的数据，比如文章\nzerofill：该属性可以让数字类型添加前导0。\n\n数据类型\n整数数据类型\n\ntinyint(1)：非常小的整数\nbit、bool：同tinyint\nsmallint(2)：小整形数\nmediumint(3)：中整形数\nint(4)：一般整数\ninteger：同int\nbigint(8)：大整形数\n\n\n浮点数据类型\n\nfloat(精度)：可用于指定单精度和双精度的浮点数\nfloat[(M,D)]：指定显示宽度和小数位数===float(4)\ndouble[(M,D)]：指定了显示宽度和小数位数===float(8)\nduoble：同上\nprecision[(M,D)]\nreal[(M,D)]：同上\ndecimal[(M [,D])]：以char储存的浮点数\nnumeric\\dec\\fixed：同上\n\n\n日期和时间类型值得注意的是如果不手动设置，特定行中的timestamp将被修改为最近修改改行的日期和时间，这对事物记录很有帮助\ndate：一个日期，以YYYY-MM-DD格式\ntime：一个时间，以HH:MM:SS格式\ndatetime：日期和时间，以YYYY-MM-DD HH:MM:SS格式\ntimestamp[(M)]：时间标签，在处理报告中有意义\nyear[(2/4)]：可指定显示格式地显示年份\n\n\n字符串类型\nchar：小段文本，varchar为可变长度的类型，指定的是每种类型的宽度\ntext、blob：大小可变，分别适用于长文本、二进制数据(二进制是万金油)。text区分大小写，blob不区分大小写\nset、enum：set最大可以有64个元素，列值必须来自其中。enum枚举最大65535个元素，同时只能有一个为null或者为枚举中的值\n\n\n\n查看数据库show tables：显示当前用户的数据库下的所有表。\nshow databases：显示当前用户的所有数据库。\ndescibe table_name：也作desc，显示表格的结构。\n创建索引\n索引有利于提高数据库的查询速度\n\ncreate index index_name on table_name (index_col_name ...)\n使用mysql数据库ss\n","dateCreated":"2018-11-30T10:09:33+08:00","dateModified":"2018-12-02T09:39:36+08:00","datePublished":"2018-11-30T10:09:33+08:00","description":"","headline":"mysql学习笔记","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://www.jelech.cn/posts/51482/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"http://www.jelech.cn/posts/51482/","keywords":"笔记, mysql"}</script>
+    <meta name="keywords" content="笔记,mysql">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="mysql学习笔记">
+<meta property="og:url" content="http://www.jelech.cn/posts/51482/index.html">
+<meta property="og:site_name" content="Jelech的博客">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2018-12-02T01:39:36.170Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="mysql学习笔记">
+<meta name="twitter:creator" content="@twitter">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="http://www.jelech.cn/assets/images/avatar.jpg"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
+    <!--STYLES END-->
+    
+
+    
+    <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?c3b0944d9211544bb9fe9d25ce47bac7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">Jelech的博客</a>
+    </div>
+    
+        
+            <a class="header-right-picture " href="#about">
+        
+        
+            <img class="header-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+                </a>
+                <h4 class="sidebar-profile-name">Jelech</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>putty本无树,MinGW亦非台</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/ " title="首页">
+                    
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-categories" title="分类">
+                    
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">分类</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-tags" title="标签">
+                    
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-archives" title="归档">
+                    
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/game" title="游戏">
+                    
+                        <i class="sidebar-button-icon fas fa-gamepad" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">游戏</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="#about" title="关于">
+                    
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="https://github.com/jelech" target="_blank" rel="noopener" title="GitHub">
+                    
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/mailto" title="邮箱">
+                    
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">邮箱</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            mysql学习笔记
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2018-11-30T10:09:33+08:00">
+	
+		    11月 30, 2018
+    	
+    </time>
+    
+        <span>发布在 </span>
+        
+    <a class="category-link" href="/categories/学习笔记/">学习笔记</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            
+            <h1 id="table-of-contents">目录</h1><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#mysql设计"><span class="toc-text">mysql设计</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#关键词"><span class="toc-text">关键词</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#设计时需要注意"><span class="toc-text">设计时需要注意</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#mysql数据库的创建"><span class="toc-text">mysql数据库的创建</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#登录"><span class="toc-text">登录</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#创建数据库"><span class="toc-text">创建数据库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#mysql权限问题"><span class="toc-text">mysql权限问题</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#授予权限"><span class="toc-text">授予权限</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#with语句也可以"><span class="toc-text">with语句也可以</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#用户的权限"><span class="toc-text">用户的权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#管理员的权限"><span class="toc-text">管理员的权限</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#特别权限"><span class="toc-text">特别权限</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#收回权限"><span class="toc-text">收回权限</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用数据库"><span class="toc-text">使用数据库</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#使用数据库表"><span class="toc-text">使用数据库表</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#数据类型"><span class="toc-text">数据类型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#查看数据库"><span class="toc-text">查看数据库</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#创建索引"><span class="toc-text">创建索引</span></a></li></ol></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#使用mysql数据库"><span class="toc-text">使用mysql数据库</span></a></li></ol>
+<a id="more"></a>
+<h1 id="mysql设计"><a href="#mysql设计" class="headerlink" title="mysql设计"></a>mysql设计</h1><h2 id="关键词"><a href="#关键词" class="headerlink" title="关键词"></a>关键词</h2><ul>
+<li>键：一个识别每一个特定用户的字段。</li>
+<li>外键：一个表引用了其他表中的主键，那么这个字段就是外键。</li>
+<li>模式：数据库整套表格的完整设计蓝图。</li>
+<li>关系：两个表格数据之间的关系，可以通过外键表达。</li>
+</ul>
+<h2 id="设计时需要注意"><a href="#设计时需要注意" class="headerlink" title="设计时需要注意"></a>设计时需要注意</h2><ul>
+<li>每个对象应该有自己的表。</li>
+<li>避免保存冗余的数据，比如相同的数据保存在了多个表当中（当然外键不算）。</li>
+<li>考虑耦合性，减少空属性的出现。如果出现了，尝试拆成多个表。</li>
+<li>使用原子列值，每一行的每个属性只储存一个数据。</li>
+<li>键要选择的有意义。</li>
+<li>考虑需要询问数据库时的问题，比如多值、多层查询时。</li>
+<li>注意表格的大体分类：描述世界的简单表、描述关系的关联表。</li>
+</ul>
+<h1 id="mysql数据库的创建"><a href="#mysql数据库的创建" class="headerlink" title="mysql数据库的创建"></a>mysql数据库的创建</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">#----临时笔记处----#</span><br><span class="line">#修改密码，注意mysql5.7中user表中密码改为了authentication_string</span><br><span class="line">    update mysql.user set authentication_string1=password(&apos;123456&apos;) where User=&quot;jelech&quot; and Host=&quot;localhost&quot;;</span><br><span class="line"></span><br><span class="line">    # 密码进入数据库，创建新数据库，授权新用户，刷新改动，设置根密码(初始使用一次就行)</span><br><span class="line">    mysql -u root -p</span><br><span class="line">  	create database blog_db charset=utf8;</span><br><span class="line">    grant all on db_music.* to jelech@localhost identified by &quot;123456&quot;;</span><br><span class="line">    flush privileges;</span><br><span class="line">    set password for root@localhost=password(&quot;abccba&quot;);</span><br><span class="line"></span><br><span class="line">    # 修改表格格式信息</span><br><span class="line">    ALTER TABLE userInfo MODIFY password VARCHAR(100) NOT NULL;</span><br><span class="line"></span><br><span class="line">    # 删除表中所有内容，以及索引 用这种方法相当于重载了表格内容，全新的！</span><br><span class="line">    truncate table wp_comments;</span><br></pre></td></tr></table></figure>
+<h2 id="登录"><a href="#登录" class="headerlink" title="登录"></a>登录</h2><p><code>msyql -h hostname -u username -p</code></p>
+<p>eg.<code>msyql -u root -p</code></p>
+<ul>
+<li>-h 指定希望连接的主机，默认为localhost</li>
+<li>-u 指定用户名称，默认为登录操作系统的用户名</li>
+<li>-p 使用一个密码来连接他</li>
+</ul>
+<h2 id="创建数据库"><a href="#创建数据库" class="headerlink" title="创建数据库"></a>创建数据库</h2><p><code>create database dbname;</code></p>
+<p>eg.<code>create database db_music;</code></p>
+<h2 id="mysql权限问题"><a href="#mysql权限问题" class="headerlink" title="mysql权限问题"></a>mysql权限问题</h2><ul>
+<li>最少权限原则，一个用户不应该拥有超过他的功能的多余权限。</li>
+<li><code>grant</code> <code>revoke</code> 授予和收回权限</li>
+</ul>
+<h2 id="授予权限"><a href="#授予权限" class="headerlink" title="授予权限"></a>授予权限</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">grant privileges # 用逗号分开的权限：all, select, create...</span><br><span class="line">on item_name # 可控制的部分:*.*, item_name.*, item_name.th_table</span><br><span class="line">to user_name # 授予一个用户：可附加通过密码 identified by &apos;password&apos;</span><br><span class="line">[require ssl_options] # 决定用户连接时，是否应该通过加密套接字连接</span><br><span class="line">[with grant potion] # 决定用户是否可以授权给别自己拥有的权限。</span><br></pre></td></tr></table></figure>
+<h3 id="with语句也可以"><a href="#with语句也可以" class="headerlink" title="with语句也可以"></a>with语句也可以</h3><p>决定这个用户每小时可以访问的数量</p>
+<p><code>MAX_QUERIES_PER_HOUR n</code> <code>MAX_UPDATES_PER_HOUR n</code> <code>MAX_CONNECTIONS_PER_HOUR n</code></p>
+<p>这个在共享系统上限制单个用户的负载非常有用。</p>
+<blockquote>
+<p>mysql中分为3个基本权限：适用一般用户权限、适用赋予管理员权限、几个特定权限。<br>mysql中存放了所有用户名、密码的地方，这里的访问权限不应随意授予。</p>
+</blockquote>
+<h3 id="用户的权限"><a href="#用户的权限" class="headerlink" title="用户的权限"></a>用户的权限</h3><ul>
+<li>select：从表中选择行</li>
+<li>insert：插入新行</li>
+<li>udpate：修改表行中值</li>
+<li>delete：删除表中的行</li>
+<li>index：创建和拖动特定表的索引</li>
+<li>alter：修改表的结构，比如添加列、重名列|表、修改列的数据类型…</li>
+<li>create：新建数据库|表，如果grant授予的特定的数据库，则他们只能创建该数据库|表，也就是他们需要先删除</li>
+<li>drop：删除数据库和表</li>
+</ul>
+<h3 id="管理员的权限"><a href="#管理员的权限" class="headerlink" title="管理员的权限"></a>管理员的权限</h3><ul>
+<li>create temporary tables：允许使用temporary关键字</li>
+<li>file：允许将数据从文件中读入表、输出到文件</li>
+<li>lock table：允许使用lock table语句</li>
+<li>process：允许管理员查看属于所有用户的服务器进程</li>
+<li>reload：允许管理员重新载入授权表、清空授权、主机、日志和表</li>
+<li>replication client：允许复制主机、使用show status</li>
+<li>replication slave：允许复制从服务器连接到主服务器</li>
+<li>show databases：允许查看所有数据库列表，没有这个权限，用户就只能看到他们自己的</li>
+<li>shutdown：允许关闭mysql服务器</li>
+<li>super：允许关闭属于任何用户的线程</li>
+</ul>
+<h3 id="特别权限"><a href="#特别权限" class="headerlink" title="特别权限"></a>特别权限</h3><ul>
+<li>all：授予以上所有权限</li>
+<li>usage：不授予权限，只允许用户登录，但不能进行任何操作。这样做的目的是为了以后授予权限</li>
+</ul>
+<h2 id="收回权限"><a href="#收回权限" class="headerlink" title="收回权限"></a>收回权限</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">revoke privileges # 收回某种权限</span><br><span class="line">on item # 从某个数据库或者表中</span><br><span class="line">from username #从一个用户中</span><br></pre></td></tr></table></figure>
+<p>其余部分和授权相似。</p>
+<h2 id="使用数据库"><a href="#使用数据库" class="headerlink" title="使用数据库"></a>使用数据库</h2><p><code>use db_name</code></p>
+<p>在登录后应切换到需要使用的数据库</p>
+<h2 id="使用数据库表"><a href="#使用数据库表" class="headerlink" title="使用数据库表"></a>使用数据库表</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">create table table_name(</span><br><span class="line">	# 字段属性</span><br><span class="line">  table_id int auto_increment not null primary key,</span><br><span class="line">  table_name varchar(255) not null,</span><br><span class="line">  table_float float(6,2),</span><br><span class="line">  #...unsigned意思是他只能是0或者一个正数</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>text：该类型用于表示更长的数据，比如文章</li>
+<li>zerofill：该属性可以让数字类型添加前导0。</li>
+</ul>
+<h3 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h3><ol>
+<li><p>整数数据类型</p>
+<ul>
+<li>tinyint(1)：非常小的整数</li>
+<li>bit、bool：同tinyint</li>
+<li>smallint(2)：小整形数</li>
+<li>mediumint(3)：中整形数</li>
+<li>int(4)：一般整数</li>
+<li>integer：同int</li>
+<li>bigint(8)：大整形数</li>
+</ul>
+</li>
+<li><p>浮点数据类型</p>
+<ul>
+<li>float(精度)：可用于指定单精度和双精度的浮点数</li>
+<li>float[(M,D)]：指定显示宽度和小数位数===float(4)</li>
+<li>double[(M,D)]：指定了显示宽度和小数位数===float(8)</li>
+<li>duoble：同上</li>
+<li>precision[(M,D)]</li>
+<li>real[(M,D)]：同上</li>
+<li>decimal[(M [,D])]：以char储存的浮点数</li>
+<li>numeric\dec\fixed：同上</li>
+</ul>
+</li>
+<li>日期和时间类型<em>值得注意的是如果不手动设置，特定行中的timestamp将被修改为最近修改改行的日期和时间，这对事物记录很有帮助</em><ul>
+<li>date：一个日期，以YYYY-MM-DD格式</li>
+<li>time：一个时间，以HH:MM:SS格式</li>
+<li>datetime：日期和时间，以YYYY-MM-DD HH:MM:SS格式</li>
+<li>timestamp[(M)]：时间标签，在处理报告中有意义</li>
+<li>year[(2/4)]：可指定显示格式地显示年份</li>
+</ul>
+</li>
+<li>字符串类型<ul>
+<li>char：小段文本，varchar为可变长度的类型，指定的是每种类型的宽度</li>
+<li>text、blob：大小可变，分别适用于长文本、二进制数据(<em>二进制是万金油</em>)。text区分大小写，blob不区分大小写</li>
+<li>set、enum：set最大可以有64个元素，列值必须来自其中。enum枚举最大65535个元素，同时只能有一个为null或者为枚举中的值</li>
+</ul>
+</li>
+</ol>
+<h3 id="查看数据库"><a href="#查看数据库" class="headerlink" title="查看数据库"></a>查看数据库</h3><p><code>show tables</code>：显示当前用户的数据库下的所有表。</p>
+<p><code>show databases</code>：显示当前用户的所有数据库。</p>
+<p><code>descibe table_name</code>：也作<em>desc</em>，显示表格的结构。</p>
+<h3 id="创建索引"><a href="#创建索引" class="headerlink" title="创建索引"></a>创建索引</h3><blockquote>
+<p>索引有利于提高数据库的查询速度</p>
+</blockquote>
+<p><code>create index index_name on table_name (index_col_name ...)</code></p>
+<h1 id="使用mysql数据库"><a href="#使用mysql数据库" class="headerlink" title="使用mysql数据库"></a>使用mysql数据库</h1><p>ss</p>
+
+            
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">标签</span><br>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/mysql/">mysql</a> <a class="tag tag--primary tag--small t-link" href="/tags/笔记/">笔记</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/65518/" data-tooltip="ACM总结" aria-label="下一篇: ACM总结">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="分享">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/51482/" title="分享到 Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/51482/" title="分享到 Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/51482/" title="分享到 Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <style media="screen">.v .vwrap{overflow: inherit;}</style>
+                <div id="vcomment"></div>
+                <a href="posts/51482/#vcomment" class="disqus-comment-count"></a>
+                <span class="valine-comment-count" data-xid="posts/51482/"></span>
+                <span> Comment</span>
+            
+        
+    </div>
+</article>
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2018 Jelech. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/65518/" data-tooltip="ACM总结" aria-label="下一篇: ACM总结">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="分享">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/51482/" title="分享到 Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/51482/" title="分享到 Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/51482/" title="分享到 Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+    <i id="btn-close-shareoptions" class="fa fa-times"></i>
+    <ul class="share-options">
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/51482/">
+                    <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/51482/">
+                    <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/51482/">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+        
+            <h4 id="about-card-name">Jelech</h4>
+        
+            <div id="about-card-bio"><p>putty本无树,MinGW亦非台</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br>
+                <p>在校大学生一枚</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br>
+                CHINA.HRB.STU
+            </div>
+        
+
+        
+            <div id="about-card-job">
+                <i class="fa fa-envelope"></i>
+                <br>
+                jelech@hotmail.com
+            </div>
+        
+
+        
+            <div id="about-card-job">
+                <i class="fa fa-phone-square"></i>
+                <br>
+                18.......6
+            </div>
+        
+
+
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js" charset="utf-8"></script>
+        <script src="//unpkg.com/valine@latest/dist/Valine.min.js" charset="utf-8"></script>
+        <script>
+            var notify = 'false' == true ? true : false;
+            var verify = 'false' == true ? true : false;
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1;
+            });
+
+            guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+            window.valine = new Valine({
+                el:'#vcomment',
+                notify:notify,
+                verify:verify,
+                appId:'rwwVeUe3kpfbc0OkoxmgnTKM-gzGzoHsz',
+                appKey:'FcDDW6bpbs5QmH3A1B2Aqmae',
+                placeholder:'Just so so',
+                avatar:'mm',
+                guest_info:guest_info,
+                pageSize:'10'
+            });
+        </script>
+    
+
+
+
+    </body>
+</html>

@@ -1,0 +1,552 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Jelech的博客">
+    <title>释放囚犯 - Jelech的博客</title>
+    <meta name="author" content="Jelech">
+    
+        <meta name="keywords" content="博客,算法,javascript,游戏,">
+    
+    
+        <link rel="icon" href="http://www.jelech.cn/assets/images/favicon.ico">
+        <link rel="Shortcut Icon" type="image/x-icon" href="http://www.jelech.cn/assets/images/favicon.ico">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\nBribe the prisoners （2009 Round 1C C）(区间DP)\n别找了…要科学上网的\nLarge dataset\n1 ≤ P ≤ 100001 ≤ Q ≤ 100\nSample\n\n\nInput28 1320 33 6 14\n\n\nOutputCase #1: 7Case #2: 35\n\n题意\n连续的P个牢房（单个囚犯）中需要释放Q个囚犯，每次释放，有连接的囚犯都需要给1金币（若中间断开则两边不连接）。求释放Q个囚犯最少金币？\n\n题解\n因为每次释放i位置的囚犯时，包括此时所需的金币数量，释放i左侧部分所需的金币总数，释放右侧部分所需的金币总数。这里给出dp[i][j]:=将A[i]号囚犯到A[j]号囚犯的连续部分里的所有囚犯都释放时（i到j中没有其他需要释放的囚犯）所需的最少金币总数。\n\n代码1234567891011121314151617181920212223242526272829303132333435363738394041#include &lt;bits/stdc++.h&gt;using namespace std;#define MAX_Q 100#define MAX_P 1e4int P,Q,A[MAX_Q+7];int dp[MAX_Q+7][MAX_Q+7];void solve()&#123;\tA[0]=0;\tA[Q+1] = P+1;\t//init\tfor (int i = 0; i &lt;= Q; ++i)\t&#123;\t\tdp[i][i+1] = 0;\t&#125;\tfor (int w = 2; w &lt;= Q+1; ++w)\t&#123;\t\tfor (int i = 0; i + w &lt;= Q+1; ++i)\t\t&#123;\t\t\tint j = i+w,t=INT_MAX;\t\t\tfor (int k = i+1; k &lt; j; ++k)\t\t\t&#123;\t\t\t\tt = min(t,dp[i][k]+dp[k][j]);\t\t\t&#125;\t\t\tdp[i][j] = t+A[j]-A[i]-2;\t\t&#125;\t&#125;\tprintf(\"%d\\n\", dp[0][Q+1]);&#125;int main(int argc, char const *argv[])&#123;\twhile(scanf(\"%d%d\", &amp;P, &amp;Q))\t&#123;\t\tfor (int i = 1; i &lt;= Q; ++i)\t\t&#123;\t\t\tscanf(\"%d\",&amp;A[i]);\t\t&#125;\t\tsolve();\t&#125;\treturn 0;&#125;\n","dateCreated":"2018-05-09T21:15:31+08:00","dateModified":"2018-12-02T09:22:39+08:00","datePublished":"2018-05-09T21:15:31+08:00","description":"","headline":"释放囚犯","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://www.jelech.cn/posts/30324/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"http://www.jelech.cn/posts/30324/","keywords":"刷题, acm"}</script>
+    <meta name="keywords" content="刷题,acm">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="释放囚犯">
+<meta property="og:url" content="http://www.jelech.cn/posts/30324/index.html">
+<meta property="og:site_name" content="Jelech的博客">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2018-12-02T01:22:39.962Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="释放囚犯">
+<meta name="twitter:creator" content="@twitter">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="http://www.jelech.cn/assets/images/avatar.jpg"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
+    <!--STYLES END-->
+    
+
+    
+    <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?c3b0944d9211544bb9fe9d25ce47bac7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">Jelech的博客</a>
+    </div>
+    
+        
+            <a class="header-right-picture " href="#about">
+        
+        
+            <img class="header-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+                </a>
+                <h4 class="sidebar-profile-name">Jelech</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>putty本无树,MinGW亦非台</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/ " title="首页">
+                    
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-categories" title="分类">
+                    
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">分类</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-tags" title="标签">
+                    
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-archives" title="归档">
+                    
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/game" title="游戏">
+                    
+                        <i class="sidebar-button-icon fas fa-gamepad" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">游戏</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="#about" title="关于">
+                    
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="https://github.com/jelech" target="_blank" rel="noopener" title="GitHub">
+                    
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/mailto" title="邮箱">
+                    
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">邮箱</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            释放囚犯
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2018-05-09T21:15:31+08:00">
+	
+		    5月 09, 2018
+    	
+    </time>
+    
+        <span>发布在 </span>
+        
+    <a class="category-link" href="/categories/ACM竞赛/">ACM竞赛</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            
+            <h1 id="table-of-contents">目录</h1><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#Bribe-the-prisoners-（2009-Round-1C-C）-区间DP"><span class="toc-text">Bribe the prisoners （2009 Round 1C C）(区间DP)</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#题意"><span class="toc-text">题意</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#题解"><span class="toc-text">题解</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#代码"><span class="toc-text">代码</span></a></li></ol></li></ol>
+<a id="more"></a>
+<h2 id="Bribe-the-prisoners-（2009-Round-1C-C）-区间DP"><a href="#Bribe-the-prisoners-（2009-Round-1C-C）-区间DP" class="headerlink" title="Bribe the prisoners （2009 Round 1C C）(区间DP)"></a>Bribe the prisoners （2009 Round 1C C）(区间DP)</h2><blockquote>
+<p><a href="">别找了…要科学上网的</a></p>
+<p>Large dataset</p>
+<p>1 ≤ <strong>P</strong> ≤ 10000<br>1 ≤ <strong>Q</strong> ≤ 100</p>
+<p>Sample</p>
+</blockquote>
+<blockquote>
+<p>Input<br>2<br>8 1<br>3<br>20 3<br>3 6 14</p>
+</blockquote>
+<blockquote>
+<p>Output<br>Case #1: 7<br>Case #2: 35</p>
+</blockquote>
+<h3 id="题意"><a href="#题意" class="headerlink" title="题意"></a>题意</h3><blockquote>
+<p>连续的P个牢房（单个囚犯）中需要释放Q个囚犯，每次释放，有连接的囚犯都需要给1金币（若中间断开则两边不连接）。求释放Q个囚犯最少金币？</p>
+</blockquote>
+<h3 id="题解"><a href="#题解" class="headerlink" title="题解"></a>题解</h3><blockquote>
+<p>因为每次释放i位置的囚犯时，包括此时所需的金币数量，释放i左侧部分所需的金币总数，释放右侧部分所需的金币总数。这里给出dp[i][j]:=将A[i]号囚犯到A[j]号囚犯的连续部分里的所有囚犯都释放时（i到j中没有其他需要释放的囚犯）所需的最少金币总数。</p>
+</blockquote>
+<h3 id="代码"><a href="#代码" class="headerlink" title="代码"></a>代码</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX_Q 100</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> MAX_P 1e4</span></span><br><span class="line"><span class="keyword">int</span> P,Q,A[MAX_Q+<span class="number">7</span>];</span><br><span class="line"><span class="keyword">int</span> dp[MAX_Q+<span class="number">7</span>][MAX_Q+<span class="number">7</span>];</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">solve</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	A[<span class="number">0</span>]=<span class="number">0</span>;</span><br><span class="line">	A[Q+<span class="number">1</span>] = P+<span class="number">1</span>;</span><br><span class="line">	<span class="comment">//init</span></span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt;= Q; ++i)</span><br><span class="line">	&#123;</span><br><span class="line">		dp[i][i+<span class="number">1</span>] = <span class="number">0</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> w = <span class="number">2</span>; w &lt;= Q+<span class="number">1</span>; ++w)</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i + w &lt;= Q+<span class="number">1</span>; ++i)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="keyword">int</span> j = i+w,t=INT_MAX;</span><br><span class="line">			<span class="keyword">for</span> (<span class="keyword">int</span> k = i+<span class="number">1</span>; k &lt; j; ++k)</span><br><span class="line">			&#123;</span><br><span class="line">				t = min(t,dp[i][k]+dp[k][j]);</span><br><span class="line">			&#125;</span><br><span class="line">			dp[i][j] = t+A[j]-A[i]<span class="number">-2</span>;</span><br><span class="line">		&#125;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%d\n"</span>, dp[<span class="number">0</span>][Q+<span class="number">1</span>]);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> <span class="keyword">const</span> *argv[])</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">	<span class="keyword">while</span>(<span class="built_in">scanf</span>(<span class="string">"%d%d"</span>, &amp;P, &amp;Q))</span><br><span class="line">	&#123;</span><br><span class="line">		<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">1</span>; i &lt;= Q; ++i)</span><br><span class="line">		&#123;</span><br><span class="line">			<span class="built_in">scanf</span>(<span class="string">"%d"</span>,&amp;A[i]);</span><br><span class="line">		&#125;</span><br><span class="line">		solve();</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+            
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">标签</span><br>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/acm/">acm</a> <a class="tag tag--primary tag--small t-link" href="/tags/刷题/">刷题</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/64946/" data-tooltip="2018第九届山东ACM省赛" aria-label="上一篇: 2018第九届山东ACM省赛">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/13833/" data-tooltip="如何安装opencv" aria-label="下一篇: 如何安装opencv">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="分享">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/30324/" title="分享到 Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/30324/" title="分享到 Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/30324/" title="分享到 Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <style media="screen">.v .vwrap{overflow: inherit;}</style>
+                <div id="vcomment"></div>
+                <a href="posts/30324/#vcomment" class="disqus-comment-count"></a>
+                <span class="valine-comment-count" data-xid="posts/30324/"></span>
+                <span> Comment</span>
+            
+        
+    </div>
+</article>
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2018 Jelech. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/64946/" data-tooltip="2018第九届山东ACM省赛" aria-label="上一篇: 2018第九届山东ACM省赛">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/13833/" data-tooltip="如何安装opencv" aria-label="下一篇: 如何安装opencv">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="分享">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/30324/" title="分享到 Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/30324/" title="分享到 Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/30324/" title="分享到 Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+    <i id="btn-close-shareoptions" class="fa fa-times"></i>
+    <ul class="share-options">
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/30324/">
+                    <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/30324/">
+                    <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/30324/">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+        
+            <h4 id="about-card-name">Jelech</h4>
+        
+            <div id="about-card-bio"><p>putty本无树,MinGW亦非台</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br>
+                <p>在校大学生一枚</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br>
+                CHINA.HRB.STU
+            </div>
+        
+
+        
+            <div id="about-card-job">
+                <i class="fa fa-envelope"></i>
+                <br>
+                jelech@hotmail.com
+            </div>
+        
+
+        
+            <div id="about-card-job">
+                <i class="fa fa-phone-square"></i>
+                <br>
+                18.......6
+            </div>
+        
+
+
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js" charset="utf-8"></script>
+        <script src="//unpkg.com/valine@latest/dist/Valine.min.js" charset="utf-8"></script>
+        <script>
+            var notify = 'false' == true ? true : false;
+            var verify = 'false' == true ? true : false;
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1;
+            });
+
+            guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+            window.valine = new Valine({
+                el:'#vcomment',
+                notify:notify,
+                verify:verify,
+                appId:'rwwVeUe3kpfbc0OkoxmgnTKM-gzGzoHsz',
+                appKey:'FcDDW6bpbs5QmH3A1B2Aqmae',
+                placeholder:'Just so so',
+                avatar:'mm',
+                guest_info:guest_info,
+                pageSize:'10'
+            });
+        </script>
+    
+
+
+
+    </body>
+</html>

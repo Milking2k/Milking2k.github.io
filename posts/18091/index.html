@@ -1,0 +1,551 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Jelech的博客">
+    <title>SWERC2017新一轮训练赛 - Jelech的博客</title>
+    <meta name="author" content="Jelech">
+    
+        <meta name="keywords" content="博客,算法,javascript,游戏,">
+    
+    
+        <link rel="icon" href="http://www.jelech.cn/assets/images/favicon.ico">
+        <link rel="Shortcut Icon" type="image/x-icon" href="http://www.jelech.cn/assets/images/favicon.ico">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n组队训练赛4月30日\nSWERC2017\nGYM 101635A\nUVA 13282\n\n单独A了三个水题。\n题意是给定两个序列，n,m长度，找到两个序列单个之间的差值的重复数最多的那个数，如果有数量一样的则输出值更小的。\n\n550 10 12 20 301 5 17 27 50以下是A题的题解。这道题正常存储会发现根本存不下1e10的位置，我发现其中有很多的的地方都可能会是0。因此我先把得到的差值数都保存下来，最多有2e3*2e3的大小。拍个顺序后，再遍历一遍记录下重复的数字的次数，记录到另一个node数组中里去。再次排序，就能得到结果了。\n\n123456789101112131415161718192021222324252627282930313233343536373839404142434445#include&lt;bits/stdc++.h&gt;using namespace std;#define LL long long int#define rd(x) scanf(\"%d\",&amp;x)struct node&#123;    int val;    int time;&#125;finans[4000007];int n,m;int emtfront[2007],emtback[2007];int ans[4000007];bool cmp(node a,node b)&#123;if(a.time==b.time) return a.val&lt;b.val; return a.time&gt;b.time;&#125;int main()&#123;    while(~rd(n))    &#123;        rd(m);        for(int i=1;i&lt;=n;i++) rd(emtfront[i]);        for(int i=1;i&lt;=m;i++) rd(emtback[i]);        int top=0;        for(int i=1;i&lt;=n;i++)            for(int j=1;j&lt;=m;j++)                if(emtback[j] &gt;= emtfront[i])                    ans[top++] = emtback[j] - emtfront[i];        sort(ans,ans+top);        int anstop=0;        finans[anstop].val=ans[0];        finans[anstop].time=1;        for(int i=1;i&lt;top;i++)        &#123;            if(ans[i]==ans[i-1])&#123;                finans[anstop].time++;            &#125;            else&#123;                finans[++anstop].val=ans[i];                finans[anstop].time=1;            &#125;        &#125;        sort(finans,finans+anstop+1,cmp);        printf(\"%d\\n\",finans[0]);    &#125;    return 0;&#125;\n101635K 题是个计算几何问题题意：一个圆内给多个点的坐标，问用最小宽度的矩形将所有点都包起来（忽略长度）\n\ninput:    3 100 010 00 10\noutput:    7.0710678118654755\n\n理解起来就是个简单的计算几何题，首先用凸包算法把所有点都算一下，然后用旋转卡壳算法，计算出点到边的最短距离使用旋转卡壳的原因是在满足所有点都在内部的情况下，必然有一条边上的点数大于或等于2.那么我们可以直接遍历一下所有的凸包边，计算对点到他的距离。在找对边的时候只需要找一次，因为是旋转，所以点也只需要转一个。听起来真不难，难在代码很难写，因此直接套了凸包的模板….\n123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118119120121122123124125126127128129130131132133134135136137138139140141142143144145146147148149150151152153154155156157158159160161162163164165166#include &lt;bits/stdc++.h&gt;using namespace std;const double eps = 1e-16;int sgn(double x)&#123;    if(fabs(x) &lt; eps)return 0;    if(x &lt; 0)return -1;    else return 1;&#125;struct point&#123;    double x,y;    point(int _x = 0,int _y = 0)    &#123;        x = _x;        y = _y;    &#125;    point operator -(const point &amp;b)const    &#123;        return point(x - b.x, y - b.y);    &#125;    double operator ^(const point &amp;b)const    &#123;        return x*b.y - y*b.x;    &#125;    double operator *(const point &amp;b)const    &#123;        return x*b.x + y*b.y;    &#125;    void sc()    &#123;        scanf(\"%lf%lf\",&amp;x,&amp;y);    &#125;&#125;;struct Line&#123;    point s,e;    Line() &#123;&#125;    Line(point _s,point _e)    &#123;        s = _s;        e = _e;    &#125;    pair&lt;int,point&gt; operator &amp;(const Line &amp;b)const    &#123;        point res = s;        if(sgn((s-e)^(b.s-b.e)) == 0)        &#123;            if(sgn((s-b.e)^(b.s-b.e)) == 0)                return make_pair(0,res);            else return make_pair(1,res);        &#125;        double t = ((s-b.s)^(b.s-b.e))/((s-e)^(b.s-b.e));        res.x += (e.x-s.x)*t;        res.y += (e.y-s.y)*t;        return make_pair(2,res);    &#125;&#125;;double dist(point a,point b)&#123;    return (double)sqrt((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y));&#125;point NearestpointToLineSeg(point P,Line L)&#123;    point result;    double t = ((P-L.s)*(L.e-L.s))/((L.e-L.s)*(L.e-L.s));    if(t &gt;= 0.000 &amp;&amp; t &lt;= 1.0000)    &#123;        result.x = L.s.x + (L.e.x - L.s.x)*t;        result.y = L.s.y + (L.e.y - L.s.y)*t;    &#125;    else    &#123;        if(dist(P,L.s) &lt; dist(P,L.e))            result = L.s;        else result = L.e;    &#125;    return result;&#125;double emmm(point P,Line L)&#123;    point zz=NearestpointToLineSeg(P,L);    return dist(zz,P);&#125;const int MAXN = 2e5+7;point List[MAXN];int Stack[MAXN],top;bool _cmp(point p1,point p2)&#123;    double tmp = (p1-List[0])^(p2-List[0]);    if(tmp &gt; 0)return true;    else if(tmp == 0 &amp;&amp; dist(p1,List[0]) &lt;= dist(p2,List[0]))        return true;    else return false;&#125;void Graham(int n)&#123;    point p0;    int k = 0;    p0 = List[0];    for(int i = 1; i &lt; n; i++)&#123;        if(p0.y &gt; List[i].y || (p0.y == List[i].y &amp;&amp; p0.x &gt; List[i].x))        &#123;            p0 = List[i];            k = i;        &#125;    &#125;    swap(List[k],List[0]);    sort(List+1,List+n,_cmp);    if(n == 1)    &#123;        top = 1;        Stack[0] = 0;        return;    &#125;    if(n == 2)    &#123;        top = 2;        Stack[0] = 0;        Stack[1] = 1;        return;    &#125;    Stack[0] = 0;    Stack[1] = 1;    top = 2;    for(int i = 2; i &lt; n; i++)    &#123;        while(top &gt; 1 &amp;&amp;        ((List[Stack[top-1]]-List[Stack[top-2]])^(List[i]-List[Stack[top-2]])) &lt;= 0)            top--;        Stack[top++] = i;    &#125;&#125;double rotating_calipers(point p[],int n)&#123;    double ans = 999999999999999999999.0;    point v;    int cur = 1;    for(int i = 0; i &lt; n; i++)    &#123;        v = p[i]-p[(i+1)%n];        while((v^(p[(cur+1)%n]-p[cur])) &lt; 0)&#123;            cur = (cur+1)%n;        &#125;        Line qw=Line(p[(i)%n],p[(i+1)%n]);//        point zz=NearestpointToLineSeg(p[cur],qw);        double as=emmm(p[cur],qw);        //as=max(as,zx);        ans=min(ans,as);//        ans=min(ans,max(dist(p[i],p[cur]),dist(p[(i+1)%n],p[(cur+1)%n])));    &#125;    return ans;&#125;point p[MAXN];int main()&#123;    int n,r;    while(~scanf(\"%d%d\",&amp;n,&amp;r))    &#123;        for(int i = 0; i &lt; n; i++)List[i].sc();        Graham(n);        for(int i = 0; i &lt; top; i++)p[i] = List[Stack[i]];        printf(\"%.16f\\n\",rotating_calipers(p,top));    &#125;    return 0;&#125;\n","dateCreated":"2018-04-30T23:13:45+08:00","dateModified":"2018-12-01T21:40:05+08:00","datePublished":"2018-04-30T23:13:45+08:00","description":"","headline":"SWERC2017新一轮训练赛","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://www.jelech.cn/posts/18091/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"http://www.jelech.cn/posts/18091/","keywords":"刷题, 组队"}</script>
+    <meta name="keywords" content="刷题,组队">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="SWERC2017新一轮训练赛">
+<meta property="og:url" content="http://www.jelech.cn/posts/18091/index.html">
+<meta property="og:site_name" content="Jelech的博客">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2018-12-01T13:40:05.843Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="SWERC2017新一轮训练赛">
+<meta name="twitter:creator" content="@twitter">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="http://www.jelech.cn/assets/images/avatar.jpg"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
+    <!--STYLES END-->
+    
+
+    
+    <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?c3b0944d9211544bb9fe9d25ce47bac7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">Jelech的博客</a>
+    </div>
+    
+        
+            <a class="header-right-picture " href="#about">
+        
+        
+            <img class="header-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+                </a>
+                <h4 class="sidebar-profile-name">Jelech</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>putty本无树,MinGW亦非台</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/ " title="首页">
+                    
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-categories" title="分类">
+                    
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">分类</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-tags" title="标签">
+                    
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-archives" title="归档">
+                    
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/game" title="游戏">
+                    
+                        <i class="sidebar-button-icon fas fa-gamepad" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">游戏</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="#about" title="关于">
+                    
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="https://github.com/jelech" target="_blank" rel="noopener" title="GitHub">
+                    
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/mailto" title="邮箱">
+                    
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">邮箱</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            SWERC2017新一轮训练赛
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2018-04-30T23:13:45+08:00">
+	
+		    4月 30, 2018
+    	
+    </time>
+    
+        <span>发布在 </span>
+        
+    <a class="category-link" href="/categories/ACM竞赛/">ACM竞赛</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            
+            <h1 id="table-of-contents">目录</h1><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#组队训练赛4月30日"><span class="toc-text">组队训练赛4月30日</span></a><ol class="toc-child"><li class="toc-item toc-level-5"><a class="toc-link" href="#101635K-题是个计算几何问题"><span class="toc-text">101635K 题是个计算几何问题</span></a></li></ol></li></ol>
+<a id="more"></a>
+<h2 id="组队训练赛4月30日"><a href="#组队训练赛4月30日" class="headerlink" title="组队训练赛4月30日"></a>组队训练赛4月30日</h2><ul>
+<li>SWERC2017</li>
+<li>GYM <a href="http://codeforces.com/gym/101635/attachments" target="_blank" rel="noopener">101635A</a></li>
+<li>UVA <a href="https://uva.onlinejudge.org/index.php?option=com_onlinejudge&amp;Itemid=8&amp;page=show_problem&amp;problem=5206" target="_blank" rel="noopener">13282</a></li>
+</ul>
+<p>单独A了三个水题。</p>
+<p>题意是给定两个序列，n,m长度，找到两个序列单个之间的差值的重复数最多的那个数，如果有数量一样的则输出值更小的。</p>
+<blockquote>
+<p>5<br>5<br>0 10 12 20 30<br>1 5 17 27 50<br>以下是A题的题解。<br>这道题正常存储会发现根本存不下1e10的位置，我发现其中有很多的的地方都可能会是0。因此我先把得到的差值数都保存下来，最多有2e3*2e3的大小。拍个顺序后，再遍历一遍记录下重复的数字的次数，记录到另一个node数组中里去。<br>再次排序，就能得到结果了。</p>
+</blockquote>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span><span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> LL long long int</span></span><br><span class="line"><span class="meta">#<span class="meta-keyword">define</span> rd(x) scanf(<span class="meta-string">"%d"</span>,&amp;x)</span></span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">node</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">int</span> val;</span><br><span class="line">    <span class="keyword">int</span> time;</span><br><span class="line">&#125;finans[<span class="number">4000007</span>];</span><br><span class="line"><span class="keyword">int</span> n,m;</span><br><span class="line"><span class="keyword">int</span> emtfront[<span class="number">2007</span>],emtback[<span class="number">2007</span>];</span><br><span class="line"><span class="keyword">int</span> ans[<span class="number">4000007</span>];</span><br><span class="line"><span class="function"><span class="keyword">bool</span> <span class="title">cmp</span><span class="params">(node a,node b)</span></span>&#123;<span class="keyword">if</span>(a.time==b.time) <span class="keyword">return</span> a.val&lt;b.val; <span class="keyword">return</span> a.time&gt;b.time;&#125;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">while</span>(~rd(n))</span><br><span class="line">    &#123;</span><br><span class="line">        rd(m);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++) rd(emtfront[i]);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=m;i++) rd(emtback[i]);</span><br><span class="line">        <span class="keyword">int</span> top=<span class="number">0</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;=n;i++)</span><br><span class="line">            <span class="keyword">for</span>(<span class="keyword">int</span> j=<span class="number">1</span>;j&lt;=m;j++)</span><br><span class="line">                <span class="keyword">if</span>(emtback[j] &gt;= emtfront[i])</span><br><span class="line">                    ans[top++] = emtback[j] - emtfront[i];</span><br><span class="line">        sort(ans,ans+top);</span><br><span class="line">        <span class="keyword">int</span> anstop=<span class="number">0</span>;</span><br><span class="line">        finans[anstop].val=ans[<span class="number">0</span>];</span><br><span class="line">        finans[anstop].time=<span class="number">1</span>;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i=<span class="number">1</span>;i&lt;top;i++)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(ans[i]==ans[i<span class="number">-1</span>])&#123;</span><br><span class="line">                finans[anstop].time++;</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="keyword">else</span>&#123;</span><br><span class="line">                finans[++anstop].val=ans[i];</span><br><span class="line">                finans[anstop].time=<span class="number">1</span>;</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">        sort(finans,finans+anstop+<span class="number">1</span>,cmp);</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"%d\n"</span>,finans[<span class="number">0</span>]);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h5 id="101635K-题是个计算几何问题"><a href="#101635K-题是个计算几何问题" class="headerlink" title="101635K 题是个计算几何问题"></a>101635K 题是个计算几何问题</h5><p>题意：一个圆内给多个点的坐标，问用最小宽度的矩形将所有点都包起来（忽略长度）</p>
+<blockquote>
+<p>input:    3 10<br>0 0<br>10 0<br>0 10</p>
+<p>output:    7.0710678118654755</p>
+</blockquote>
+<p>理解起来就是个简单的计算几何题，首先用凸包算法把所有点都算一下，然后用<strong>旋转卡壳</strong>算法，计算出点到边的最短距离<br>使用旋转卡壳的原因是在满足所有点都在内部的情况下，必然有一条边上的点数大于或等于2.那么我们可以直接遍历一下所有的凸包边，计算对点到他的距离。在找对边的时候只需要找一次，因为是旋转，所以点也只需要转一个。<br>听起来真不难，难在代码很难写，因此直接套了凸包的模板….</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br><span class="line">150</span><br><span class="line">151</span><br><span class="line">152</span><br><span class="line">153</span><br><span class="line">154</span><br><span class="line">155</span><br><span class="line">156</span><br><span class="line">157</span><br><span class="line">158</span><br><span class="line">159</span><br><span class="line">160</span><br><span class="line">161</span><br><span class="line">162</span><br><span class="line">163</span><br><span class="line">164</span><br><span class="line">165</span><br><span class="line">166</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;bits/stdc++.h&gt;</span></span></span><br><span class="line"><span class="keyword">using</span> <span class="keyword">namespace</span> <span class="built_in">std</span>;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">double</span> eps = <span class="number">1e-16</span>;</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">sgn</span><span class="params">(<span class="keyword">double</span> x)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">if</span>(<span class="built_in">fabs</span>(x) &lt; eps)<span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">    <span class="keyword">if</span>(x &lt; <span class="number">0</span>)<span class="keyword">return</span> <span class="number">-1</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">return</span> <span class="number">1</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">point</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    <span class="keyword">double</span> x,y;</span><br><span class="line">    point(<span class="keyword">int</span> _x = <span class="number">0</span>,<span class="keyword">int</span> _y = <span class="number">0</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        x = _x;</span><br><span class="line">        y = _y;</span><br><span class="line">    &#125;</span><br><span class="line">    point <span class="keyword">operator</span> -(<span class="keyword">const</span> point &amp;b)<span class="keyword">const</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> point(x - b.x, y - b.y);</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">double</span> <span class="keyword">operator</span> ^(<span class="keyword">const</span> point &amp;b)<span class="keyword">const</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> x*b.y - y*b.x;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">double</span> <span class="keyword">operator</span> *(<span class="keyword">const</span> point &amp;b)<span class="keyword">const</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">return</span> x*b.x + y*b.y;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">sc</span><span class="params">()</span></span></span><br><span class="line"><span class="function">    </span>&#123;</span><br><span class="line">        <span class="built_in">scanf</span>(<span class="string">"%lf%lf"</span>,&amp;x,&amp;y);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">Line</span></span></span><br><span class="line"><span class="class">&#123;</span></span><br><span class="line">    point s,e;</span><br><span class="line">    Line() &#123;&#125;</span><br><span class="line">    Line(point _s,point _e)</span><br><span class="line">    &#123;</span><br><span class="line">        s = _s;</span><br><span class="line">        e = _e;</span><br><span class="line">    &#125;</span><br><span class="line">    pair&lt;<span class="keyword">int</span>,point&gt; <span class="keyword">operator</span> &amp;(<span class="keyword">const</span> Line &amp;b)<span class="keyword">const</span></span><br><span class="line">    &#123;</span><br><span class="line">        point res = s;</span><br><span class="line">        <span class="keyword">if</span>(sgn((s-e)^(b.s-b.e)) == <span class="number">0</span>)</span><br><span class="line">        &#123;</span><br><span class="line">            <span class="keyword">if</span>(sgn((s-b.e)^(b.s-b.e)) == <span class="number">0</span>)</span><br><span class="line">                <span class="keyword">return</span> make_pair(<span class="number">0</span>,res);</span><br><span class="line">            <span class="keyword">else</span> <span class="keyword">return</span> make_pair(<span class="number">1</span>,res);</span><br><span class="line">        &#125;</span><br><span class="line">        <span class="keyword">double</span> t = ((s-b.s)^(b.s-b.e))/((s-e)^(b.s-b.e));</span><br><span class="line">        res.x += (e.x-s.x)*t;</span><br><span class="line">        res.y += (e.y-s.y)*t;</span><br><span class="line">        <span class="keyword">return</span> make_pair(<span class="number">2</span>,res);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;;</span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">dist</span><span class="params">(point a,point b)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> (<span class="keyword">double</span>)<span class="built_in">sqrt</span>((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y));</span><br><span class="line">&#125;</span><br><span class="line"><span class="function">point <span class="title">NearestpointToLineSeg</span><span class="params">(point P,Line L)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    point result;</span><br><span class="line">    <span class="keyword">double</span> t = ((P-L.s)*(L.e-L.s))/((L.e-L.s)*(L.e-L.s));</span><br><span class="line">    <span class="keyword">if</span>(t &gt;= <span class="number">0.000</span> &amp;&amp; t &lt;= <span class="number">1.0000</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        result.x = L.s.x + (L.e.x - L.s.x)*t;</span><br><span class="line">        result.y = L.s.y + (L.e.y - L.s.y)*t;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">else</span></span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">if</span>(dist(P,L.s) &lt; dist(P,L.e))</span><br><span class="line">            result = L.s;</span><br><span class="line">        <span class="keyword">else</span> result = L.e;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> result;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">emmm</span><span class="params">(point P,Line L)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    point zz=NearestpointToLineSeg(P,L);</span><br><span class="line">    <span class="keyword">return</span> dist(zz,P);</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> MAXN = <span class="number">2e5</span>+<span class="number">7</span>;</span><br><span class="line">point List[MAXN];</span><br><span class="line"><span class="keyword">int</span> Stack[MAXN],top;</span><br><span class="line"><span class="keyword">bool</span> _cmp(point p1,point p2)</span><br><span class="line">&#123;</span><br><span class="line">    <span class="keyword">double</span> tmp = (p1-List[<span class="number">0</span>])^(p2-List[<span class="number">0</span>]);</span><br><span class="line">    <span class="keyword">if</span>(tmp &gt; <span class="number">0</span>)<span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">if</span>(tmp == <span class="number">0</span> &amp;&amp; dist(p1,List[<span class="number">0</span>]) &lt;= dist(p2,List[<span class="number">0</span>]))</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    <span class="keyword">else</span> <span class="keyword">return</span> <span class="literal">false</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">Graham</span><span class="params">(<span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    point p0;</span><br><span class="line">    <span class="keyword">int</span> k = <span class="number">0</span>;</span><br><span class="line">    p0 = List[<span class="number">0</span>];</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">1</span>; i &lt; n; i++)&#123;</span><br><span class="line">        <span class="keyword">if</span>(p0.y &gt; List[i].y || (p0.y == List[i].y &amp;&amp; p0.x &gt; List[i].x))</span><br><span class="line">        &#123;</span><br><span class="line">            p0 = List[i];</span><br><span class="line">            k = i;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">    swap(List[k],List[<span class="number">0</span>]);</span><br><span class="line">    sort(List+<span class="number">1</span>,List+n,_cmp);</span><br><span class="line">    <span class="keyword">if</span>(n == <span class="number">1</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        top = <span class="number">1</span>;</span><br><span class="line">        Stack[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">if</span>(n == <span class="number">2</span>)</span><br><span class="line">    &#123;</span><br><span class="line">        top = <span class="number">2</span>;</span><br><span class="line">        Stack[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">        Stack[<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">        <span class="keyword">return</span>;</span><br><span class="line">    &#125;</span><br><span class="line">    Stack[<span class="number">0</span>] = <span class="number">0</span>;</span><br><span class="line">    Stack[<span class="number">1</span>] = <span class="number">1</span>;</span><br><span class="line">    top = <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">2</span>; i &lt; n; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">while</span>(top &gt; <span class="number">1</span> &amp;&amp;</span><br><span class="line">        ((List[Stack[top<span class="number">-1</span>]]-List[Stack[top<span class="number">-2</span>]])^(List[i]-List[Stack[top<span class="number">-2</span>]])) &lt;= <span class="number">0</span>)</span><br><span class="line">            top--;</span><br><span class="line">        Stack[top++] = i;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">double</span> <span class="title">rotating_calipers</span><span class="params">(point p[],<span class="keyword">int</span> n)</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">double</span> ans = <span class="number">999999999999999999999.0</span>;</span><br><span class="line">    point v;</span><br><span class="line">    <span class="keyword">int</span> cur = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)</span><br><span class="line">    &#123;</span><br><span class="line">        v = p[i]-p[(i+<span class="number">1</span>)%n];</span><br><span class="line">        <span class="keyword">while</span>((v^(p[(cur+<span class="number">1</span>)%n]-p[cur])) &lt; <span class="number">0</span>)&#123;</span><br><span class="line">            cur = (cur+<span class="number">1</span>)%n;</span><br><span class="line">        &#125;</span><br><span class="line">        Line qw=Line(p[(i)%n],p[(i+<span class="number">1</span>)%n]);</span><br><span class="line"><span class="comment">//        point zz=NearestpointToLineSeg(p[cur],qw);</span></span><br><span class="line">        <span class="keyword">double</span> as=emmm(p[cur],qw);</span><br><span class="line">        <span class="comment">//as=max(as,zx);</span></span><br><span class="line">        ans=min(ans,as);</span><br><span class="line"><span class="comment">//        ans=min(ans,max(dist(p[i],p[cur]),dist(p[(i+1)%n],p[(cur+1)%n])));</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> ans;</span><br><span class="line">&#125;</span><br><span class="line">point p[MAXN];</span><br><span class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></span><br><span class="line"><span class="function"></span>&#123;</span><br><span class="line">    <span class="keyword">int</span> n,r;</span><br><span class="line">    <span class="keyword">while</span>(~<span class="built_in">scanf</span>(<span class="string">"%d%d"</span>,&amp;n,&amp;r))</span><br><span class="line">    &#123;</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)List[i].sc();</span><br><span class="line">        Graham(n);</span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; top; i++)p[i] = List[Stack[i]];</span><br><span class="line">        <span class="built_in">printf</span>(<span class="string">"%.16f\n"</span>,rotating_calipers(p,top));</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+            
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">标签</span><br>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/刷题/">刷题</a> <a class="tag tag--primary tag--small t-link" href="/tags/组队/">组队</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/49388/" data-tooltip="node.js的学习笔记" aria-label="上一篇: node.js的学习笔记">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/18031/" data-tooltip="更高级的模板" aria-label="下一篇: 更高级的模板">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="分享">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/18091/" title="分享到 Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/18091/" title="分享到 Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/18091/" title="分享到 Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <style media="screen">.v .vwrap{overflow: inherit;}</style>
+                <div id="vcomment"></div>
+                <a href="posts/18091/#vcomment" class="disqus-comment-count"></a>
+                <span class="valine-comment-count" data-xid="posts/18091/"></span>
+                <span> Comment</span>
+            
+        
+    </div>
+</article>
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2018 Jelech. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/49388/" data-tooltip="node.js的学习笔记" aria-label="上一篇: node.js的学习笔记">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/18031/" data-tooltip="更高级的模板" aria-label="下一篇: 更高级的模板">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="分享">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/18091/" title="分享到 Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/18091/" title="分享到 Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/18091/" title="分享到 Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+    <i id="btn-close-shareoptions" class="fa fa-times"></i>
+    <ul class="share-options">
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/18091/">
+                    <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/18091/">
+                    <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/18091/">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+        
+            <h4 id="about-card-name">Jelech</h4>
+        
+            <div id="about-card-bio"><p>putty本无树,MinGW亦非台</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br>
+                <p>在校大学生一枚</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br>
+                CHINA.HRB.STU
+            </div>
+        
+
+        
+            <div id="about-card-job">
+                <i class="fa fa-envelope"></i>
+                <br>
+                jelech@hotmail.com
+            </div>
+        
+
+        
+            <div id="about-card-job">
+                <i class="fa fa-phone-square"></i>
+                <br>
+                18.......6
+            </div>
+        
+
+
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js" charset="utf-8"></script>
+        <script src="//unpkg.com/valine@latest/dist/Valine.min.js" charset="utf-8"></script>
+        <script>
+            var notify = 'false' == true ? true : false;
+            var verify = 'false' == true ? true : false;
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1;
+            });
+
+            guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+            window.valine = new Valine({
+                el:'#vcomment',
+                notify:notify,
+                verify:verify,
+                appId:'rwwVeUe3kpfbc0OkoxmgnTKM-gzGzoHsz',
+                appKey:'FcDDW6bpbs5QmH3A1B2Aqmae',
+                placeholder:'Just so so',
+                avatar:'mm',
+                guest_info:guest_info,
+                pageSize:'10'
+            });
+        </script>
+    
+
+
+
+    </body>
+</html>

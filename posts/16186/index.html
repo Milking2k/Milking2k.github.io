@@ -1,0 +1,549 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Jelech的博客">
+    <title>算法学习笔记 - Jelech的博客</title>
+    <meta name="author" content="Jelech">
+    
+        <meta name="keywords" content="博客,算法,javascript,游戏,">
+    
+    
+        <link rel="icon" href="http://www.jelech.cn/assets/images/favicon.ico">
+        <link rel="Shortcut Icon" type="image/x-icon" href="http://www.jelech.cn/assets/images/favicon.ico">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n学习笔记O(∩_∩)O倍增\n倍增是一种思想。依据这种思想，衍生出了ST表、LCA(最近公共祖先)以及一些在树上的倍增应用。\n\n考虑这样一个问题：如何快速在一个序列s中查询到不大于a的值？（这里序列已排序好正常思想就是二分，每次取得s中l,r,mid的值，进行比较后快速logn速度逼近正确的值。但是这里我们不考虑二分倍增和二分的思想很类似。对于一个单调的序列，我们可以快速的跳过太小的（或者太大的）数，从而快速逼近结果。简单的模拟一下倍增：· 设置一个长度p，每次如果查询到的值小于目标，位置k+=p，长度p=2*p· 如果查询到的值大于目标，长度p=p/2。并重复上一个步骤。· 循环查询到确切的目标。比如，起初位置在k为0，p为2.查询到s[k+p]为小于目标的数，k就变成了k+p，p增倍了。下一次查询到s[k+p]大于了目标数，我们就把p先减小为一半。再查一次。如果有概念了，可以想象出平均下来是logn的。\nST表\nst表灵活的使用了倍增的思想可以进行对区间最值问题的快速查找与更新预处理O（n·logn），查询O（1），空间（n·logn）\n\n线段树虽说是区间维护的全能王，但是也恰巧这样导致了他在一些特别的方面处理比较慢，线段树的查询是O(logn)的，而且占用的空间也较大，所以容易被卡常数。\n字典树 Trie\n将所有字符串依据前缀构建的一棵树其中的节点表示字符串的某个字符，树的根是一个空指针是一种存放字符串的数据结构（就是为了其他算法的使用专门设计的\n\nAC自动机（好像顺序乱套了\n\n不是可以自动Acepte的程序是基于kmp思想，建立在字典树上的自动匹配字符串算法多个模板串，一个目标串重要词典:失败指针(fail指针)：指的是在匹配某个字符串的时候，如果到当前的位置发现不匹配，会跳到某个其他前缀匹配的位置，继续匹配。如果仍然没有，就会跳回到根\n\n佩尔方程（没想到还是要学数论\n\n满足：x^2 - dy^2 = 1 的方程方程通过假设x1,x2两个解，解出了另一个新的解。这代表了如果知道方程中的最小特解，就能推论出所有的解。通解：`Xn = Xn-1  X1 + d  Yn-1  Y1Yn = Xn-1  X1 + Yn-1  Y1`半难以发现正解公式，需要通过自己一步一步推公式。\n\n赛后笔记\n先贪心再暴力打表找规律推公式关于long long 要先仔细读题思考哪些部分需要再修改部分\n\n","dateCreated":"2018-09-20T21:09:57+08:00","dateModified":"2018-12-01T21:37:14+08:00","datePublished":"2018-09-20T21:09:57+08:00","description":"","headline":"算法学习笔记","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://www.jelech.cn/posts/16186/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"http://www.jelech.cn/posts/16186/","keywords":"算法"}</script>
+    <meta name="keywords" content="算法">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="算法学习笔记">
+<meta property="og:url" content="http://www.jelech.cn/posts/16186/index.html">
+<meta property="og:site_name" content="Jelech的博客">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2018-12-01T13:37:14.241Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="算法学习笔记">
+<meta name="twitter:creator" content="@twitter">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="http://www.jelech.cn/assets/images/avatar.jpg"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
+    <!--STYLES END-->
+    
+
+    
+    <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?c3b0944d9211544bb9fe9d25ce47bac7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">Jelech的博客</a>
+    </div>
+    
+        
+            <a class="header-right-picture " href="#about">
+        
+        
+            <img class="header-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+                </a>
+                <h4 class="sidebar-profile-name">Jelech</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>putty本无树,MinGW亦非台</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/ " title="首页">
+                    
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-categories" title="分类">
+                    
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">分类</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-tags" title="标签">
+                    
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-archives" title="归档">
+                    
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/game" title="游戏">
+                    
+                        <i class="sidebar-button-icon fas fa-gamepad" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">游戏</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="#about" title="关于">
+                    
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="https://github.com/jelech" target="_blank" rel="noopener" title="GitHub">
+                    
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/mailto" title="邮箱">
+                    
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">邮箱</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            算法学习笔记
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2018-09-20T21:09:57+08:00">
+	
+		    9月 20, 2018
+    	
+    </time>
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            
+            <h1 id="table-of-contents">目录</h1><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#学习笔记O-∩-∩-O"><span class="toc-text">学习笔记O(∩_∩)O</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#倍增"><span class="toc-text">倍增</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#ST表"><span class="toc-text">ST表</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#字典树-Trie"><span class="toc-text">字典树 Trie</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#AC自动机"><span class="toc-text">AC自动机</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#佩尔方程"><span class="toc-text">佩尔方程</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#赛后笔记"><span class="toc-text">赛后笔记</span></a></li></ol></li></ol>
+<a id="more"></a>
+<h2 id="学习笔记O-∩-∩-O"><a href="#学习笔记O-∩-∩-O" class="headerlink" title="学习笔记O(∩_∩)O"></a>学习笔记O(∩_∩)O</h2><h4 id="倍增"><a href="#倍增" class="headerlink" title="倍增"></a>倍增</h4><blockquote>
+<p>倍增是一种思想。依据这种思想，衍生出了ST表、LCA(最近公共祖先)以及一些在树上的倍增应用。</p>
+</blockquote>
+<p>考虑这样一个问题：如何快速在一个序列s中查询到不大于a的值？（这里序列已排序好<br>正常思想就是二分，每次取得s中<code>l,r,mid</code>的值，进行比较后快速logn速度逼近正确的值。但是这里我们不考虑二分<br>倍增和二分的思想很类似。对于一个单调的序列，我们可以快速的跳过太小的（或者太大的）数，从而快速逼近结果。<br>简单的模拟一下倍增：<br>· 设置一个长度p，每次如果查询到的值小于<strong>目标</strong>，位置<code>k+=p</code>，长度<code>p=2*p</code><br>· 如果查询到的值大于<strong>目标</strong>，长度<code>p=p/2</code>。并重复上一个步骤。<br>· 循环查询到确切的目标。<br>比如，起初位置在k为0，p为2.查询到s[k+p]为小于<strong>目标</strong>的数，<code>k</code>就变成了<code>k+p</code>，<code>p</code>增倍了。下一次查询到s[k+p]大于了<strong>目标</strong>数，我们就把p先减小为一半。再查一次。如果有概念了，可以想象出平均下来是logn的。</p>
+<h4 id="ST表"><a href="#ST表" class="headerlink" title="ST表"></a>ST表</h4><blockquote>
+<p>st表灵活的使用了倍增的思想<br>可以进行对区间最值问题的快速查找与更新<br>预处理O（n·logn），查询O（1），空间（n·logn）</p>
+</blockquote>
+<p>线段树虽说是区间维护的全能王，但是也恰巧这样导致了他在一些特别的方面处理比较慢，线段树的查询是O(logn)的，而且占用的空间也较大，所以容易被卡常数。</p>
+<h4 id="字典树-Trie"><a href="#字典树-Trie" class="headerlink" title="字典树 Trie"></a>字典树 Trie</h4><blockquote>
+<p>将所有字符串依据前缀构建的一棵树<br>其中的节点表示字符串的某个字符，树的根是一个空指针<br>是一种存放字符串的数据结构（就是为了其他算法的使用专门设计的</p>
+</blockquote>
+<h4 id="AC自动机"><a href="#AC自动机" class="headerlink" title="AC自动机"></a>AC自动机</h4><p>（好像顺序乱套了</p>
+<blockquote>
+<p>不是可以自动Acepte的程序<br>是基于kmp思想，建立在字典树上的自动匹配字符串算法<br>多个模板串，一个目标串<br><code>重要词典:</code><br>失败指针(fail指针)：指的是在匹配某个字符串的时候，如果到当前的位置发现不匹配，会跳到某个其他前缀匹配的位置，继续匹配。如果仍然没有，就会跳回到根</p>
+</blockquote>
+<h4 id="佩尔方程"><a href="#佩尔方程" class="headerlink" title="佩尔方程"></a>佩尔方程</h4><p>（没想到还是要学数论</p>
+<blockquote>
+<p>满足：x^2 - d<em>y^2 = 1 的方程<br>方程通过假设x1,x2两个解，解出了另一个新的解。这代表了如果知道方程中的最小特解，就能推论出所有的解。<br>通解：`Xn = Xn-1 </em> X1 + d <em> Yn-1 </em> Y1<code></code>Yn = Xn-1 <em> X1 + Yn-1 </em> Y1`<br>半难以发现正解公式，需要通过自己一步一步推公式。</p>
+</blockquote>
+<h4 id="赛后笔记"><a href="#赛后笔记" class="headerlink" title="赛后笔记"></a>赛后笔记</h4><blockquote>
+<p>先贪心再暴力<br>打表找规律推公式<br>关于long long 要先仔细读题思考哪些部分需要再修改部分</p>
+</blockquote>
+
+            
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">标签</span><br>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/算法/">算法</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/3676/" data-tooltip="安装Django" aria-label="上一篇: 安装Django">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/21344/" data-tooltip="linux下安装python3" aria-label="下一篇: linux下安装python3">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="分享">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/16186/" title="分享到 Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/16186/" title="分享到 Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/16186/" title="分享到 Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <style media="screen">.v .vwrap{overflow: inherit;}</style>
+                <div id="vcomment"></div>
+                <a href="posts/16186/#vcomment" class="disqus-comment-count"></a>
+                <span class="valine-comment-count" data-xid="posts/16186/"></span>
+                <span> Comment</span>
+            
+        
+    </div>
+</article>
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2018 Jelech. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/3676/" data-tooltip="安装Django" aria-label="上一篇: 安装Django">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/21344/" data-tooltip="linux下安装python3" aria-label="下一篇: linux下安装python3">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="分享">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/16186/" title="分享到 Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/16186/" title="分享到 Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/16186/" title="分享到 Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+    <i id="btn-close-shareoptions" class="fa fa-times"></i>
+    <ul class="share-options">
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/16186/">
+                    <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/16186/">
+                    <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/16186/">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+        
+            <h4 id="about-card-name">Jelech</h4>
+        
+            <div id="about-card-bio"><p>putty本无树,MinGW亦非台</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br>
+                <p>在校大学生一枚</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br>
+                CHINA.HRB.STU
+            </div>
+        
+
+        
+            <div id="about-card-job">
+                <i class="fa fa-envelope"></i>
+                <br>
+                jelech@hotmail.com
+            </div>
+        
+
+        
+            <div id="about-card-job">
+                <i class="fa fa-phone-square"></i>
+                <br>
+                18.......6
+            </div>
+        
+
+
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js" charset="utf-8"></script>
+        <script src="//unpkg.com/valine@latest/dist/Valine.min.js" charset="utf-8"></script>
+        <script>
+            var notify = 'false' == true ? true : false;
+            var verify = 'false' == true ? true : false;
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1;
+            });
+
+            guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+            window.valine = new Valine({
+                el:'#vcomment',
+                notify:notify,
+                verify:verify,
+                appId:'rwwVeUe3kpfbc0OkoxmgnTKM-gzGzoHsz',
+                appKey:'FcDDW6bpbs5QmH3A1B2Aqmae',
+                placeholder:'Just so so',
+                avatar:'mm',
+                guest_info:guest_info,
+                pageSize:'10'
+            });
+        </script>
+    
+
+
+
+    </body>
+</html>

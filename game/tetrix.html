@@ -1,0 +1,644 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Jelech的博客">
+    <title>俄罗斯方块 - Jelech的博客</title>
+    <meta name="author" content="Jelech">
+    
+        <meta name="keywords" content="博客,算法,javascript,游戏,">
+    
+    
+        <link rel="icon" href="http://www.jelech.cn/assets/images/favicon.ico">
+        <link rel="Shortcut Icon" type="image/x-icon" href="http://www.jelech.cn/assets/images/favicon.ico">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"Website","@id":"http://www.jelech.cn","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"name":"Jelech的博客","description":"jelech的博客，我在这里分享一切","url":"http://www.jelech.cn","keywords":"博客, 算法, javascript, 游戏"}</script>
+    <meta name="description" content="score:       const canvas = document.getElementById(&apos;tetris&apos;);     const context = canvas.getContext(&apos;2d&apos;);      context.scale(20, 20);      function arenaSweep() {         let rowCount = 1;">
+<meta name="keywords" content="博客,算法,javascript,游戏">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="俄罗斯方块">
+<meta property="og:url" content="http://www.jelech.cn/game/tetrix.html">
+<meta property="og:site_name" content="Jelech的博客">
+<meta property="og:description" content="score:       const canvas = document.getElementById(&apos;tetris&apos;);     const context = canvas.getContext(&apos;2d&apos;);      context.scale(20, 20);      function arenaSweep() {         let rowCount = 1;">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2018-12-02T04:24:09.595Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="俄罗斯方块">
+<meta name="twitter:description" content="score:       const canvas = document.getElementById(&apos;tetris&apos;);     const context = canvas.getContext(&apos;2d&apos;);      context.scale(20, 20);      function arenaSweep() {         let rowCount = 1;">
+<meta name="twitter:creator" content="@twitter">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="http://www.jelech.cn/assets/images/avatar.jpg"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
+    <!--STYLES END-->
+    
+
+    
+    <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?c3b0944d9211544bb9fe9d25ce47bac7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="1">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">Jelech的博客</a>
+    </div>
+    
+        
+            <a class="header-right-picture " href="#about">
+        
+        
+            <img class="header-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="1">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+                </a>
+                <h4 class="sidebar-profile-name">Jelech</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>putty本无树,MinGW亦非台</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/ " title="首页">
+                    
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-categories" title="分类">
+                    
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">分类</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-tags" title="标签">
+                    
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-archives" title="归档">
+                    
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/game" title="游戏">
+                    
+                        <i class="sidebar-button-icon fas fa-gamepad" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">游戏</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="#about" title="关于">
+                    
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="https://github.com/jelech" target="_blank" rel="noopener" title="GitHub">
+                    
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/mailto" title="邮箱">
+                    
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">邮箱</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="1"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            俄罗斯方块
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2018-11-16T13:02:57+08:00">
+	
+		    11月 16, 2018
+    	
+    </time>
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            
+            <p><div><br>    <canvas id="tetris" width="240" height="400" style="background: #fff"></canvas><br>    <div>score: <span id="score"></span></div><br></div></p>
+<script>
+    const canvas = document.getElementById('tetris');
+    const context = canvas.getContext('2d');
+
+    context.scale(20, 20);
+
+    function arenaSweep() {
+        let rowCount = 1;
+        outer: for (let y = arena.length -1; y > 0; --y) {
+            for (let x = 0; x < arena[y].length; ++x) {
+                if (arena[y][x] === 0) {
+                    continue outer;
+                }
+            }
+
+            const row = arena.splice(y, 1)[0].fill(0);
+            arena.unshift(row);
+            ++y;
+
+            player.score += rowCount * 10;
+            rowCount *= 2;
+        }
+    }
+
+    function collide(arena, player) {
+        const m = player.matrix;
+        const o = player.pos;
+        for (let y = 0; y < m.length; ++y) {
+            for (let x = 0; x < m[y].length; ++x) {
+                if (m[y][x] !== 0 &&
+                (arena[y + o.y] &&
+                    arena[y + o.y][x + o.x]) !== 0) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    function createMatrix(w, h) {
+        const matrix = [];
+        while (h--) {
+            matrix.push(new Array(w).fill(0));
+        }
+        return matrix;
+    }
+
+    function createPiece(type)
+    {
+        if (type === 'I') {
+            return [
+                [0, 1, 0, 0],
+                [0, 1, 0, 0],
+                [0, 1, 0, 0],
+                [0, 1, 0, 0],
+            ];
+        } else if (type === 'L') {
+            return [
+                [0, 2, 0],
+                [0, 2, 0],
+                [0, 2, 2],
+            ];
+        } else if (type === 'J') {
+            return [
+                [0, 3, 0],
+                [0, 3, 0],
+                [3, 3, 0],
+            ];
+        } else if (type === 'O') {
+            return [
+                [4, 4],
+                [4, 4],
+            ];
+        } else if (type === 'Z') {
+            return [
+                [5, 5, 0],
+                [0, 5, 5],
+                [0, 0, 0],
+            ];
+        } else if (type === 'S') {
+            return [
+                [0, 6, 6],
+                [6, 6, 0],
+                [0, 0, 0],
+            ];
+        } else if (type === 'T') {
+            return [
+                [0, 7, 0],
+                [7, 7, 7],
+                [0, 0, 0],
+            ];
+        }
+    }
+
+    function drawMatrix(matrix, offset) {
+        matrix.forEach((row, y) => {
+            row.forEach((value, x) => {
+                if (value !== 0) {
+                    context.fillStyle = colors[value];
+                    context.fillRect(x + offset.x,
+                                    y + offset.y,
+                                    1, 1);
+                }
+            });
+        });
+    }
+
+    function draw() {
+        context.fillStyle = '#000';
+        context.fillRect(0, 0, canvas.width, canvas.height);
+
+        drawMatrix(arena, {x: 0, y: 0});
+        drawMatrix(player.matrix, player.pos);
+    }
+
+    function merge(arena, player) {
+        player.matrix.forEach((row, y) => {
+            row.forEach((value, x) => {
+                if (value !== 0) {
+                    arena[y + player.pos.y][x + player.pos.x] = value;
+                }
+            });
+        });
+    }
+
+    function rotate(matrix, dir) {
+        for (let y = 0; y < matrix.length; ++y) {
+            for (let x = 0; x < y; ++x) {
+                [
+                    matrix[x][y],
+                    matrix[y][x],
+                ] = [
+                    matrix[y][x],
+                    matrix[x][y],
+                ];
+            }
+        }
+
+        if (dir > 0) {
+            matrix.forEach(row => row.reverse());
+        } else {
+            matrix.reverse();
+        }
+    }
+
+    function playerDrop() {
+        player.pos.y++;
+        if (collide(arena, player)) {
+            player.pos.y--;
+            merge(arena, player);
+            playerReset();
+            arenaSweep();
+            updateScore();
+        }
+        dropCounter = 0;
+    }
+
+    function playerMove(offset) {
+        player.pos.x += offset;
+        if (collide(arena, player)) {
+            player.pos.x -= offset;
+        }
+    }
+
+    function playerReset() {
+        const pieces = 'TJLOSZI';
+        player.matrix = createPiece(pieces[pieces.length * Math.random() | 0]);
+        player.pos.y = 0;
+        player.pos.x = (arena[0].length / 2 | 0) -
+                    (player.matrix[0].length / 2 | 0);
+        if (collide(arena, player)) {
+            arena.forEach(row => row.fill(0));
+            player.score = 0;
+            updateScore();
+        }
+    }
+
+    function playerRotate(dir) {
+        const pos = player.pos.x;
+        let offset = 1;
+        rotate(player.matrix, dir);
+        while (collide(arena, player)) {
+            player.pos.x += offset;
+            offset = -(offset + (offset > 0 ? 1 : -1));
+            if (offset > player.matrix[0].length) {
+                rotate(player.matrix, -dir);
+                player.pos.x = pos;
+                return;
+            }
+        }
+    }
+
+    let dropCounter = 0;
+    let dropInterval = 1000 / 5 | 0;
+
+    let lastTime = 0;
+    function update(time = 0) {
+        const deltaTime = time - lastTime;
+
+        dropCounter += deltaTime;
+        if (dropCounter > dropInterval) {
+            playerDrop();
+        }
+
+        lastTime = time;
+
+        draw();
+        requestAnimationFrame(update);
+    }
+
+    function updateScore() {
+        document.getElementById('score').innerText = player.score;
+    }
+
+    document.addEventListener('keydown', event => {
+        if (event.keyCode === 37) {
+            playerMove(-1);
+        } else if (event.keyCode === 39) {
+            playerMove(1);
+        } else if (event.keyCode === 40) {
+            playerDrop();
+        } else if (event.keyCode === 81) {
+            playerRotate(-1);
+        } else if (event.keyCode === 87) {
+            playerRotate(1);
+        }
+    });
+
+    const colors = [
+        null,
+        '#FF0D72',
+        '#0DC2FF',
+        '#0DFF72',
+        '#F538FF',
+        '#FF8E0D',
+        '#FFE138',
+        '#3877FF',
+    ];
+
+    const arena = createMatrix(12, 20);
+
+    const player = {
+        pos: {x: 0, y: 0},
+        matrix: null,
+        score: 0,
+    };
+
+    function _main(){
+        playerReset();
+        updateScore();
+        update();
+    }
+    window.onload = _main();
+
+</script>
+
+            
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="分享">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/game/tetrix.html" title="分享到 Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/game/tetrix.html" title="分享到 Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/game/tetrix.html" title="分享到 Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="返回到头顶">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <style media="screen">.v .vwrap{overflow: inherit;}</style>
+                <div id="vcomment"></div>
+                <a href="game/tetrix.html#vcomment" class="disqus-comment-count"></a>
+                <span class="valine-comment-count" data-xid="game/tetrix.html"></span>
+                <span> Comment</span>
+            
+        
+    </div>
+</article>
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2018 Jelech. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+        
+            <h4 id="about-card-name">Jelech</h4>
+        
+            <div id="about-card-bio"><p>putty本无树,MinGW亦非台</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br>
+                <p>在校大学生一枚</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br>
+                CHINA.HRB.STU
+            </div>
+        
+
+        
+            <div id="about-card-job">
+                <i class="fa fa-envelope"></i>
+                <br>
+                jelech@hotmail.com
+            </div>
+        
+
+        
+            <div id="about-card-job">
+                <i class="fa fa-phone-square"></i>
+                <br>
+                18.......6
+            </div>
+        
+
+
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
+<!--SCRIPTS END-->
+
+
+
+    </body>
+</html>

@@ -1,0 +1,535 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Jelech的博客">
+    <title>动态规划模板 - Jelech的博客</title>
+    <meta name="author" content="Jelech">
+    
+        <meta name="keywords" content="博客,算法,javascript,游戏,">
+    
+    
+        <link rel="icon" href="http://www.jelech.cn/assets/images/favicon.ico">
+        <link rel="Shortcut Icon" type="image/x-icon" href="http://www.jelech.cn/assets/images/favicon.ico">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n更新一些动态规划的模板背包问题12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849//  01背包：  void bag01(int cost,int weight)  &#123;      for(i = v; i &gt;= cost; --i)      dp[i] = max(dp[i], dp[i-cost]+weight);  &#125;  //  完全背包：void complete(int cost, int weight)  &#123;      for(i = cost ; i &lt;= v; ++i)      dp[i] = max(dp[i], dp[i - cost] + weight);  &#125;  //  多重背包：  void multiply(int cost, int weight, int amount)  &#123;      if(cost * amount &gt;= v)          complete(cost, weight);      else&#123;          k = 1;          while (k &lt; amount)&#123;              bag01(k * cost, k * weight);              amount -= k;              k += k;          &#125;          bag01(cost * amount, weight * amount);      &#125;  &#125;  // other 递归类型int dp[1000000];// 1e6int c[55], m[110];int sum;void CompletePack(int c) &#123;    for (int v = c; v &lt;= sum / 2; ++v)        dp[v] = max(dp[v], dp[v - c] + c);&#125;void ZeroOnePack(int c) &#123;    for (int v = sum / 2; v &gt;= c; --v)        dp[v] = max(dp[v], dp[v - c] + c);&#125;void multiplePack(int c, int m） &#123;    if (m * c &gt; sum / 2) CompletePack(c);    else&#123;        int k = 1;        while (k &lt; m)&#123;            ZeroOnePack(k * c);            m -= k;            k &lt;&lt;= 1;        &#125;        if (m != 0) ZeroOnePack(m * c);    &#125;&#125;\nLIS 最长上升子序列12345678910111213141516171819202122232425262728/*    状态转移dp[i] = max&#123; 1.dp[j] + 1 &#125;;  j&lt;i; a[j]&lt;a[i];    d[i]是以i结尾的最长上升子序列    与i之前的 每个a[j]&lt;a[i]的 j的位置的最长上升子序列+1后的值比较*/void solve()&#123;   // 参考挑战程序设计入门经典;    for(int i = 0; i &lt; n; ++i)&#123;          dp[i] = 1;          for(int j = 0; j &lt; i; ++j)&#123;              if(a[j] &lt; a[i])&#123;                  dp[i] = max(dp[i], dp[j] + 1);              &#125; &#125; &#125;&#125;  /*     优化方法：    dp[i]表示长度为i+1的上升子序列的最末尾元素      找到第一个比dp末尾大的来代替 */void solve() &#123;  \tfor (int i = 0; i &lt; n; ++i)\t\tdp[i] = INF;\tfor (int i = 0; i &lt; n; ++i) \t\t*lower_bound(dp, dp + n, a[i]) = a[i];  //  返回一个指针  \tprintf(\"%d\\n\", *lower_bound(dp, dp + n, INF) - dp;  &#125;/*      函数lower_bound()返回一个 iterator 它指向在[first,last)标记的有序序列中可以插入value，而不会破坏容器顺序的第一个位置，而这个位置标记了一个不小于value的值。*/\nLCS 最长公共子序列123456789void solve() &#123;    for (int i = 0; i &lt; n; ++i) &#123;        for (int j = 0; j &lt; m; ++j) &#123;            if (s1[i] == s2[j]) &#123;                dp[i + 1][j + 1] = dp[i][j] + 1;              &#125;else &#123;                  dp[i + 1][j + 1] = max(dp[i][j + 1], dp[i + 1][j]);              &#125; &#125; &#125;&#125;","dateCreated":"2018-04-30T21:09:57+08:00","dateModified":"2018-12-01T21:37:59+08:00","datePublished":"2018-04-30T21:09:57+08:00","description":"","headline":"动态规划模板","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://www.jelech.cn/posts/33256/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"http://www.jelech.cn/posts/33256/","keywords":"模板"}</script>
+    <meta name="keywords" content="模板">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="动态规划模板">
+<meta property="og:url" content="http://www.jelech.cn/posts/33256/index.html">
+<meta property="og:site_name" content="Jelech的博客">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2018-12-01T13:37:59.888Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="动态规划模板">
+<meta name="twitter:creator" content="@twitter">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="http://www.jelech.cn/assets/images/avatar.jpg"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
+    <!--STYLES END-->
+    
+
+    
+    <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?c3b0944d9211544bb9fe9d25ce47bac7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">Jelech的博客</a>
+    </div>
+    
+        
+            <a class="header-right-picture " href="#about">
+        
+        
+            <img class="header-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+                </a>
+                <h4 class="sidebar-profile-name">Jelech</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>putty本无树,MinGW亦非台</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/ " title="首页">
+                    
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-categories" title="分类">
+                    
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">分类</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-tags" title="标签">
+                    
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-archives" title="归档">
+                    
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/game" title="游戏">
+                    
+                        <i class="sidebar-button-icon fas fa-gamepad" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">游戏</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="#about" title="关于">
+                    
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="https://github.com/jelech" target="_blank" rel="noopener" title="GitHub">
+                    
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/mailto" title="邮箱">
+                    
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">邮箱</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            动态规划模板
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2018-04-30T21:09:57+08:00">
+	
+		    4月 30, 2018
+    	
+    </time>
+    
+        <span>发布在 </span>
+        
+    <a class="category-link" href="/categories/算法/">算法</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            
+            <h1 id="table-of-contents">目录</h1><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#更新一些动态规划的模板"><span class="toc-text">更新一些动态规划的模板</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#背包问题"><span class="toc-text">背包问题</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#LIS-最长上升子序列"><span class="toc-text">LIS 最长上升子序列</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#LCS-最长公共子序列"><span class="toc-text">LCS 最长公共子序列</span></a></li></ol>
+<a id="more"></a>
+<h2 id="更新一些动态规划的模板"><a href="#更新一些动态规划的模板" class="headerlink" title="更新一些动态规划的模板"></a>更新一些动态规划的模板</h2><h4 id="背包问题"><a href="#背包问题" class="headerlink" title="背包问题"></a>背包问题</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//  01背包：  </span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">bag01</span><span class="params">(<span class="keyword">int</span> cost,<span class="keyword">int</span> weight)</span>  </span>&#123;  </span><br><span class="line">    <span class="keyword">for</span>(i = v; i &gt;= cost; --i)  </span><br><span class="line">    dp[i] = max(dp[i], dp[i-cost]+weight);  </span><br><span class="line">&#125;  </span><br><span class="line"><span class="comment">//  完全背包：</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">complete</span><span class="params">(<span class="keyword">int</span> cost, <span class="keyword">int</span> weight)</span>  </span>&#123;  </span><br><span class="line">    <span class="keyword">for</span>(i = cost ; i &lt;= v; ++i)  </span><br><span class="line">    dp[i] = max(dp[i], dp[i - cost] + weight);  </span><br><span class="line">&#125;  </span><br><span class="line"><span class="comment">//  多重背包：  </span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">multiply</span><span class="params">(<span class="keyword">int</span> cost, <span class="keyword">int</span> weight, <span class="keyword">int</span> amount)</span>  </span>&#123;  </span><br><span class="line">    <span class="keyword">if</span>(cost * amount &gt;= v)  </span><br><span class="line">        complete(cost, weight);  </span><br><span class="line">    <span class="keyword">else</span>&#123;  </span><br><span class="line">        k = <span class="number">1</span>;  </span><br><span class="line">        <span class="keyword">while</span> (k &lt; amount)&#123;  </span><br><span class="line">            bag01(k * cost, k * weight);  </span><br><span class="line">            amount -= k;  </span><br><span class="line">            k += k;  </span><br><span class="line">        &#125;  </span><br><span class="line">        bag01(cost * amount, weight * amount);  </span><br><span class="line">    &#125;  </span><br><span class="line">&#125;  </span><br><span class="line"></span><br><span class="line"><span class="comment">// other 递归类型</span></span><br><span class="line"><span class="keyword">int</span> dp[<span class="number">1000000</span>];<span class="comment">// 1e6</span></span><br><span class="line"><span class="keyword">int</span> c[<span class="number">55</span>], m[<span class="number">110</span>];</span><br><span class="line"><span class="keyword">int</span> sum;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">CompletePack</span><span class="params">(<span class="keyword">int</span> c)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> v = c; v &lt;= sum / <span class="number">2</span>; ++v)</span><br><span class="line">        dp[v] = max(dp[v], dp[v - c] + c);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">ZeroOnePack</span><span class="params">(<span class="keyword">int</span> c)</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> v = sum / <span class="number">2</span>; v &gt;= c; --v)</span><br><span class="line">        dp[v] = max(dp[v], dp[v - c] + c);</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">multiplePack</span><span class="params">(<span class="keyword">int</span> c, <span class="keyword">int</span> m） &#123;</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">if</span> (m * c &gt; sum / <span class="number">2</span>) CompletePack(c);</span></span></span><br><span class="line"><span class="function"><span class="params">    <span class="keyword">else</span>&#123;</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">int</span> k = <span class="number">1</span>;</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">while</span> (k &lt; m)&#123;</span></span></span><br><span class="line"><span class="function"><span class="params">            ZeroOnePack(k * c);</span></span></span><br><span class="line"><span class="function"><span class="params">            m -= k;</span></span></span><br><span class="line"><span class="function"><span class="params">            k &lt;&lt;= <span class="number">1</span>;</span></span></span><br><span class="line"><span class="function"><span class="params">        &#125;</span></span></span><br><span class="line"><span class="function"><span class="params">        <span class="keyword">if</span> (m != <span class="number">0</span>) ZeroOnePack(m * c);</span></span></span><br><span class="line"><span class="function"><span class="params">    &#125;</span></span></span><br><span class="line"><span class="function"><span class="params">&#125;</span></span></span><br></pre></td></tr></table></figure>
+<h4 id="LIS-最长上升子序列"><a href="#LIS-最长上升子序列" class="headerlink" title="LIS 最长上升子序列"></a>LIS 最长上升子序列</h4><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">/*</span></span><br><span class="line"><span class="comment">    状态转移dp[i] = max&#123; 1.dp[j] + 1 &#125;;  j&lt;i; a[j]&lt;a[i];</span></span><br><span class="line"><span class="comment">    d[i]是以i结尾的最长上升子序列</span></span><br><span class="line"><span class="comment">    与i之前的 每个a[j]&lt;a[i]的 j的位置的最长上升子序列+1后的值比较</span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">solve</span><span class="params">()</span></span>&#123;   <span class="comment">// 参考挑战程序设计入门经典;</span></span><br><span class="line">    <span class="keyword">for</span>(<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i)&#123;  </span><br><span class="line">        dp[i] = <span class="number">1</span>;  </span><br><span class="line">        <span class="keyword">for</span>(<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; i; ++j)&#123;  </span><br><span class="line">            <span class="keyword">if</span>(a[j] &lt; a[i])&#123;  </span><br><span class="line">                dp[i] = max(dp[i], dp[j] + <span class="number">1</span>);  </span><br><span class="line">            &#125; &#125; &#125;</span><br><span class="line">&#125;  </span><br><span class="line"><span class="comment">/* </span></span><br><span class="line"><span class="comment">    优化方法：</span></span><br><span class="line"><span class="comment">    dp[i]表示长度为i+1的上升子序列的最末尾元素  </span></span><br><span class="line"><span class="comment">    找到第一个比dp末尾大的来代替 </span></span><br><span class="line"><span class="comment">*/</span></span><br><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">solve</span><span class="params">()</span> </span>&#123;  </span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i)</span><br><span class="line">		dp[i] = INF;</span><br><span class="line">	<span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) </span><br><span class="line">		*lower_bound(dp, dp + n, a[i]) = a[i];  <span class="comment">//  返回一个指针  </span></span><br><span class="line">	<span class="built_in">printf</span>(<span class="string">"%d\n"</span>, *lower_bound(dp, dp + n, INF) - dp;  </span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">/*  </span></span><br><span class="line"><span class="comment">    函数lower_bound()返回一个 iterator 它指向在[first,last)标记的有序序列中可以插入value，而不会破坏容器顺序的第一个位置，而这个位置标记了一个不小于value的值。</span></span><br><span class="line"><span class="comment">*/</span></span><br></pre></td></tr></table></figure>
+<h3 id="LCS-最长公共子序列"><a href="#LCS-最长公共子序列" class="headerlink" title="LCS 最长公共子序列"></a>LCS 最长公共子序列</h3><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">solve</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; ++i) &#123;</span><br><span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; m; ++j) &#123;</span><br><span class="line">            <span class="keyword">if</span> (s1[i] == s2[j]) &#123;</span><br><span class="line">                dp[i + <span class="number">1</span>][j + <span class="number">1</span>] = dp[i][j] + <span class="number">1</span>;  </span><br><span class="line">            &#125;<span class="keyword">else</span> &#123;  </span><br><span class="line">                dp[i + <span class="number">1</span>][j + <span class="number">1</span>] = max(dp[i][j + <span class="number">1</span>], dp[i + <span class="number">1</span>][j]);  </span><br><span class="line">            &#125; &#125; &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+            
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">标签</span><br>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/模板/">模板</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/56449/" data-tooltip="计算几何模板" aria-label="上一篇: 计算几何模板">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/39634/" data-tooltip="中等难度模板" aria-label="下一篇: 中等难度模板">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="分享">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/33256/" title="分享到 Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/33256/" title="分享到 Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/33256/" title="分享到 Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <style media="screen">.v .vwrap{overflow: inherit;}</style>
+                <div id="vcomment"></div>
+                <a href="posts/33256/#vcomment" class="disqus-comment-count"></a>
+                <span class="valine-comment-count" data-xid="posts/33256/"></span>
+                <span> Comment</span>
+            
+        
+    </div>
+</article>
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2018 Jelech. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/56449/" data-tooltip="计算几何模板" aria-label="上一篇: 计算几何模板">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/39634/" data-tooltip="中等难度模板" aria-label="下一篇: 中等难度模板">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="分享">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/33256/" title="分享到 Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/33256/" title="分享到 Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/33256/" title="分享到 Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+    <i id="btn-close-shareoptions" class="fa fa-times"></i>
+    <ul class="share-options">
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/33256/">
+                    <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/33256/">
+                    <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/33256/">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+        
+            <h4 id="about-card-name">Jelech</h4>
+        
+            <div id="about-card-bio"><p>putty本无树,MinGW亦非台</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br>
+                <p>在校大学生一枚</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br>
+                CHINA.HRB.STU
+            </div>
+        
+
+        
+            <div id="about-card-job">
+                <i class="fa fa-envelope"></i>
+                <br>
+                jelech@hotmail.com
+            </div>
+        
+
+        
+            <div id="about-card-job">
+                <i class="fa fa-phone-square"></i>
+                <br>
+                18.......6
+            </div>
+        
+
+
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js" charset="utf-8"></script>
+        <script src="//unpkg.com/valine@latest/dist/Valine.min.js" charset="utf-8"></script>
+        <script>
+            var notify = 'false' == true ? true : false;
+            var verify = 'false' == true ? true : false;
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1;
+            });
+
+            guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+            window.valine = new Valine({
+                el:'#vcomment',
+                notify:notify,
+                verify:verify,
+                appId:'rwwVeUe3kpfbc0OkoxmgnTKM-gzGzoHsz',
+                appKey:'FcDDW6bpbs5QmH3A1B2Aqmae',
+                placeholder:'Just so so',
+                avatar:'mm',
+                guest_info:guest_info,
+                pageSize:'10'
+            });
+        </script>
+    
+
+
+
+    </body>
+</html>

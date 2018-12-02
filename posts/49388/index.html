@@ -1,0 +1,586 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Jelech的博客">
+    <title>node.js的学习笔记 - Jelech的博客</title>
+    <meta name="author" content="Jelech">
+    
+        <meta name="keywords" content="博客,算法,javascript,游戏,">
+    
+    
+        <link rel="icon" href="http://www.jelech.cn/assets/images/favicon.ico">
+        <link rel="Shortcut Icon" type="image/x-icon" href="http://www.jelech.cn/assets/images/favicon.ico">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\nNodeJS code notes当初学习node.js时候的笔记，现在看来，写的都很简陋和天真，进了计算机专业后，跟着学了真正的计算机知识。再回来看这些问题，真的觉得突然简单了很多。特别是算法的学习对我的帮助真的很大很大！现在想想还有点小激动！！下面是笔记的第一版本，在排版上做了一些修改，其他基本保持原样。之后我会在这个基础上修改。\nNodeJs安装官网下载安装，使用git调用(调Path)，试用官网网页的创建一个服务器储存为server.js，git调用 node server.js，返回日志console.log\n12345678var http = require('http')\t\t\t\t\t//加载http模块var server = http.createServer(function (req,res) &#123;    res.writeHead(200,&#123;'Conten-Type':'text/plain'&#125;)//声明传出的类型//写具体内容    res.end('Hello Node.js\\n')\t\t\t\t//结束传出&#125;)server.listen(1337,'127.0.0.1')console.log('Server running at http://127.0.0.1:1377/')\nnodejs引用了规范模块与包管理工具.Commonjs规范：模块定义，标识，引用模块分类：核心模块、文件模块、第三方模块exports.add = name/function 暴露对象。module.exports = name 暴露对象。//修改传统对象实例\n.forEach //遍历require(‘./name’)加载模块Node.js API ：//url具体的地址：\n\nurl.parse(‘http…’，true//让query解析为对象，\ntrue//path显示方法)对地址拆开解析：\nurl.format(‘’)\n\n\nprotocol                     底层使用协议\nslashes                      是否有协议双斜线\nhost                     ip地址/域名\nport                     端口默认80\nhostname                     主机名\nhash:                      页面锚点\nsearch                     查询字符串参数\nquery                      发送给服务器的数据、字符串\npathnam                      /path\nhref                      完整超链接\n\n————————————————————-安全————————————————————\n\nquerystring.string({ name:’scott’ }, ’不同对象的分离’, ’对象和值之间的符号’)\nquerystring.parse(‘…’, ’告诉浏览器用什么分开解析’, ’告诉浏览器用:代表值等符号’，’’)\nquerystring.escape(‘&lt;…&gt;’)把内容转义字符\nquerystring.unescape(‘…’)把字符转义内容\n\nHTTP//协议//线搜索自身DNS缓存/系统自身//读取HOST文件//发送一个DNS请求//宽带运营商服务器查看本身缓存//运营商服务器发送一个迭代DNS解析的请求    //结果返回操作系统内核同时缓存/操作系统内核把结果返回浏览器//TCP连接请求//发送HTTP请求//服务器接收HTTP请求，返回数据//浏览器显示\n\n请求方法:GET:获取数据               POST:提交数据                        PUT:更新上传数据DELETE:删除                   HEAD:获取一个元数据                   TRACE:POTIONS:状态码：1XX:接收处理ing                       2XX:处理ed                        3XX:进一步处理4XX:客户端错误               5XX:服务器错误\n\n————————————————————-安全————————————————————\nHTTP进阶概念1234567891011function learn (something)&#123;\tconsole.log(‘something’)&#125;function we(callback,something)&#123;  something += ‘ is coll’  callback(something)&#125;we(learn, ‘Nodejs’)\t\t\t\t//具名函数we(function()&#123;\tconsole.log(something)&#125;,Jack)//\n​回调://将后续逻辑封装在函数中作为起始函数的参数,逐层嵌套/传入一个匿名函数\n同步/异步://顺序执行任务，后等前//时长会出现因为延迟，没有运行结束就已经进行下一步（多线程）        \nI/O:        \n单线程/多线程://单线程安全同意//多线程资源控制        \n阻塞/非阻塞:\n事件:\n事件驱动:为某个时间注册了函数，当一个事件发生才调用函数        \n基于事件驱动的回调:\n事件循环:                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              \nHTTP源码解读作用域://局部、全局\n12345678910var pet = &#123;    words: ’...’    speak: function(say) &#123;    console.log(say + ‘ ’ + this.words)&#125;&#125;var dog = &#123;    words: ‘Wang’&#125;pet.speak.call(dog, ’Speak’)\nab -n1000 -c10 http://... n请求数, c线路默认1 ————Apache ab\n \nHTTP小爬虫 npm install cheerio1234567891011121314151617181920212223242526272829303132333435363738394041424344var http = require(‘http’)var url = ‘http://www.imooc.com/learn/348’http.get(url, function(res) &#123;    var html = ‘’    res.on(‘data’, function(data) &#123;\t\t\t\thtml += data\t\t&#125;)    res.on(‘end’, function() &#123;  \t\t\tconsole.log(html)\t\t&#125;)&#125;).on(‘error’, function() &#123;\t\tconsole.log(‘获取出错’)&#125;)var http = require(‘http’)var cheerio = require(‘cheerio’)var url = ‘http://www.imooc.com/learn/348’function filterChapters(html) &#123;    var $ = cheerio. load(html)    var chapters = $(‘.learnchapter’)  [&#123;    chapterTitle:’’,    videos: [      title: ‘’,      id: ‘’    ]  &#125;]&#125;http.get(url, function(res) &#123;    var html = ‘’    res.on(‘data’, function(data) &#123;        html += data    &#125;)    res.on(‘end’, function() &#123;      \tfilterChapters(html)  \t&#125;)&#125;).on(‘error’, function() &#123;  \tconsole.log(‘获取出错’)&#125;)//unfinished\nPromiseES6 的Promise是一种对象,有3种状态(未完成,已完成,失败),可以使用.then().then().then链式使用Promise 库:bluebird,Q,then.js,es6-promise,ypromise,async,native-promise-only重写爬虫(https使用的加密方式,在http和tcp之间需要SSL/TLS证书)\n123456789101112var http = require('https')var fs = require('fs')var options = &#123;    key: fs.readFileSync('ssh_key.pem')    cert: fs.readFileSync('ssh_cert.pem')&#125;//可以运行一个https服务器https.createServer(option, funcion(req, res)&#123;    res.writeHead(200)    res.end('Hello')&#125;).listen(8090)\n","dateCreated":"2018-05-02T23:44:47+08:00","dateModified":"2018-12-02T09:23:44+08:00","datePublished":"2018-05-02T23:44:47+08:00","description":"","headline":"node.js的学习笔记","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://www.jelech.cn/posts/49388/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"http://www.jelech.cn/posts/49388/","keywords":"笔记, 前端"}</script>
+    <meta name="keywords" content="笔记,前端">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="node.js的学习笔记">
+<meta property="og:url" content="http://www.jelech.cn/posts/49388/index.html">
+<meta property="og:site_name" content="Jelech的博客">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:image" content="http://www.jelech.cn/images/nodejsnote/htmlhead.jpg">
+<meta property="og:updated_time" content="2018-12-02T01:23:44.640Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="node.js的学习笔记">
+<meta name="twitter:image" content="http://www.jelech.cn/images/nodejsnote/htmlhead.jpg">
+<meta name="twitter:creator" content="@twitter">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="http://www.jelech.cn/assets/images/avatar.jpg"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
+    <!--STYLES END-->
+    
+
+    
+    <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?c3b0944d9211544bb9fe9d25ce47bac7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">Jelech的博客</a>
+    </div>
+    
+        
+            <a class="header-right-picture " href="#about">
+        
+        
+            <img class="header-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+                </a>
+                <h4 class="sidebar-profile-name">Jelech</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>putty本无树,MinGW亦非台</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/ " title="首页">
+                    
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-categories" title="分类">
+                    
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">分类</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-tags" title="标签">
+                    
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-archives" title="归档">
+                    
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/game" title="游戏">
+                    
+                        <i class="sidebar-button-icon fas fa-gamepad" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">游戏</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="#about" title="关于">
+                    
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="https://github.com/jelech" target="_blank" rel="noopener" title="GitHub">
+                    
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/mailto" title="邮箱">
+                    
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">邮箱</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            node.js的学习笔记
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2018-05-02T23:44:47+08:00">
+	
+		    5月 02, 2018
+    	
+    </time>
+    
+        <span>发布在 </span>
+        
+    <a class="category-link" href="/categories/学习笔记/">学习笔记</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            
+            <h1 id="table-of-contents">目录</h1><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#NodeJS-code-notes"><span class="toc-text">NodeJS code notes</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#NodeJs安装"><span class="toc-text">NodeJs安装</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#nodejs引用了规范"><span class="toc-text">nodejs引用了规范</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP-协议"><span class="toc-text">HTTP//协议//</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP进阶概念"><span class="toc-text">HTTP进阶概念</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP源码解读"><span class="toc-text">HTTP源码解读</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#HTTP小爬虫-npm-install-cheerio"><span class="toc-text">HTTP小爬虫 npm install cheerio</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Promise"><span class="toc-text">Promise</span></a></li></ol></li></ol>
+<a id="more"></a>
+<h2 id="NodeJS-code-notes"><a href="#NodeJS-code-notes" class="headerlink" title="NodeJS code notes"></a>NodeJS code notes</h2><p>当初学习node.js时候的笔记，现在看来，写的都很简陋和天真，进了计算机专业后，跟着学了真正的计算机知识。再回来看这些问题，真的觉得突然简单了很多。特别是算法的学习对我的帮助真的很大很大！现在想想还有点小激动！！<br>下面是笔记的第一版本，在排版上做了一些修改，其他基本保持原样。之后我会在这个基础上修改。</p>
+<h3 id="NodeJs安装"><a href="#NodeJs安装" class="headerlink" title="NodeJs安装"></a>NodeJs安装</h3><p>官网下载安装，使用git调用(调Path)，试用官网网页的创建一个服务器储存为server.js，git调用 node server.js，返回日志console.log</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'http'</span>)					<span class="comment">//加载http模块</span></span><br><span class="line"><span class="keyword">var</span> server = http.createServer(<span class="function"><span class="keyword">function</span> (<span class="params">req,res</span>) </span>&#123;</span><br><span class="line">    res.writeHead(<span class="number">200</span>,&#123;<span class="string">'Conten-Type'</span>:<span class="string">'text/plain'</span>&#125;)<span class="comment">//声明传出的类型</span></span><br><span class="line"><span class="comment">//写具体内容</span></span><br><span class="line">    res.end(<span class="string">'Hello Node.js\n'</span>)				<span class="comment">//结束传出</span></span><br><span class="line">&#125;)</span><br><span class="line">server.listen(<span class="number">1337</span>,<span class="string">'127.0.0.1'</span>)</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">'Server running at http://127.0.0.1:1377/'</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="nodejs引用了规范"><a href="#nodejs引用了规范" class="headerlink" title="nodejs引用了规范"></a>nodejs引用了规范</h3><p>模块与包管理工具.Commonjs规范：模块定义，标识，引用<br>模块分类：核心模块、文件模块、第三方模块<br>exports.add = name/function 暴露对象。<br>module.exports = name 暴露对象。//修改传统对象实例</p>
+<p>.forEach //遍历<br>require(‘./name’)加载模块<br>Node.js API ：//url具体的地址：</p>
+<ol>
+<li>url.parse(‘http…’，true//让query解析为对象，</li>
+<li>true//path显示方法)对地址拆开解析：</li>
+<li>url.format(‘’)</li>
+</ol>
+<ul>
+<li>protocol                     底层使用协议</li>
+<li>slashes                      是否有协议双斜线</li>
+<li>host                     ip地址/域名</li>
+<li>port                     端口默认80</li>
+<li>hostname                     主机名</li>
+<li>hash:                      页面锚点</li>
+<li>search                     查询字符串参数</li>
+<li>query                      发送给服务器的数据、字符串</li>
+<li>pathnam                      /path</li>
+<li>href                      完整超链接</li>
+</ul>
+<p><strong>————————————————————-安全————————————————————</strong></p>
+<ul>
+<li>querystring.string({ name:’scott’ }, ’不同对象的分离’, ’对象和值之间的符号’)</li>
+<li>querystring.parse(‘…’, ’告诉浏览器用什么分开解析’, ’告诉浏览器用:代表值等符号’，’’)</li>
+<li>querystring.escape(‘&lt;…&gt;’)把内容转义字符</li>
+<li>querystring.unescape(‘…’)把字符转义内容</li>
+</ul>
+<h3 id="HTTP-协议"><a href="#HTTP-协议" class="headerlink" title="HTTP//协议//"></a>HTTP//协议//</h3><p>线搜索自身DNS缓存/系统自身//读取HOST文件//发送一个DNS请求//宽带运营商服务器查看本身缓存//运营商服务器发送一个迭代DNS解析的请求    //结果返回操作系统内核同时缓存/操作系统内核把结果返回浏览器//TCP连接请求//发送HTTP请求//服务器接收HTTP请求，返回数据//浏览器显示</p>
+<blockquote>
+<p>请求方法:<br>GET:获取数据               POST:提交数据                        PUT:更新上传数据<br>DELETE:删除                   HEAD:获取一个元数据                   TRACE:POTIONS:<br>状态码：<br>1XX:接收处理ing                       2XX:处理ed                        3XX:进一步处理<br>4XX:客户端错误               5XX:服务器错误</p>
+</blockquote>
+<p><strong>————————————————————-安全————————————————————</strong></p>
+<h3 id="HTTP进阶概念"><a href="#HTTP进阶概念" class="headerlink" title="HTTP进阶概念"></a>HTTP进阶概念</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">learn</span> (<span class="params">something</span>)</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(‘something’)</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">we</span>(<span class="params">callback,something</span>)</span>&#123;</span><br><span class="line">  something += ‘ is coll’</span><br><span class="line">  callback(something)</span><br><span class="line">&#125;</span><br><span class="line">we(learn, ‘Nodejs’)				<span class="comment">//具名函数</span></span><br><span class="line">we(<span class="function"><span class="keyword">function</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">	<span class="built_in">console</span>.log(something)</span><br><span class="line">&#125;,Jack)<span class="comment">//</span></span><br></pre></td></tr></table></figure>
+<p>​<strong>回调</strong>://将后续逻辑封装在函数中作为起始函数的参数,逐层嵌套/传入一个匿名函数</p>
+<p><strong>同步/异步</strong>://顺序执行任务，后等前//时长会出现因为延迟，没有运行结束就已经进行下一步（多线程）        </p>
+<p><strong>I/O</strong>:        </p>
+<p><strong>单线程/多线程</strong>://单线程安全同意//多线程资源控制        </p>
+<p><strong>阻塞/非阻塞</strong>:</p>
+<p><strong>事件</strong>:</p>
+<p><strong>事件驱动</strong>:为某个时间注册了函数，当一个事件发生才调用函数        </p>
+<p><strong>基于事件驱动的回调</strong>:</p>
+<p><strong>事件循环</strong>:                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              </p>
+<h3 id="HTTP源码解读"><a href="#HTTP源码解读" class="headerlink" title="HTTP源码解读"></a>HTTP源码解读</h3><p>作用域://局部、全局</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> pet = &#123;</span><br><span class="line">    words: ’...’</span><br><span class="line">    speak: <span class="function"><span class="keyword">function</span>(<span class="params">say</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">console</span>.log(say + ‘ ’ + <span class="keyword">this</span>.words)</span><br><span class="line">&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">var</span> dog = &#123;</span><br><span class="line">    words: ‘Wang’</span><br><span class="line">&#125;</span><br><span class="line">pet.speak.call(dog, ’Speak’)</span><br></pre></td></tr></table></figure>
+<p>ab -n1000 -c10 <a href="http://..." target="_blank" rel="noopener">http://...</a> n请求数, c线路默认1 ————Apache ab</p>
+<p> <img src="\images\nodejsnote\htmlhead.jpg" alt="htmlhead"></p>
+<h3 id="HTTP小爬虫-npm-install-cheerio"><a href="#HTTP小爬虫-npm-install-cheerio" class="headerlink" title="HTTP小爬虫 npm install cheerio"></a>HTTP小爬虫 npm install cheerio</h3><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(‘http’)</span><br><span class="line"><span class="keyword">var</span> url = ‘http:<span class="comment">//www.imooc.com/learn/348’</span></span><br><span class="line"></span><br><span class="line">http.get(url, <span class="function"><span class="keyword">function</span>(<span class="params">res</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> html = ‘’</span><br><span class="line">    res.on(‘data’, <span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">				html += data</span><br><span class="line">		&#125;)</span><br><span class="line">    res.on(‘end’, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  			<span class="built_in">console</span>.log(html)</span><br><span class="line">		&#125;)</span><br><span class="line">&#125;).on(‘error’, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">		<span class="built_in">console</span>.log(‘获取出错’)</span><br><span class="line">&#125;)</span><br><span class="line"></span><br><span class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(‘http’)</span><br><span class="line"><span class="keyword">var</span> cheerio = <span class="built_in">require</span>(‘cheerio’)</span><br><span class="line"><span class="keyword">var</span> url = ‘http:<span class="comment">//www.imooc.com/learn/348’</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">filterChapters</span>(<span class="params">html</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> $ = cheerio. load(html)</span><br><span class="line">    <span class="keyword">var</span> chapters = $(‘.learnchapter’)</span><br><span class="line"></span><br><span class="line">  [&#123;</span><br><span class="line">    chapterTitle:’’,</span><br><span class="line">    videos: [</span><br><span class="line">      title: ‘’,</span><br><span class="line">      id: ‘’</span><br><span class="line">    ]</span><br><span class="line">  &#125;]</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">http.get(url, <span class="function"><span class="keyword">function</span>(<span class="params">res</span>) </span>&#123;</span><br><span class="line">    <span class="keyword">var</span> html = ‘’</span><br><span class="line">    res.on(‘data’, <span class="function"><span class="keyword">function</span>(<span class="params">data</span>) </span>&#123;</span><br><span class="line">        html += data</span><br><span class="line">    &#125;)</span><br><span class="line">    res.on(‘end’, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">      	filterChapters(html)</span><br><span class="line">  	&#125;)</span><br><span class="line">&#125;).on(‘error’, <span class="function"><span class="keyword">function</span>(<span class="params"></span>) </span>&#123;</span><br><span class="line">  	<span class="built_in">console</span>.log(‘获取出错’)</span><br><span class="line">&#125;)</span><br><span class="line"><span class="comment">//unfinished</span></span><br></pre></td></tr></table></figure>
+<h3 id="Promise"><a href="#Promise" class="headerlink" title="Promise"></a>Promise</h3><p>ES6 的Promise是一种对象,有3种状态(未完成,已完成,失败),可以使用.then().then().then链式使用<br>Promise 库:bluebird,Q,then.js,es6-promise,ypromise,async,native-promise-only<br>重写爬虫(https使用的加密方式,在http和tcp之间需要SSL/TLS证书)</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> http = <span class="built_in">require</span>(<span class="string">'https'</span>)</span><br><span class="line"><span class="keyword">var</span> fs = <span class="built_in">require</span>(<span class="string">'fs'</span>)</span><br><span class="line"><span class="keyword">var</span> options = &#123;</span><br><span class="line">    key: fs.readFileSync(<span class="string">'ssh_key.pem'</span>)</span><br><span class="line">    cert: fs.readFileSync(<span class="string">'ssh_cert.pem'</span>)</span><br><span class="line">&#125;<span class="comment">//可以运行一个https服务器</span></span><br><span class="line"></span><br><span class="line">https.createServer(option, funcion(req, res)&#123;</span><br><span class="line">    res.writeHead(<span class="number">200</span>)</span><br><span class="line">    res.end(<span class="string">'Hello'</span>)</span><br><span class="line">&#125;)</span><br><span class="line">.listen(<span class="number">8090</span>)</span><br></pre></td></tr></table></figure>
+
+            
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">标签</span><br>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/前端/">前端</a> <a class="tag tag--primary tag--small t-link" href="/tags/笔记/">笔记</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/4499/" data-tooltip="github被封以及HOST的使用" aria-label="上一篇: github被封以及HOST的使用">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/18091/" data-tooltip="SWERC2017新一轮训练赛" aria-label="下一篇: SWERC2017新一轮训练赛">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="分享">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/49388/" title="分享到 Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/49388/" title="分享到 Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/49388/" title="分享到 Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <style media="screen">.v .vwrap{overflow: inherit;}</style>
+                <div id="vcomment"></div>
+                <a href="posts/49388/#vcomment" class="disqus-comment-count"></a>
+                <span class="valine-comment-count" data-xid="posts/49388/"></span>
+                <span> Comment</span>
+            
+        
+    </div>
+</article>
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2018 Jelech. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/4499/" data-tooltip="github被封以及HOST的使用" aria-label="上一篇: github被封以及HOST的使用">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/18091/" data-tooltip="SWERC2017新一轮训练赛" aria-label="下一篇: SWERC2017新一轮训练赛">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="分享">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/49388/" title="分享到 Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/49388/" title="分享到 Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/49388/" title="分享到 Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+    <i id="btn-close-shareoptions" class="fa fa-times"></i>
+    <ul class="share-options">
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/49388/">
+                    <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/49388/">
+                    <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/49388/">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+        
+            <h4 id="about-card-name">Jelech</h4>
+        
+            <div id="about-card-bio"><p>putty本无树,MinGW亦非台</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br>
+                <p>在校大学生一枚</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br>
+                CHINA.HRB.STU
+            </div>
+        
+
+        
+            <div id="about-card-job">
+                <i class="fa fa-envelope"></i>
+                <br>
+                jelech@hotmail.com
+            </div>
+        
+
+        
+            <div id="about-card-job">
+                <i class="fa fa-phone-square"></i>
+                <br>
+                18.......6
+            </div>
+        
+
+
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js" charset="utf-8"></script>
+        <script src="//unpkg.com/valine@latest/dist/Valine.min.js" charset="utf-8"></script>
+        <script>
+            var notify = 'false' == true ? true : false;
+            var verify = 'false' == true ? true : false;
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1;
+            });
+
+            guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+            window.valine = new Valine({
+                el:'#vcomment',
+                notify:notify,
+                verify:verify,
+                appId:'rwwVeUe3kpfbc0OkoxmgnTKM-gzGzoHsz',
+                appKey:'FcDDW6bpbs5QmH3A1B2Aqmae',
+                placeholder:'Just so so',
+                avatar:'mm',
+                guest_info:guest_info,
+                pageSize:'10'
+            });
+        </script>
+    
+
+
+
+    </body>
+</html>

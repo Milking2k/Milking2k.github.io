@@ -1,0 +1,545 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Jelech的博客">
+    <title>设计模式学习笔记 - Jelech的博客</title>
+    <meta name="author" content="Jelech">
+    
+        <meta name="keywords" content="博客,算法,javascript,游戏,">
+    
+    
+        <link rel="icon" href="http://www.jelech.cn/assets/images/favicon.ico">
+        <link rel="Shortcut Icon" type="image/x-icon" href="http://www.jelech.cn/assets/images/favicon.ico">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n设计模式笔记\n重构获得模式寻找变化点，在变化点运用设计模式\n静态-&gt;动态早绑定-&gt;晚绑定继承-&gt;组合编译时依赖-&gt;运行时依赖紧耦合-&gt;松耦合\n对扩展开放，对修改关闭：类的新增加功能应使用扩展功能，而不是通过修改原来的代码。比如一堆的elseif\nattention规划时,划分出稳定的和变化的\n\n组件协作: 使用框架与应用创建与划分时template Method从早绑定到晚绑定算法的骨架需要稳定才能使用这个方法使得子类可以不改变一个算法的结构，就可以重定义这个算法的某些步骤框架写好了部分函数和主调用函数，使用者只需要重定义一些子类信息就可以\nStrategy多态调用，对扩展开放，对修改关闭多个else if..并且限制不明显，未来很有可能扩展时，可以使用，代码过长会占用更多内存，而对象只会在调用时使用定义一系列算法，把他们都一个个封装起来，并且可以互相替换(变化)，使他们所服务的客户程序稳定使得在运行时支持在各种算法之间切换\nObeserve / Event父类通过调用多个观察者，观察子类的信息，更新一些其他的数据\n单一职责: 因为需求的增加，会让子类功能复用多次重复利用，应划清责任Decorator装饰继承父类的功能后，&#39;多个&#39;子类在细化细节时候对功能进行扩展，引入的静态特质，缺乏灵活性:比如都要加密，都要缓存...动态的给一个对象增加一些额外的职责，Decorator模式比生成子类更为灵活基类分为了子类与装饰类(Decorator类)\nBridge以下是预期内容\n对象创建对象性能借口隔离状态变化数据结构行为变化领域问题\n","dateCreated":"2018-11-28T20:01:28+08:00","dateModified":"2018-12-01T21:39:28+08:00","datePublished":"2018-11-28T20:01:28+08:00","description":"","headline":"设计模式学习笔记","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://www.jelech.cn/posts/3493/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"http://www.jelech.cn/posts/3493/","keywords":"笔记"}</script>
+    <meta name="keywords" content="笔记">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="设计模式学习笔记">
+<meta property="og:url" content="http://www.jelech.cn/posts/3493/index.html">
+<meta property="og:site_name" content="Jelech的博客">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2018-12-01T13:39:28.834Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="设计模式学习笔记">
+<meta name="twitter:creator" content="@twitter">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="http://www.jelech.cn/assets/images/avatar.jpg"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
+    <!--STYLES END-->
+    
+
+    
+    <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?c3b0944d9211544bb9fe9d25ce47bac7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">Jelech的博客</a>
+    </div>
+    
+        
+            <a class="header-right-picture " href="#about">
+        
+        
+            <img class="header-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+                </a>
+                <h4 class="sidebar-profile-name">Jelech</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>putty本无树,MinGW亦非台</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/ " title="首页">
+                    
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-categories" title="分类">
+                    
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">分类</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-tags" title="标签">
+                    
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-archives" title="归档">
+                    
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/game" title="游戏">
+                    
+                        <i class="sidebar-button-icon fas fa-gamepad" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">游戏</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="#about" title="关于">
+                    
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="https://github.com/jelech" target="_blank" rel="noopener" title="GitHub">
+                    
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/mailto" title="邮箱">
+                    
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">邮箱</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            设计模式学习笔记
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2018-11-28T20:01:28+08:00">
+	
+		    11月 28, 2018
+    	
+    </time>
+    
+        <span>发布在 </span>
+        
+    <a class="category-link" href="/categories/学习笔记/">学习笔记</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            
+            <h1 id="table-of-contents">目录</h1><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#设计模式笔记"><span class="toc-text">设计模式笔记</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#组件协作-使用框架与应用创建与划分时"><span class="toc-text">组件协作: 使用框架与应用创建与划分时</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#template-Method"><span class="toc-text">template Method</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Strategy"><span class="toc-text">Strategy</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Obeserve-Event"><span class="toc-text">Obeserve / Event</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#单一职责-因为需求的增加，会让子类功能复用多次重复利用，应划清责任"><span class="toc-text">单一职责: 因为需求的增加，会让子类功能复用多次重复利用，应划清责任</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#Decorator装饰"><span class="toc-text">Decorator装饰</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Bridge"><span class="toc-text">Bridge</span></a></li></ol></li></ol>
+<a id="more"></a>
+<h2 id="设计模式笔记"><a href="#设计模式笔记" class="headerlink" title="设计模式笔记"></a>设计模式笔记</h2><blockquote>
+<p>重构获得模式<br>寻找变化点，在变化点运用设计模式</p>
+<p>静态-&gt;动态<br>早绑定-&gt;晚绑定<br>继承-&gt;组合<br>编译时依赖-&gt;运行时依赖<br>紧耦合-&gt;松耦合</p>
+<p>对扩展开放，对修改关闭：类的新增加功能应使用扩展功能，而不是通过修改原来的代码。比如一堆的elseif</p>
+<p><em>attention</em><br><em>规划时,划分出稳定的和变化的</em></p>
+</blockquote>
+<h2 id="组件协作-使用框架与应用创建与划分时"><a href="#组件协作-使用框架与应用创建与划分时" class="headerlink" title="组件协作: 使用框架与应用创建与划分时"></a>组件协作: 使用框架与应用创建与划分时</h2><h3 id="template-Method"><a href="#template-Method" class="headerlink" title="template Method"></a>template Method</h3><p><code>从早绑定到晚绑定</code><br>算法的骨架需要稳定才能使用这个方法<br>使得子类可以不改变一个算法的结构，就可以重定义这个算法的某些步骤<br>框架写好了部分函数和主调用函数，使用者只需要重定义一些子类信息就可以</p>
+<h3 id="Strategy"><a href="#Strategy" class="headerlink" title="Strategy"></a>Strategy</h3><p><code>多态调用，对扩展开放，对修改关闭</code><br>多个else if..并且限制不明显，未来很有可能扩展时，可以使用，代码过长会占用更多内存，而对象只会在调用时使用<br>定义一系列算法，把他们都一个个封装起来，并且可以互相替换(变化)，使他们所服务的客户程序稳定<br>使得在运行时支持在各种算法之间切换</p>
+<h3 id="Obeserve-Event"><a href="#Obeserve-Event" class="headerlink" title="Obeserve / Event"></a>Obeserve / Event</h3><p>父类通过调用多个观察者，观察子类的信息，更新一些其他的数据</p>
+<h2 id="单一职责-因为需求的增加，会让子类功能复用多次重复利用，应划清责任"><a href="#单一职责-因为需求的增加，会让子类功能复用多次重复利用，应划清责任" class="headerlink" title="单一职责: 因为需求的增加，会让子类功能复用多次重复利用，应划清责任"></a>单一职责: 因为需求的增加，会让子类功能复用多次重复利用，应划清责任</h2><h3 id="Decorator装饰"><a href="#Decorator装饰" class="headerlink" title="Decorator装饰"></a>Decorator装饰</h3><p><code>继承父类的功能后，&#39;多个&#39;子类在细化细节时候对功能进行扩展，引入的静态特质，缺乏灵活性:比如都要加密，都要缓存...</code><br>动态的给一个对象增加一些额外的职责，Decorator模式比生成子类更为灵活<br>基类分为了子类与装饰类(Decorator类)</p>
+<h3 id="Bridge"><a href="#Bridge" class="headerlink" title="Bridge"></a>Bridge</h3><p><em>以下是预期内容</em></p>
+<p>对象创建<br>对象性能<br>借口隔离<br>状态变化<br>数据结构<br>行为变化<br>领域问题</p>
+
+            
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">标签</span><br>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/笔记/">笔记</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/65518/" data-tooltip="ACM总结" aria-label="上一篇: ACM总结">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/3676/" data-tooltip="安装Django" aria-label="下一篇: 安装Django">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="分享">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/3493/" title="分享到 Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/3493/" title="分享到 Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/3493/" title="分享到 Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <style media="screen">.v .vwrap{overflow: inherit;}</style>
+                <div id="vcomment"></div>
+                <a href="posts/3493/#vcomment" class="disqus-comment-count"></a>
+                <span class="valine-comment-count" data-xid="posts/3493/"></span>
+                <span> Comment</span>
+            
+        
+    </div>
+</article>
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2018 Jelech. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/65518/" data-tooltip="ACM总结" aria-label="上一篇: ACM总结">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/3676/" data-tooltip="安装Django" aria-label="下一篇: 安装Django">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="分享">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/3493/" title="分享到 Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/3493/" title="分享到 Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/3493/" title="分享到 Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+    <i id="btn-close-shareoptions" class="fa fa-times"></i>
+    <ul class="share-options">
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/3493/">
+                    <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/3493/">
+                    <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/3493/">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+        
+            <h4 id="about-card-name">Jelech</h4>
+        
+            <div id="about-card-bio"><p>putty本无树,MinGW亦非台</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br>
+                <p>在校大学生一枚</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br>
+                CHINA.HRB.STU
+            </div>
+        
+
+        
+            <div id="about-card-job">
+                <i class="fa fa-envelope"></i>
+                <br>
+                jelech@hotmail.com
+            </div>
+        
+
+        
+            <div id="about-card-job">
+                <i class="fa fa-phone-square"></i>
+                <br>
+                18.......6
+            </div>
+        
+
+
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js" charset="utf-8"></script>
+        <script src="//unpkg.com/valine@latest/dist/Valine.min.js" charset="utf-8"></script>
+        <script>
+            var notify = 'false' == true ? true : false;
+            var verify = 'false' == true ? true : false;
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1;
+            });
+
+            guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+            window.valine = new Valine({
+                el:'#vcomment',
+                notify:notify,
+                verify:verify,
+                appId:'rwwVeUe3kpfbc0OkoxmgnTKM-gzGzoHsz',
+                appKey:'FcDDW6bpbs5QmH3A1B2Aqmae',
+                placeholder:'Just so so',
+                avatar:'mm',
+                guest_info:guest_info,
+                pageSize:'10'
+            });
+        </script>
+    
+
+
+
+    </body>
+</html>

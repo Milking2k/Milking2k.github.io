@@ -1,0 +1,661 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Jelech的博客">
+    <title>贪吃蛇 - Jelech的博客</title>
+    <meta name="author" content="Jelech">
+    
+        <meta name="keywords" content="博客,算法,javascript,游戏,">
+    
+    
+        <link rel="icon" href="http://www.jelech.cn/assets/images/favicon.ico">
+        <link rel="Shortcut Icon" type="image/x-icon" href="http://www.jelech.cn/assets/images/favicon.ico">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"Website","@id":"http://www.jelech.cn","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"name":"Jelech的博客","description":"jelech的博客，我在这里分享一切","url":"http://www.jelech.cn","keywords":"博客, 算法, javascript, 游戏"}</script>
+    <meta name="description" content="不支持canvas        WASD-score1: 0    方向-score2: 0  // javascript code       /** @type {HTMLCanvasElement} */     var gameOver;      const WIDTH = 500;     const HEIGHT = 600;     const STOP=0;     c">
+<meta name="keywords" content="博客,算法,javascript,游戏">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="贪吃蛇">
+<meta property="og:url" content="http://www.jelech.cn/game/tanchishe.html">
+<meta property="og:site_name" content="Jelech的博客">
+<meta property="og:description" content="不支持canvas        WASD-score1: 0    方向-score2: 0  // javascript code       /** @type {HTMLCanvasElement} */     var gameOver;      const WIDTH = 500;     const HEIGHT = 600;     const STOP=0;     c">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2018-12-02T04:24:11.359Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="贪吃蛇">
+<meta name="twitter:description" content="不支持canvas        WASD-score1: 0    方向-score2: 0  // javascript code       /** @type {HTMLCanvasElement} */     var gameOver;      const WIDTH = 500;     const HEIGHT = 600;     const STOP=0;     c">
+<meta name="twitter:creator" content="@twitter">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="http://www.jelech.cn/assets/images/avatar.jpg"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
+    <!--STYLES END-->
+    
+
+    
+    <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?c3b0944d9211544bb9fe9d25ce47bac7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="1">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">Jelech的博客</a>
+    </div>
+    
+        
+            <a class="header-right-picture " href="#about">
+        
+        
+            <img class="header-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="1">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+                </a>
+                <h4 class="sidebar-profile-name">Jelech</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>putty本无树,MinGW亦非台</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/ " title="首页">
+                    
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-categories" title="分类">
+                    
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">分类</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-tags" title="标签">
+                    
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-archives" title="归档">
+                    
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/game" title="游戏">
+                    
+                        <i class="sidebar-button-icon fas fa-gamepad" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">游戏</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="#about" title="关于">
+                    
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="https://github.com/jelech" target="_blank" rel="noopener" title="GitHub">
+                    
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/mailto" title="邮箱">
+                    
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">邮箱</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="1"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            贪吃蛇
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2018-10-15T13:02:57+08:00">
+	
+		    10月 15, 2018
+    	
+    </time>
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            
+            <p><div id="boxx" style="text-align: center;"><br>    <canvas width="500px" height="600px" id="canvas" style="border: 1px solid #999;margin: 0 auto;background: #fff">不支持canvas</canvas><br>    <!-- <div> <font style="font-size: 30px">P</font> to start/pause</div> --><br>    <div>WASD-score1: <span id="Player1Score">0</span></div><br>    <div>方向-score2: <span id="Player2Score">0</span></div><br></div></p>
+<script>
+// javascript code  
+    /** @type {HTMLCanvasElement} */
+    var gameOver;
+
+    const WIDTH = 500;
+    const HEIGHT = 600;
+    const STOP=0;
+    const UP=1;
+    const DOWN=2;
+    const LEFT=3;
+    const RIGHT=4;
+    const SPEED = 5;
+
+    var x, y, fruitX, fruitY, score;
+    var tailX = new Array(100);
+    var tailY = new Array(100);
+    var nTail;//length of the tail
+
+    var x1, y1, score1;
+    var tailX1 = new Array(100);
+    var tailY1 = new Array(100);
+    var nTail1;//length of the tail
+
+    var canvas = document.getElementById('canvas');
+    var ctx = canvas.getContext('2d');
+
+    var dir;
+    var dir1;
+    // enum eDirection {STOP = 0, UP, DOWN, LEFT, RIGHT};
+    // eDirection dir;//the snake
+
+
+    function Setup() {
+        gameOver = false;
+        dir = dir1 = STOP;
+        //cnt on the map
+        x = WIDTH / 2-50;
+        y = HEIGHT / 2;
+        nTail = 0;
+
+        x1 = WIDTH / 2+50;
+        y1 = HEIGHT / 2;
+        nTail1 = 0;
+
+        fruitX = Math.random() * WIDTH;
+        fruitY = Math.random() * HEIGHT;
+        score = 0;
+        score1 = 0;
+    }
+
+    function Draw(){
+        ctx.clearRect(0,0,WIDTH,HEIGHT);
+
+
+        ctx.beginPath();
+        ctx.arc(fruitX, fruitY, 10, 0, Math.PI * 2, true);
+        ctx.fillStyle = '#982374';//填充
+        ctx.fill();
+        // console.log(parseInt(Math.random()*1000000));
+
+        for (var k = 0; k < nTail;k++){
+            ctx.beginPath();
+            ctx.arc(tailX[k], tailY[k], 10, 0, Math.PI * 2, true);            
+            ctx.fillStyle = 'green';//填充
+            ctx.fill();
+        }
+        // player two
+        for (var k = 0; k < nTail1;k++){
+            ctx.beginPath();
+            ctx.arc(tailX1[k], tailY1[k], 10, 0, Math.PI * 2, true);            
+            ctx.fillStyle = 'yellow';//填充
+            ctx.fill();
+        }
+
+        ctx.beginPath();
+        ctx.arc(x, y, 11, 0, Math.PI * 2, true);
+        ctx.fillStyle = 'blue';//填充
+        ctx.fill();
+
+        //player2
+        ctx.beginPath();
+        ctx.arc(x1, y1, 11, 0, Math.PI * 2, true);
+        ctx.fillStyle = 'orange';//填充
+        ctx.fill();
+
+        var scoreBox = document.getElementById('Player1Score');     
+        var scoreBox1 = document.getElementById('Player2Score');     
+        scoreBox.textContent = score;
+        scoreBox1.textContent = score1;
+    }
+
+    window.addEventListener('keydown', function(event){
+        switch (event.key) {
+            case 'w':
+                dir = UP;
+                break;
+            case 'a':
+                dir = LEFT;
+                break;
+            case 's':
+                dir = DOWN;
+                break;
+            case 'd':
+                dir = RIGHT;
+                break;
+            case 'ArrowUp':
+                dir1 = UP;
+                break;
+            case 'ArrowLeft':
+                dir1 = LEFT;
+                break;
+            case 'ArrowDown':
+                dir1 = DOWN;
+                break;
+            case 'ArrowRight':
+                dir1 = RIGHT;
+                break;
+            default:
+                gameOver = true;
+                break;
+        }
+    })
+
+    function logic(){
+        // console.log(x,y,dir);
+
+        var prevX = x;
+        var prevY = y;
+        var prev2X,prev2Y;
+        // console.log(-1,x,y);
+        if(nTail>0 && Math.sqrt((x-tailX[0])*(x-tailX[0]) + (y-tailY[0])*(y-tailY[0])) > 18){
+            for (var i = 0; i < nTail;i++)
+            {
+                prev2X = tailX[i];
+                prev2Y = tailY[i];
+                // console.log(i,prev2X,prev2Y);
+                tailX[i] = prevX;
+                tailY[i] = prevY;
+                prevX = prev2X;
+                prevY = prev2Y;
+            }
+        }
+
+        prevX = x1;
+        prevY = y1;
+        if(nTail1>0 && Math.sqrt((x1-tailX1[0])*(x1-tailX1[0]) + (y1-tailY1[0])*(y1-tailY1[0])) > 18){
+            for (var i = 0; i < nTail1;i++)
+            {
+                prev2X = tailX1[i];
+                prev2Y = tailY1[i];
+                // console.log(i,prev2X,prev2Y);
+                tailX1[i] = prevX;
+                tailY1[i] = prevY;
+                prevX = prev2X;
+                prevY = prev2Y;
+            }
+        }
+
+        switch (dir)
+        {
+            case LEFT:
+                x-=SPEED;
+                break;
+            case RIGHT:
+                x+=SPEED;
+                break;
+            case UP:
+                y-=SPEED;
+                break;
+            case DOWN:
+                y+=SPEED;
+                break;
+
+            default:
+                break;
+        }
+
+        switch (dir1)
+        {
+            case LEFT:
+                x1-=SPEED;
+                break;
+            case RIGHT:
+                x1+=SPEED;
+                break;
+            case UP:
+                y1-=SPEED;
+                break;
+            case DOWN:
+                y1+=SPEED;
+                break;
+
+            default:
+                break;
+        }
+
+        for(var i=0;i<nTail;i++){
+            if (Math.abs(x1 - tailX[i]) <= 18 && Math.abs(y1 - tailY[i]) <= 18 ){
+                nTail1=0;
+                break;
+            }
+        }
+        for(var i=0;i<nTail1;i++){
+            if (Math.abs(x - tailX1[i]) <= 18 && Math.abs(y - tailY1[i]) <= 18 ){
+                nTail=0;
+                break;
+            }
+        }
+
+
+
+        if (x > WIDTH+2) x = 1;
+        if (x <= 0) x = WIDTH;
+        if (y > HEIGHT+2) y = 0;
+        if (y < 0) y = HEIGHT+1;
+
+        if (x1 > WIDTH+2) x1 = 1;
+        if (x1 <= 0) x1 = WIDTH;
+        if (y1 > HEIGHT+2) y1 = 0;
+        if (y1 < 0) y1 = HEIGHT+1;
+
+        if (Math.abs(x - fruitX) <= 18 && Math.abs(y - fruitY) <= 18 )
+        {
+            score += 100;
+
+            tailX[nTail] = y;
+            tailY[nTail] = x;
+            // console.log(0,x,y);
+            // console.log(nTail,tailX[nTail], tailY[nTail]);
+
+            nTail++;
+            fruitX = Math.random() * WIDTH;
+            fruitY = Math.random() * HEIGHT;
+        }
+
+        if (Math.abs(x1 - fruitX) <= 18 && Math.abs(y1 - fruitY) <= 18 )
+        {
+            score1 += 100;
+
+            tailX1[nTail1] = y1;
+            tailY1[nTail1] = x1;
+            // console.log(0,x1,y1);
+            // console.log(nTail1,tailX1[nTail1], tailY[nTail1]);
+
+            nTail1++;
+            fruitX = Math.random() * WIDTH;
+            fruitY = Math.random() * HEIGHT;
+        }
+
+    }
+
+
+    function RunLoop(fps) {
+        // var dbfps = 1000.0/fps;
+        Draw();
+        logic();
+
+        if(!gameOver){
+            setTimeout(() => {
+                RunLoop(fps);
+            }, 1000/fps);
+        }
+    }
+
+    function __main(fps) {
+        Setup();
+        RunLoop(fps);
+    }
+    window.onload = __main(50);
+//  end javascript code    
+</script>
+
+            
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="分享">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/game/tanchishe.html" title="分享到 Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/game/tanchishe.html" title="分享到 Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/game/tanchishe.html" title="分享到 Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#" aria-label="返回到头顶">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <style media="screen">.v .vwrap{overflow: inherit;}</style>
+                <div id="vcomment"></div>
+                <a href="game/tanchishe.html#vcomment" class="disqus-comment-count"></a>
+                <span class="valine-comment-count" data-xid="game/tanchishe.html"></span>
+                <span> Comment</span>
+            
+        
+    </div>
+</article>
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2018 Jelech. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+        
+            <h4 id="about-card-name">Jelech</h4>
+        
+            <div id="about-card-bio"><p>putty本无树,MinGW亦非台</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br>
+                <p>在校大学生一枚</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br>
+                CHINA.HRB.STU
+            </div>
+        
+
+        
+            <div id="about-card-job">
+                <i class="fa fa-envelope"></i>
+                <br>
+                jelech@hotmail.com
+            </div>
+        
+
+        
+            <div id="about-card-job">
+                <i class="fa fa-phone-square"></i>
+                <br>
+                18.......6
+            </div>
+        
+
+
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
+<!--SCRIPTS END-->
+
+
+
+    </body>
+</html>

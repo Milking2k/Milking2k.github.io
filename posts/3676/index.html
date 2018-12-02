@@ -1,0 +1,566 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Jelech的博客">
+    <title>安装Django - Jelech的博客</title>
+    <meta name="author" content="Jelech">
+    
+        <meta name="keywords" content="博客,算法,javascript,游戏,">
+    
+    
+        <link rel="icon" href="http://www.jelech.cn/assets/images/favicon.ico">
+        <link rel="Shortcut Icon" type="image/x-icon" href="http://www.jelech.cn/assets/images/favicon.ico">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\nHow 2 Install Django?当然第一步是安装好你的python啦！\n安装djangopip install django(指定版本django==2.1.1)\n基础设置django.setting.py -&gt; DATABASE\n​    //设置为mysql，数据库名，用户名，密码\n1234'ENGINE'     :   'django.db.backends.mysql',​'NAME'       :   'blog-db',​'USER'       :   'jelech',​'PASSWORD'   :   '123456',\n安装memcached django-web缓存当同一个用户(ip)访问时候，缓存会识别出来，直接拿出上次同样的访问进行返回\n\n：cd ..（返回到Downloads目录下，Downloads目录下专门放所有下载的东西）\n：wget http://www.memcached.org/files/memcached-1.4.24.tar.gz（下载地址）\n：tar zxvf memcached-1.4.24.tar.gz（进行解压）\n：cd memcached-1.4.24 （进入到memcached-1.4.24目录下）\n：./configure --with-libevent=/usr（进行配置）\n：Make（编译这些源代码，让它生成库文件\n：make install\n\n安装连接器第一步：pip install python-memcached\n第二步：启动相应服务（因为python-memcached安装完成后只是个可执行文件，我们需要启动它）/usr/local/bin/memcached -u root -d  -p 11211 -c 256 -P /tmp/memcached.pid\n第三步：启动以后，我们要看这个东西有没有在系统中启动ps -ef|grep memca每次启动都需要手动输入，很麻烦。\n修改启动文件vi /etc/rc.local将/usr/local/bin/memcached -u root -d  -p 11211 -c 256 -P /tmp/memcached.pid命令放在里面\nDjango.setting 配置缓存DATABASE下新加\n123456789101112CACHES = &#123;  'default': &#123;    'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',    'LOCATION':'127.0.0.1:11211',  &#125;&#125;#多个缓存服务器，在location写地址数组[,,,]MIDDLEWAREE_CLASSES内(如果没有，就加到MIDDLEWARE)#最前新加'django.middleware.cache.UpdateCacheMiddleware',#最后新加'django.middleware.cache.FetchFromCacheMiddleware',\ndjango manage.py migrate 会自动创建django的app链接数据库，创建相应的表 表会依据models进行创建\ndjango配置神器django-debug-toolbar:123456789#pip 安装好插件pip install django-debug-toolbar#setting中的app加入debug_toolbar#编辑toolbar内部文件python -c \"import django;print(django.__path__);\" #得到pip路径vi ..path/site-pacages/debug_toolbar/settings.py#加入(修改)'JQUERY_URL':'//cdn.bootcss.com/jquery/2.1.4/jquery.min.js'\n开始Django\n创建APP,\n修改setting,\n修改url,\n修改app.views\n\ndjango中配置日志器的建立和使用修改setting,加入123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475LOGGING = &#123;    'version': 1,    'disable_existing_loggers': false,    'formaters': &#123;        'standerd': &#123;            'format':'%(ssctime)s [%(thresdName)s:%(thread)d][%(name)s:%(lineno)d][%(module)s:%(funcName)s][%(levelname)s] - %(message)s'        &#125;,        'filters': &#123;            'mail_admins': &#123;                'level': 'ERROR',                'class': 'django.utils.log.AdminEmailHandler',                'include_html':True,            &#125;            'default': &#123;                'level': 'DEBUG',                'class': 'logging.handlers.RotatingFiileHandler',                'filename': 'log/all.log',                'maxBytes': 1024* 1024* 5,                'backupCount': 5,                'formatter':'standerd',            &#125;            'error': &#123;                'level': 'ERROR',                'class': 'logging.handlers.RotatingFiileHandler',                'filename': 'log/error.log',                'maxBytes': 1024* 1024* 5,                'backupCount': 5,                'formatter':'standerd',            &#125;            'console': &#123;                'level': 'DEBUG',                'class': 'logging.StreamHandler',                'formatter': 'standerd',            &#125;            'request_handler';&#123;                'level': 'DEBUG',                'class': 'logging.handlers.RotatingFiileHandler',                'filename': 'log/script.log',                'maxBytes': 1024* 1024* 5,                'backupCount': 5,                'formatter':'standerd',            &#125;            'scripts_handler';&#123;                'level': 'DEBUG',                'class': 'logging.handlers.RotatingFiileHandler',                'filename': 'log/script.log',                'maxBytes': 1024* 1024* 5,                'backupCount': 5,                'formatter':'standerd',            &#125;        &#125;,        'loggers': &#123;            'django': &#123;                'handlers': ['default', 'console'],                'level': 'DEBUG',                'propaga':False,            &#125;            'django.request': &#123;                'handlers': ['request_handler'],                'level': 'DEBUG',                'propaga':False,            &#125;            'scripts': &#123;                'handlers': ['scripts_handler'],                'level': 'INFO',                'propaga':False,            &#125;            'blog.views': &#123; #app name.views                'handlers': ['default', 'error'],                'level': 'DEBUG',                'propaga':False,            &#125;        &#125;    &#125;&#125;\n使用：1234import logginglogger = logging.getLogger('appName.views')logger.error(x) errorException#抓取x错误登记到error.txt文件里\n其他12345678910111213141516#setting中可以设置网站的基本信息，网站内进行引用SITE_NAME = 'jelech的个人博客'...#1`局部引用from django.conf import settings#2`全局settingdef global_setting(request):  return &#123;    'SITE_NAME':setting.SITE_NAME,    ...  &#125;#settings中TMPLATES中context_processors尾部加入'appName.views.global_setting',#网站内直接使用变量&#123;&#123; SITE_NAME &#125;&#125;\n1234567891011121314151617181920212223242526272829#mysql临时笔记    //修改密码，注意mysql5.7中user表中密码改为了authentication_string    update mysql.user set authentication_string1=password(&apos;123456&apos;) where User=&quot;jelech&quot; and Host=&quot;localhost&quot;;    // 密码进入数据库，创建新数据库，授权新用户，刷新改动，设置根密码(初始使用一次就行)    mysql -u root -p    create database blog_db charset=utf8;    grant all on db_music.* to jelech@localhost identified by &quot;123456&quot;;    flush privileges;    set password for root@localhost=password(&quot;Nozuonodie&quot;);    //修改表格格式信息    ALTER TABLE userInfo MODIFY password VARCHAR(100) NOT NULL;    //删除表中所有内容，以及索引 用这种方法相当于重载了表格内容，全新的！    truncate table wp_comments;安装mysqlclient    pip install mysqlclient    安装Python mysqlclient出现“OSError: mysql_config not found”错误：    安装libmysqlclient-dev包即可，如果还有问题，可以安装python-dev    $ apt-get install libmysqlclient-dev python3-devdjango链接数据库    pip install pymysql     #安装好python和mysql的连接器    python3 manage.py inspectdb &gt; bigDataSwap/models.py     #链接django和mysql，自动生成表中的各种东西\n","dateCreated":"2018-10-10T20:24:40+08:00","dateModified":"2018-12-02T09:16:33+08:00","datePublished":"2018-10-10T20:24:40+08:00","description":"","headline":"安装Django","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://www.jelech.cn/posts/3676/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"http://www.jelech.cn/posts/3676/","keywords":"linux, 软件配置, Django, python"}</script>
+    <meta name="keywords" content="linux,软件配置,Django,python">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="安装Django">
+<meta property="og:url" content="http://www.jelech.cn/posts/3676/index.html">
+<meta property="og:site_name" content="Jelech的博客">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2018-12-02T01:16:33.315Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="安装Django">
+<meta name="twitter:creator" content="@twitter">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="http://www.jelech.cn/assets/images/avatar.jpg"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
+    <!--STYLES END-->
+    
+
+    
+    <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?c3b0944d9211544bb9fe9d25ce47bac7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">Jelech的博客</a>
+    </div>
+    
+        
+            <a class="header-right-picture " href="#about">
+        
+        
+            <img class="header-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+                </a>
+                <h4 class="sidebar-profile-name">Jelech</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>putty本无树,MinGW亦非台</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/ " title="首页">
+                    
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-categories" title="分类">
+                    
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">分类</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-tags" title="标签">
+                    
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-archives" title="归档">
+                    
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/game" title="游戏">
+                    
+                        <i class="sidebar-button-icon fas fa-gamepad" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">游戏</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="#about" title="关于">
+                    
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="https://github.com/jelech" target="_blank" rel="noopener" title="GitHub">
+                    
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/mailto" title="邮箱">
+                    
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">邮箱</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            安装Django
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2018-10-10T20:24:40+08:00">
+	
+		    10月 10, 2018
+    	
+    </time>
+    
+        <span>发布在 </span>
+        
+    <a class="category-link" href="/categories/软件配置/">软件配置</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            
+            <h1 id="table-of-contents">目录</h1><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#How-2-Install-Django"><span class="toc-text">How 2 Install Django?</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装django"><span class="toc-text">安装django</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#基础设置"><span class="toc-text">基础设置</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#安装memcached-django-web缓存"><span class="toc-text">安装memcached django-web缓存</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#安装连接器"><span class="toc-text">安装连接器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Django-setting-配置缓存"><span class="toc-text">Django.setting 配置缓存</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#django配置神器django-debug-toolbar"><span class="toc-text">django配置神器django-debug-toolbar:</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#开始Django"><span class="toc-text">开始Django</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#创建APP"><span class="toc-text">创建APP,</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#修改setting"><span class="toc-text">修改setting,</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#修改url"><span class="toc-text">修改url,</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#修改app-views"><span class="toc-text">修改app.views</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#django中配置日志器的建立和使用"><span class="toc-text">django中配置日志器的建立和使用</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#修改setting-加入"><span class="toc-text">修改setting,加入</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#使用："><span class="toc-text">使用：</span></a></li></ol></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#其他"><span class="toc-text">其他</span></a></li>
+<a id="more"></a>
+<h2 id="How-2-Install-Django"><a href="#How-2-Install-Django" class="headerlink" title="How 2 Install Django?"></a>How 2 Install Django?</h2><p>当然第一步是安装好你的python啦！</p>
+<h2 id="安装django"><a href="#安装django" class="headerlink" title="安装django"></a>安装django</h2><p><code>pip install django(指定版本django==2.1.1)</code></p>
+<h3 id="基础设置"><a href="#基础设置" class="headerlink" title="基础设置"></a>基础设置</h3><p><code>django.setting.py -&gt; DATABASE</code></p>
+<p>​    //设置为mysql，数据库名，用户名，密码</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">'ENGINE'</span>     :   <span class="string">'django.db.backends.mysql'</span>,</span><br><span class="line">​<span class="string">'NAME'</span>       :   <span class="string">'blog-db'</span>,</span><br><span class="line">​<span class="string">'USER'</span>       :   <span class="string">'jelech'</span>,</span><br><span class="line">​<span class="string">'PASSWORD'</span>   :   <span class="string">'123456'</span>,</span><br></pre></td></tr></table></figure>
+<h2 id="安装memcached-django-web缓存"><a href="#安装memcached-django-web缓存" class="headerlink" title="安装memcached django-web缓存"></a>安装memcached django-web缓存</h2><p><em>当同一个用户(ip)访问时候，缓存会识别出来，直接拿出上次同样的访问进行返回</em></p>
+<ol>
+<li>：<code>cd ..</code>（返回到Downloads目录下，Downloads目录下专门放所有下载的东西）</li>
+<li>：<code>wget http://www.memcached.org/files/memcached-1.4.24.tar.gz</code>（下载地址）</li>
+<li>：<code>tar zxvf memcached-1.4.24.tar.gz</code>（进行解压）</li>
+<li>：<code>cd memcached-1.4.24</code> （进入到memcached-1.4.24目录下）</li>
+<li>：<code>./configure --with-libevent=/usr</code>（进行配置）</li>
+<li>：<code>Make</code>（编译这些源代码，让它生成库文件</li>
+<li>：<code>make install</code></li>
+</ol>
+<h3 id="安装连接器"><a href="#安装连接器" class="headerlink" title="安装连接器"></a>安装连接器</h3><p>第一步：pip install python-memcached</p>
+<p>第二步：启动相应服务（因为python-memcached安装完成后只是个可执行文件，我们需要启动它）<code>/usr/local/bin/memcached -u root -d  -p 11211 -c 256 -P /tmp/memcached.pid</code></p>
+<p>第三步：启动以后，我们要看这个东西有没有在系统中启动<code>ps -ef|grep memca</code>每次启动都需要手动输入，很麻烦。</p>
+<p>修改启动文件<code>vi /etc/rc.local</code>将<code>/usr/local/bin/memcached -u root -d  -p 11211 -c 256 -P /tmp/memcached.pid</code>命令放在里面</p>
+<h3 id="Django-setting-配置缓存"><a href="#Django-setting-配置缓存" class="headerlink" title="Django.setting 配置缓存"></a>Django.setting 配置缓存</h3><p>DATABASE下新加</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">CACHES = &#123;</span><br><span class="line">  <span class="string">'default'</span>: &#123;</span><br><span class="line">    <span class="string">'BACKEND'</span>: <span class="string">'django.core.cache.backends.memcached.MemcachedCache'</span>,</span><br><span class="line">    <span class="string">'LOCATION'</span>:<span class="string">'127.0.0.1:11211'</span>,</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">#多个缓存服务器，在location写地址数组[,,,]</span></span><br><span class="line">MIDDLEWAREE_CLASSES内(如果没有，就加到MIDDLEWARE)</span><br><span class="line"><span class="comment">#最前新加</span></span><br><span class="line"><span class="string">'django.middleware.cache.UpdateCacheMiddleware'</span>,</span><br><span class="line"><span class="comment">#最后新加</span></span><br><span class="line"><span class="string">'django.middleware.cache.FetchFromCacheMiddleware'</span>,</span><br></pre></td></tr></table></figure>
+<p><code>django manage.py migrate</code> 会自动创建django的app链接数据库，创建相应的表 表会依据models进行创建</p>
+<h3 id="django配置神器django-debug-toolbar"><a href="#django配置神器django-debug-toolbar" class="headerlink" title="django配置神器django-debug-toolbar:"></a>django配置神器django-debug-toolbar:</h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#pip 安装好插件</span></span><br><span class="line">pip install django-debug-toolbar</span><br><span class="line"><span class="comment">#setting中的app加入debug_toolbar</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#编辑toolbar内部文件</span></span><br><span class="line">python -c <span class="string">"import django;print(django.__path__);"</span> <span class="comment">#得到pip路径</span></span><br><span class="line">vi ..path/site-pacages/debug_toolbar/settings.py</span><br><span class="line"><span class="comment">#加入(修改)</span></span><br><span class="line"><span class="string">'JQUERY_URL'</span>:<span class="string">'//cdn.bootcss.com/jquery/2.1.4/jquery.min.js'</span></span><br></pre></td></tr></table></figure>
+<h2 id="开始Django"><a href="#开始Django" class="headerlink" title="开始Django"></a>开始Django</h2><ul>
+<li><h4 id="创建APP"><a href="#创建APP" class="headerlink" title="创建APP,"></a>创建APP,</h4></li>
+<li><h4 id="修改setting"><a href="#修改setting" class="headerlink" title="修改setting,"></a>修改setting,</h4></li>
+<li><h4 id="修改url"><a href="#修改url" class="headerlink" title="修改url,"></a>修改url,</h4></li>
+<li><h4 id="修改app-views"><a href="#修改app-views" class="headerlink" title="修改app.views"></a>修改app.views</h4></li>
+</ul>
+<h3 id="django中配置日志器的建立和使用"><a href="#django中配置日志器的建立和使用" class="headerlink" title="django中配置日志器的建立和使用"></a>django中配置日志器的建立和使用</h3><h4 id="修改setting-加入"><a href="#修改setting-加入" class="headerlink" title="修改setting,加入"></a>修改setting,加入</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br></pre></td><td class="code"><pre><span class="line">LOGGING = &#123;</span><br><span class="line">    <span class="string">'version'</span>: <span class="number">1</span>,</span><br><span class="line">    <span class="string">'disable_existing_loggers'</span>: false,</span><br><span class="line">    <span class="string">'formaters'</span>: &#123;</span><br><span class="line">        <span class="string">'standerd'</span>: &#123;</span><br><span class="line">            <span class="string">'format'</span>:<span class="string">'%(ssctime)s [%(thresdName)s:%(thread)d][%(name)s:%(lineno)d][%(module)s:%(funcName)s][%(levelname)s] - %(message)s'</span></span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">'filters'</span>: &#123;</span><br><span class="line">            <span class="string">'mail_admins'</span>: &#123;</span><br><span class="line">                <span class="string">'level'</span>: <span class="string">'ERROR'</span>,</span><br><span class="line">                <span class="string">'class'</span>: <span class="string">'django.utils.log.AdminEmailHandler'</span>,</span><br><span class="line">                <span class="string">'include_html'</span>:<span class="keyword">True</span>,</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="string">'default'</span>: &#123;</span><br><span class="line">                <span class="string">'level'</span>: <span class="string">'DEBUG'</span>,</span><br><span class="line">                <span class="string">'class'</span>: <span class="string">'logging.handlers.RotatingFiileHandler'</span>,</span><br><span class="line">                <span class="string">'filename'</span>: <span class="string">'log/all.log'</span>,</span><br><span class="line">                <span class="string">'maxBytes'</span>: <span class="number">1024</span>* <span class="number">1024</span>* <span class="number">5</span>,</span><br><span class="line">                <span class="string">'backupCount'</span>: <span class="number">5</span>,</span><br><span class="line">                <span class="string">'formatter'</span>:<span class="string">'standerd'</span>,</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="string">'error'</span>: &#123;</span><br><span class="line">                <span class="string">'level'</span>: <span class="string">'ERROR'</span>,</span><br><span class="line">                <span class="string">'class'</span>: <span class="string">'logging.handlers.RotatingFiileHandler'</span>,</span><br><span class="line">                <span class="string">'filename'</span>: <span class="string">'log/error.log'</span>,</span><br><span class="line">                <span class="string">'maxBytes'</span>: <span class="number">1024</span>* <span class="number">1024</span>* <span class="number">5</span>,</span><br><span class="line">                <span class="string">'backupCount'</span>: <span class="number">5</span>,</span><br><span class="line">                <span class="string">'formatter'</span>:<span class="string">'standerd'</span>,</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="string">'console'</span>: &#123;</span><br><span class="line">                <span class="string">'level'</span>: <span class="string">'DEBUG'</span>,</span><br><span class="line">                <span class="string">'class'</span>: <span class="string">'logging.StreamHandler'</span>,</span><br><span class="line">                <span class="string">'formatter'</span>: <span class="string">'standerd'</span>,</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="string">'request_handler'</span>;&#123;</span><br><span class="line">                <span class="string">'level'</span>: <span class="string">'DEBUG'</span>,</span><br><span class="line">                <span class="string">'class'</span>: <span class="string">'logging.handlers.RotatingFiileHandler'</span>,</span><br><span class="line">                <span class="string">'filename'</span>: <span class="string">'log/script.log'</span>,</span><br><span class="line">                <span class="string">'maxBytes'</span>: <span class="number">1024</span>* <span class="number">1024</span>* <span class="number">5</span>,</span><br><span class="line">                <span class="string">'backupCount'</span>: <span class="number">5</span>,</span><br><span class="line">                <span class="string">'formatter'</span>:<span class="string">'standerd'</span>,</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="string">'scripts_handler'</span>;&#123;</span><br><span class="line">                <span class="string">'level'</span>: <span class="string">'DEBUG'</span>,</span><br><span class="line">                <span class="string">'class'</span>: <span class="string">'logging.handlers.RotatingFiileHandler'</span>,</span><br><span class="line">                <span class="string">'filename'</span>: <span class="string">'log/script.log'</span>,</span><br><span class="line">                <span class="string">'maxBytes'</span>: <span class="number">1024</span>* <span class="number">1024</span>* <span class="number">5</span>,</span><br><span class="line">                <span class="string">'backupCount'</span>: <span class="number">5</span>,</span><br><span class="line">                <span class="string">'formatter'</span>:<span class="string">'standerd'</span>,</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;,</span><br><span class="line">        <span class="string">'loggers'</span>: &#123;</span><br><span class="line">            <span class="string">'django'</span>: &#123;</span><br><span class="line">                <span class="string">'handlers'</span>: [<span class="string">'default'</span>, <span class="string">'console'</span>],</span><br><span class="line">                <span class="string">'level'</span>: <span class="string">'DEBUG'</span>,</span><br><span class="line">                <span class="string">'propaga'</span>:<span class="keyword">False</span>,</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="string">'django.request'</span>: &#123;</span><br><span class="line">                <span class="string">'handlers'</span>: [<span class="string">'request_handler'</span>],</span><br><span class="line">                <span class="string">'level'</span>: <span class="string">'DEBUG'</span>,</span><br><span class="line">                <span class="string">'propaga'</span>:<span class="keyword">False</span>,</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="string">'scripts'</span>: &#123;</span><br><span class="line">                <span class="string">'handlers'</span>: [<span class="string">'scripts_handler'</span>],</span><br><span class="line">                <span class="string">'level'</span>: <span class="string">'INFO'</span>,</span><br><span class="line">                <span class="string">'propaga'</span>:<span class="keyword">False</span>,</span><br><span class="line">            &#125;</span><br><span class="line">            <span class="string">'blog.views'</span>: &#123; <span class="comment">#app name.views</span></span><br><span class="line">                <span class="string">'handlers'</span>: [<span class="string">'default'</span>, <span class="string">'error'</span>],</span><br><span class="line">                <span class="string">'level'</span>: <span class="string">'DEBUG'</span>,</span><br><span class="line">                <span class="string">'propaga'</span>:<span class="keyword">False</span>,</span><br><span class="line">            &#125;</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h4 id="使用："><a href="#使用：" class="headerlink" title="使用："></a>使用：</h4><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> logging</span><br><span class="line">logger = logging.getLogger(<span class="string">'appName.views'</span>)</span><br><span class="line">logger.error(x) errorException</span><br><span class="line"><span class="comment">#抓取x错误登记到error.txt文件里</span></span><br></pre></td></tr></table></figure>
+<h2 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#setting中可以设置网站的基本信息，网站内进行引用</span></span><br><span class="line">SITE_NAME = <span class="string">'jelech的个人博客'</span></span><br><span class="line">...</span><br><span class="line"><span class="comment">#1`局部引用</span></span><br><span class="line"><span class="keyword">from</span> django.conf <span class="keyword">import</span> settings</span><br><span class="line"><span class="comment">#2`全局setting</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">global_setting</span><span class="params">(request)</span>:</span></span><br><span class="line">  <span class="keyword">return</span> &#123;</span><br><span class="line">    <span class="string">'SITE_NAME'</span>:setting.SITE_NAME,</span><br><span class="line">    ...</span><br><span class="line">  &#125;</span><br><span class="line"><span class="comment">#settings中TMPLATES中context_processors尾部加入</span></span><br><span class="line"><span class="string">'appName.views.global_setting'</span>,</span><br><span class="line"></span><br><span class="line"><span class="comment">#网站内直接使用变量</span></span><br><span class="line">&#123;&#123; SITE_NAME &#125;&#125;</span><br></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">#mysql临时笔记</span><br><span class="line"></span><br><span class="line">    //修改密码，注意mysql5.7中user表中密码改为了authentication_string</span><br><span class="line">    update mysql.user set authentication_string1=password(&apos;123456&apos;) where User=&quot;jelech&quot; and Host=&quot;localhost&quot;;</span><br><span class="line"></span><br><span class="line">    // 密码进入数据库，创建新数据库，授权新用户，刷新改动，设置根密码(初始使用一次就行)</span><br><span class="line">    mysql -u root -p</span><br><span class="line">    create database blog_db charset=utf8;</span><br><span class="line">    grant all on db_music.* to jelech@localhost identified by &quot;123456&quot;;</span><br><span class="line">    flush privileges;</span><br><span class="line">    set password for root@localhost=password(&quot;Nozuonodie&quot;);</span><br><span class="line"></span><br><span class="line">    //修改表格格式信息</span><br><span class="line">    ALTER TABLE userInfo MODIFY password VARCHAR(100) NOT NULL;</span><br><span class="line"></span><br><span class="line">    //删除表中所有内容，以及索引 用这种方法相当于重载了表格内容，全新的！</span><br><span class="line">    truncate table wp_comments;</span><br><span class="line"></span><br><span class="line">安装mysqlclient</span><br><span class="line"></span><br><span class="line">    pip install mysqlclient</span><br><span class="line"></span><br><span class="line">    安装Python mysqlclient出现“OSError: mysql_config not found”错误：</span><br><span class="line">    安装libmysqlclient-dev包即可，如果还有问题，可以安装python-dev</span><br><span class="line">    $ apt-get install libmysqlclient-dev python3-dev</span><br><span class="line"></span><br><span class="line">django链接数据库</span><br><span class="line">    pip install pymysql     #安装好python和mysql的连接器</span><br><span class="line">    python3 manage.py inspectdb &gt; bigDataSwap/models.py     #链接django和mysql，自动生成表中的各种东西</span><br></pre></td></tr></table></figure>
+
+            
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">标签</span><br>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/Django/">Django</a> <a class="tag tag--primary tag--small t-link" href="/tags/linux/">linux</a> <a class="tag tag--primary tag--small t-link" href="/tags/python/">python</a> <a class="tag tag--primary tag--small t-link" href="/tags/软件配置/">软件配置</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/3493/" data-tooltip="设计模式学习笔记" aria-label="上一篇: 设计模式学习笔记">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/16186/" data-tooltip="算法学习笔记" aria-label="下一篇: 算法学习笔记">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="分享">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/3676/" title="分享到 Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/3676/" title="分享到 Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/3676/" title="分享到 Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <style media="screen">.v .vwrap{overflow: inherit;}</style>
+                <div id="vcomment"></div>
+                <a href="posts/3676/#vcomment" class="disqus-comment-count"></a>
+                <span class="valine-comment-count" data-xid="posts/3676/"></span>
+                <span> Comment</span>
+            
+        
+    </div>
+</article>
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2018 Jelech. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/3493/" data-tooltip="设计模式学习笔记" aria-label="上一篇: 设计模式学习笔记">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/16186/" data-tooltip="算法学习笔记" aria-label="下一篇: 算法学习笔记">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="分享">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/3676/" title="分享到 Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/3676/" title="分享到 Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/3676/" title="分享到 Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+    <i id="btn-close-shareoptions" class="fa fa-times"></i>
+    <ul class="share-options">
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/3676/">
+                    <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/3676/">
+                    <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/3676/">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+        
+            <h4 id="about-card-name">Jelech</h4>
+        
+            <div id="about-card-bio"><p>putty本无树,MinGW亦非台</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br>
+                <p>在校大学生一枚</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br>
+                CHINA.HRB.STU
+            </div>
+        
+
+        
+            <div id="about-card-job">
+                <i class="fa fa-envelope"></i>
+                <br>
+                jelech@hotmail.com
+            </div>
+        
+
+        
+            <div id="about-card-job">
+                <i class="fa fa-phone-square"></i>
+                <br>
+                18.......6
+            </div>
+        
+
+
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js" charset="utf-8"></script>
+        <script src="//unpkg.com/valine@latest/dist/Valine.min.js" charset="utf-8"></script>
+        <script>
+            var notify = 'false' == true ? true : false;
+            var verify = 'false' == true ? true : false;
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1;
+            });
+
+            guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+            window.valine = new Valine({
+                el:'#vcomment',
+                notify:notify,
+                verify:verify,
+                appId:'rwwVeUe3kpfbc0OkoxmgnTKM-gzGzoHsz',
+                appKey:'FcDDW6bpbs5QmH3A1B2Aqmae',
+                placeholder:'Just so so',
+                avatar:'mm',
+                guest_info:guest_info,
+                pageSize:'10'
+            });
+        </script>
+    
+
+
+
+    </body>
+</html>
