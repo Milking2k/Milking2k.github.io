@@ -1,0 +1,684 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Jelech的博客">
+    <title>python进阶学习笔记(好像还是有点基础) - Jelech的博客</title>
+    <meta name="author" content="Jelech">
+    
+        <meta name="keywords" content="博客,算法,javascript,游戏,">
+    
+    
+        <link rel="icon" href="http://www.jelech.cn/assets/images/favicon.ico">
+        <link rel="Shortcut Icon" type="image/x-icon" href="assets/images/favicon.ico">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\nPython的学习笔记-高级编程有关linux-python3的搭建，可以参考我的另一篇博客。\n\n由于现在的python分为了2.7阵营和3+阵营，但是3+优化了许多的细节问题、修改了一些bug。所以这里就以3+的python为主啦\n\n开始每个文件的开头一般会写#!/usr/bin/python3\n安装部分直接跳过，可参考我的另一篇博客\npython语法这部分也跳过，基础部分。\n但是值得一提的是，语言真的是想通的。c++可通过适当 的修改，变为python：\n\n去掉c++中的所有大括号\n\n去掉c++中变量声明时的类型符号(int,float,double…)\n\n换行和缩进必须为标准\n\n每个判断类型的关键字(如if、else、while、for、函数…)当行的后面都需要加冒号\n  这时候基本上已经很接近python语法了\n  可以一行进行多条语句，语句间用;号分割\n\n\n数据类型（不需要特殊声明）\nNumber（数字）\n\nString（字符串）\n\nList（列表）\n\nTuple（元组）\n\nSet（集合）\n\nDictionary（字典）\n  其中：\n\n不可变数据（3 个）：Number（数字）、String（字符串）、Tuple（元组）；\n\n可变数据（3 个）：List（列表）、Dictionary（字典）、Set（集合）。\n\n您也可以使用del语句删除一些对象引用。del var1[,var2[,var3[....,varN]]]\n其他注意事项string * num表示复制string字符串num次\nPython 使用反斜杠()转义特殊字符，如果你不想让反斜杠发生转义，可以在字符串前面添加一个 r，表示原始字符串&gt;&gt;&gt; print(r&#39;Ru\\noob&#39;)\n与 C 字符串不同的是，Python 字符串不能被改变。向一个索引位置赋值，比如word[0] = &#39;m&#39;会导致错误。\nTuple（元组）元组（tuple）与列表类似，不同之处在于元组的元素不能修改。元组写在小括号 () 里，元素之间用逗号隔开。其实，可以把字符串看作一种特殊的元组。\nSet（集合）可以使用大括号 { } 或者 set() 函数创建集合，注意：创建一个空集合必须用 set() 而不是 { }，因为 { } 是用来创建一个空字典。\n1234print(a - b)     # a 和 b 的差集print(a | b)     # a 和 b 的并集print(a &amp; b)     # a 和 b 的交集print(a ^ b)     # a 和 b 中不同时存在的元素\nDictionary（字典）(对应c++中的map)字典是一种映射类型，字典用”{ }”标识，它是一个无序的键(key) : 值(value)对集合。\n数据类型转换\n\n\n函数\n描述\n\n\n\n\nint(x [,base])\n将x转换为一个整数,进制\n\n\nfloat(x)\n将x转换到一个浮点数\n\n\ncomplex(real [,imag])\n创建一个复数\n\n\nstr(x)\n将对象 x 转换为字符串\n\n\nrepr(x)\n将对象 x 转换为表达式字符串\n\n\neval(str)\n用来计算在字符串中的有效Python表达式,并返回一个对象\n\n\ntuple(s)\n将序列 s 转换为一个元组\n\n\nlist(s)\n将序列 s 转换为一个列表\n\n\nset(s)\n转换为可变集合\n\n\ndict(d)\n创建一个字典。d 必须是一个序列 (key,value)元组。\n\n\nfrozenset(s)\n转换为不可变集合\n\n\nchr(x)\n将一个整数转换为一个字符\n\n\nord(x)\n将一个字符转换为它的整数值\n\n\nhex(x)\n将一个整数转换为一个十六进制字符串\n\n\noct(x)\n将一个整数转换为一个八进制字符串\n\n\n\nis 用于判断两个变量引用对象是否为同一个， == 用于判断引用变量的值是否相等。\n随机数函数\n\n\n函数\n描述\n\n\n\n\nchoice(seq)\n从序列的元素中随机挑选一个元素，比如random.choice(range(10))，从0到9中随机挑选一个整数。\n\n\nrandrange ([start,] stop [,step])\n从指定范围内，按指定基数递增的集合中获取一个随机数，基数缺省值为1\n\n\nrandom()\n随机生成下一个实数，它在[0,1)范围内。\n\n\nseed([x])\n改变随机数生成器的种子seed。如果你不了解其原理，你不必特别去设定seed，Python会帮你选择seed。\n\n\nshuffle(lst)\n将序列的所有元素随机排序\n\n\nuniform(x, y)\n随机生成下一个实数，它在[x,y]范围内。\n\n\n\n","dateCreated":"2018-12-03T10:09:33+08:00","dateModified":"2018-12-03T23:11:45+08:00","datePublished":"2018-12-03T10:09:33+08:00","description":"","headline":"python进阶学习笔记(好像还是有点基础)","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://www.jelech.cn/posts/60692/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"http://www.jelech.cn/posts/60692/","keywords":"笔记, python"}</script>
+    <meta name="keywords" content="笔记,python">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="python进阶学习笔记(好像还是有点基础)">
+<meta property="og:url" content="http://www.jelech.cn/posts/60692/index.html">
+<meta property="og:site_name" content="Jelech的博客">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2018-12-03T15:11:45.304Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python进阶学习笔记(好像还是有点基础)">
+<meta name="twitter:creator" content="@twitter">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="http://www.jelech.cn/assets/images/avatar.jpg"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
+    <!--STYLES END-->
+    
+
+    
+    <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?c3b0944d9211544bb9fe9d25ce47bac7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">Jelech的博客</a>
+    </div>
+    
+        
+            <a class="header-right-picture " href="#about">
+        
+        
+            <img class="header-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+                </a>
+                <h4 class="sidebar-profile-name">Jelech</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>putty本无树,MinGW亦非台</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/ " title="首页">
+                    
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-categories" title="分类">
+                    
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">分类</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-tags" title="标签">
+                    
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-archives" title="归档">
+                    
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/game" title="游戏">
+                    
+                        <i class="sidebar-button-icon fas fa-gamepad" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">游戏</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="#about" title="关于">
+                    
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="https://github.com/jelech" target="_blank" rel="noopener" title="GitHub">
+                    
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/mailto" title="邮箱">
+                    
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">邮箱</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            python进阶学习笔记(好像还是有点基础)
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2018-12-03T10:09:33+08:00">
+	
+		    12月 03, 2018
+    	
+    </time>
+    
+        <span>发布在 </span>
+        
+    <a class="category-link" href="/categories/学习笔记/">学习笔记</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            
+            <h1 id="table-of-contents">目录</h1><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Python的学习笔记-高级编程"><span class="toc-text">Python的学习笔记-高级编程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#开始"><span class="toc-text">开始</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#python语法"><span class="toc-text">python语法</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据类型（不需要特殊声明）"><span class="toc-text">数据类型（不需要特殊声明）</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#其他注意事项"><span class="toc-text">其他注意事项</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Tuple（元组）"><span class="toc-text">Tuple（元组）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Set（集合）"><span class="toc-text">Set（集合）</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#Dictionary（字典）-对应c-中的map"><span class="toc-text">Dictionary（字典）(对应c++中的map)</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#数据类型转换"><span class="toc-text">数据类型转换</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#随机数函数"><span class="toc-text">随机数函数</span></a></li></ol></li></ol></li></ol>
+<a id="more"></a>
+<h1 id="Python的学习笔记-高级编程"><a href="#Python的学习笔记-高级编程" class="headerlink" title="Python的学习笔记-高级编程"></a>Python的学习笔记-高级编程</h1><p>有关linux-python3的搭建，可以参考我的另一篇博客。</p>
+<blockquote>
+<p>由于现在的python分为了2.7阵营和3+阵营，但是3+优化了许多的细节问题、修改了一些bug。所以这里就以3+的python为主啦</p>
+</blockquote>
+<h2 id="开始"><a href="#开始" class="headerlink" title="开始"></a>开始</h2><p>每个文件的开头一般会写<code>#!/usr/bin/python3</code></p>
+<p>安装部分直接跳过，可参考我的另一篇博客</p>
+<h3 id="python语法"><a href="#python语法" class="headerlink" title="python语法"></a>python语法</h3><p>这部分也跳过，基础部分。</p>
+<p>但是值得一提的是，语言真的是想通的。c++可通过适当 的修改，变为python：</p>
+<ul>
+<li><p>去掉c++中的所有大括号</p>
+</li>
+<li><p>去掉c++中变量声明时的类型符号(int,float,double…)</p>
+</li>
+<li><p>换行和缩进必须为标准</p>
+</li>
+<li><p>每个判断类型的关键字(如if、else、while、for、函数…)当行的后面都需要加冒号</p>
+<p>  这时候基本上已经很接近python语法了</p>
+<p>  可以一行进行多条语句，语句间用<code>;</code>号分割</p>
+</li>
+</ul>
+<h3 id="数据类型（不需要特殊声明）"><a href="#数据类型（不需要特殊声明）" class="headerlink" title="数据类型（不需要特殊声明）"></a>数据类型（不需要特殊声明）</h3><ul>
+<li><p>Number（数字）</p>
+</li>
+<li><p>String（字符串）</p>
+</li>
+<li><p>List（列表）</p>
+</li>
+<li><p>Tuple（元组）</p>
+</li>
+<li><p>Set（集合）</p>
+</li>
+<li><p>Dictionary（字典）</p>
+<p>  其中：</p>
+</li>
+<li><p><strong>不可变数据（3 个）：</strong>Number（数字）、String（字符串）、Tuple（元组）；</p>
+</li>
+<li><strong>可变数据（3 个）：</strong>List（列表）、Dictionary（字典）、Set（集合）。</li>
+</ul>
+<p>您也可以使用del语句删除一些对象引用。<code>del var1[,var2[,var3[....,varN]]]</code></p>
+<h4 id="其他注意事项"><a href="#其他注意事项" class="headerlink" title="其他注意事项"></a>其他注意事项</h4><p><code>string * num</code>表示复制string字符串num次</p>
+<p>Python 使用反斜杠()转义特殊字符，如果你不想让反斜杠发生转义，可以在字符串前面添加一个 r，表示原始字符串<code>&gt;&gt;&gt; print(r&#39;Ru\noob&#39;)</code></p>
+<p>与 C 字符串不同的是，Python 字符串不能被改变。向一个索引位置赋值，比如<code>word[0] = &#39;m&#39;</code>会导致错误。</p>
+<h3 id="Tuple（元组）"><a href="#Tuple（元组）" class="headerlink" title="Tuple（元组）"></a>Tuple（元组）</h3><p>元组（tuple）与列表类似，不同之处在于元组的元素不能修改。元组写在小括号 () 里，元素之间用逗号隔开。其实，可以把字符串看作一种特殊的元组。</p>
+<h3 id="Set（集合）"><a href="#Set（集合）" class="headerlink" title="Set（集合）"></a>Set（集合）</h3><p>可以使用大括号 { } 或者 set() 函数创建集合，注意：创建一个空集合必须用 set() 而不是 { }，因为 { } 是用来创建一个空字典。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">print(a - b)     <span class="comment"># a 和 b 的差集</span></span><br><span class="line">print(a | b)     <span class="comment"># a 和 b 的并集</span></span><br><span class="line">print(a &amp; b)     <span class="comment"># a 和 b 的交集</span></span><br><span class="line">print(a ^ b)     <span class="comment"># a 和 b 中不同时存在的元素</span></span><br></pre></td></tr></table></figure>
+<h3 id="Dictionary（字典）-对应c-中的map"><a href="#Dictionary（字典）-对应c-中的map" class="headerlink" title="Dictionary（字典）(对应c++中的map)"></a>Dictionary（字典）(对应c++中的map)</h3><p>字典是一种映射类型，字典用”{ }”标识，它是一个<strong>无序</strong>的<strong>键(key) : 值(value)</strong>对集合。</p>
+<h3 id="数据类型转换"><a href="#数据类型转换" class="headerlink" title="数据类型转换"></a>数据类型转换</h3><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>int(x [,base])</td>
+<td>将x转换为一个整数,进制</td>
+</tr>
+<tr>
+<td>float(x)</td>
+<td>将x转换到一个浮点数</td>
+</tr>
+<tr>
+<td>complex(real [,imag])</td>
+<td>创建一个复数</td>
+</tr>
+<tr>
+<td>str(x)</td>
+<td>将对象 x 转换为字符串</td>
+</tr>
+<tr>
+<td>repr(x)</td>
+<td>将对象 x 转换为表达式字符串</td>
+</tr>
+<tr>
+<td>eval(str)</td>
+<td>用来计算在字符串中的有效Python表达式,并返回一个对象</td>
+</tr>
+<tr>
+<td>tuple(s)</td>
+<td>将序列 s 转换为一个元组</td>
+</tr>
+<tr>
+<td>list(s)</td>
+<td>将序列 s 转换为一个列表</td>
+</tr>
+<tr>
+<td>set(s)</td>
+<td>转换为可变集合</td>
+</tr>
+<tr>
+<td>dict(d)</td>
+<td>创建一个字典。d 必须是一个序列 (key,value)元组。</td>
+</tr>
+<tr>
+<td>frozenset(s)</td>
+<td>转换为不可变集合</td>
+</tr>
+<tr>
+<td>chr(x)</td>
+<td>将一个整数转换为一个字符</td>
+</tr>
+<tr>
+<td>ord(x)</td>
+<td>将一个字符转换为它的整数值</td>
+</tr>
+<tr>
+<td>hex(x)</td>
+<td>将一个整数转换为一个十六进制字符串</td>
+</tr>
+<tr>
+<td>oct(x)</td>
+<td>将一个整数转换为一个八进制字符串</td>
+</tr>
+</tbody>
+</table>
+<p>is 用于判断两个变量引用对象是否为同一个， == 用于判断引用变量的值是否相等。</p>
+<h3 id="随机数函数"><a href="#随机数函数" class="headerlink" title="随机数函数"></a>随机数函数</h3><table>
+<thead>
+<tr>
+<th>函数</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>choice(seq)</td>
+<td>从序列的元素中随机挑选一个元素，比如random.choice(range(10))，从0到9中随机挑选一个整数。</td>
+</tr>
+<tr>
+<td>randrange ([start,] stop [,step])</td>
+<td>从指定范围内，按指定基数递增的集合中获取一个随机数，基数缺省值为1</td>
+</tr>
+<tr>
+<td>random()</td>
+<td>随机生成下一个实数，它在[0,1)范围内。</td>
+</tr>
+<tr>
+<td>seed([x])</td>
+<td>改变随机数生成器的种子seed。如果你不了解其原理，你不必特别去设定seed，Python会帮你选择seed。</td>
+</tr>
+<tr>
+<td>shuffle(lst)</td>
+<td>将序列的所有元素随机排序</td>
+</tr>
+<tr>
+<td>uniform(x, y)</td>
+<td>随机生成下一个实数，它在[x,y]范围内。</td>
+</tr>
+</tbody>
+</table>
+
+            
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">标签</span><br>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/python/">python</a> <a class="tag tag--primary tag--small t-link" href="/tags/笔记/">笔记</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/864/" data-tooltip="HTTP学习笔记" aria-label="上一篇: HTTP学习笔记">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/26201/" data-tooltip="c++进阶学习笔记(好像就是基础)" aria-label="下一篇: c++进阶学习笔记(好像就是基础)">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="分享">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/60692/" title="分享到 Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/60692/" title="分享到 Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/60692/" title="分享到 Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <style media="screen">.v .vwrap{overflow: inherit;}</style>
+                <div id="vcomment"></div>
+                <a href="posts/60692/#vcomment" class="disqus-comment-count"></a>
+                <span class="valine-comment-count" data-xid="posts/60692/"></span>
+                <span> Comment</span>
+            
+        
+    </div>
+</article>
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2018 Jelech. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/864/" data-tooltip="HTTP学习笔记" aria-label="上一篇: HTTP学习笔记">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/26201/" data-tooltip="c++进阶学习笔记(好像就是基础)" aria-label="下一篇: c++进阶学习笔记(好像就是基础)">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="分享">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/60692/" title="分享到 Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/60692/" title="分享到 Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/60692/" title="分享到 Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+    <i id="btn-close-shareoptions" class="fa fa-times"></i>
+    <ul class="share-options">
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/60692/">
+                    <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/60692/">
+                    <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/60692/">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+        
+            <h4 id="about-card-name">Jelech</h4>
+        
+            <div id="about-card-bio"><p>putty本无树,MinGW亦非台</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br>
+                <p>在校大学生一枚</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br>
+                CHINA.HRB.STU
+            </div>
+        
+
+        
+            <div id="about-card-job">
+                <i class="fa fa-envelope"></i>
+                <br>
+                jelech@hotmail.com
+            </div>
+        
+
+        
+            <div id="about-card-job">
+                <i class="fa fa-phone-square"></i>
+                <br>
+                18.......6
+            </div>
+        
+
+
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js" charset="utf-8"></script>
+        <script src="//unpkg.com/valine@latest/dist/Valine.min.js" charset="utf-8"></script>
+        <script>
+            var notify = 'false' == true ? true : false;
+            var verify = 'false' == true ? true : false;
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1;
+            });
+
+            guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+            window.valine = new Valine({
+                el:'#vcomment',
+                notify:notify,
+                verify:verify,
+                appId:'rwwVeUe3kpfbc0OkoxmgnTKM-gzGzoHsz',
+                appKey:'FcDDW6bpbs5QmH3A1B2Aqmae',
+                placeholder:'Just so so',
+                avatar:'mm',
+                guest_info:guest_info,
+                pageSize:'10'
+            });
+        </script>
+    
+
+
+
+    </body>
+</html>
