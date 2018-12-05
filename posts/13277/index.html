@@ -1,0 +1,666 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Jelech的博客">
+    <title>TCP/IP学习笔记 - Jelech的博客</title>
+    <meta name="author" content="Jelech">
+    
+        <meta name="keywords" content="博客,算法,javascript,游戏,">
+    
+    
+        <link rel="icon" href="http://www.jelech.cn/assets/images/favicon.ico">
+        <link rel="Shortcut Icon" type="image/x-icon" href="assets/images/favicon.ico">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\nTCP/IP 教程\n您的浏览器与服务器都在使用 TCP/IP 协议\n\n您的 E-Mail 使用 TCP/IP 协议\n\n因特网地址是 TCP/IP 协议\n\n\n网际互联及OSI七层模型：\n物理层、数据链路层、网络层、传输层、表示层、会话层、应用层\n\n物理层\n  作用：定义一些电器，机械，过程和规范，如集线器；\n  PDU(协议数据单元)：bit/比特\n  设备：集线器HUB;\n  注意：没有寻址的概念；\n\n数据链路层\n  作用：定义如何格式化数据，支持错误检测；\n  典型协议：以太网，帧中继（古董级VPN）\n  PDU：frame（帧）设备：以太网交换机；\n  备注：交换机通过MAC地址转发数据，逻辑链路控制；\n\n网络层\n  作用：定义一个逻辑的寻址，选择最佳路径传输，路由数据包；\n  典型协议：IP，IPX，ICMP,ARP(IP-&gt;MAC),IARP;\n  PDU:packet/数据包；\n  设备：路由器\n  备注：实现寻址\n\n传输层：\n  作用：提供可靠和尽力而为的传输；\n  典型协议：TCP,UDP,SPX,port(65535个端口),EIGRP,OSPF,\n  PDU:fragment 段；\n  无典型设备；\n  备注：负责网络传输和会话建立;\n\n会话层：\n  作用：控制会话，建立管理终止应用程序会话；\n  典型协议：NFS, SQL, ASP, PHP, JSP, RSVP(资源源预留协议), windows， \n  备注：负责会话建立；\n\n表示层：\n  作用：格式化数据；\n  典型协议：ASCII, JPEG. PNG, MP3. WAV, AVI, \n  备注：可以提供加密服务；\n\n应用层：\n  作用：控制应用程序；\n  典型协议：telnet, ssh, http, ftp, smtp, rip, BGP, (未完待续)\n  备注：为应用程序提供网络服务；\n\n\n在 TCP/IP 内部在 TCP/IP 中包含一系列用于处理数据通信的协议：\n\nTCP (传输控制协议) - 应用程序之间通信\nUDP (用户数据报协议) - 应用程序之间的简单通信\nIP (网际协议) - 计算机之间的通信\nICMP (因特网消息控制协议) - 针对错误和状态\nDHCP (动态主机配置协议) - 针对动态寻址\n\n当应用程序希望通过 TCP 与另一个应用程序通信时，它会发送一个通信请求。这个请求必须被送到一个确切的地址。在双方”握手”之后，TCP 将在两个应用程序之间建立一个全双工 (full-duplex) 的通信。\n这个全双工的通信将占用两个计算机之间的通信线路，直到它被一方或双方关闭为止。\nUDP 和 TCP 很相似，但是更简单，同时可靠性低于 TCP。\nIP 是无连接的协议IP 用于计算机之间的通信。\nIP 是无连接的通信协议。它不会占用两个正在通信的计算机之间的通信线路。这样，IP 就降低了对网络线路的需求。每条线可以同时满足许多不同的计算机之间的通信需要。\n通过 IP，消息（或者其他数据）被分割为小的独立的包，并通过因特网在计算机之间传送。\nIP 负责将每个包路由至它的目的地。\nIP 路由器当一个 IP 包从一台计算机被发送，它会到达一个 IP 路由器。\nIP 路由器负责将这个包路由至它的目的地，直接地或者通过其他的路由器。\n在一个相同的通信中，一个包所经由的路径可能会和其他的包不同。而路由器负责根据通信量、网络中的错误或者其他参数来进行正确地寻址。\n总结TCP/IP是什么TCP/IP 意味着 TCP 和 IP 在一起协同工作。\nTCP 负责应用软件（比如您的浏览器）和网络软件之间的通信。\nIP 负责计算机之间的通信。\nTCP 负责将数据分割并装入 IP 包，然后在它们到达的时候重新组合它们。\nIP 负责将包发送至接受者。\nTCP/IP 寻址TCP/IP 使用 32 个比特或者 4 组 0 到 255 之间的数字来为计算机编址。\nIP地址每个计算机必须有一个 IP 地址才能够连入因特网。\n每个 IP 包必须有一个地址才能够发送到另一台计算机。\n每个计算机必须有一个唯一的 4 组数字的地址，每组数字必须在 0 到 255 之间，并由点号隔开，比如：192.168.1.60\nIP V6\nIPv6 是 “Internet Protocol Version 6” 的缩写，也被称作下一代互联网协议，它是由 IETF 小组（Internet 工程任务组Internet Engineering Task Force）设计的用来替代现行的 IPv4（现行的）协议的一种新的 IP 协议。\n\n规定的标准语法建议把 IPv6 地址的 128 位（16 个字节）写成 8 个 16 位的无符号整数，每个整数用 4 个十六进制位表示，这些数之间用冒号（:）分开，例如：\n1686E：8C64：FFFF：FFFF：0：1180：96A：FFFF\n冒号十六进制记法允许零压缩，即一串连续的0可以用一对冒号取代，只能使用一次零压缩。1FF05：0：0：0：0：0：0：B3 /*可以定成：*/ FF05：：B3\n域名12 个阿拉伯数字很难记忆。使用一个名称更容易。\n用于 TCP/IP 地址的名字被称为域名。jelech.cn 就是一个域名。\n\nSSL - 安全套接字层（Secure Sockets Layer）\n  SSL 协议用于为安全数据传输加密数据。\n\nSMTP - 简易邮件传输协议（Simple Mail Transfer Protocol）\n  SMTP 用于电子邮件的传输。\n\nMIME - 多用途因特网邮件扩展（Multi-purpose Internet Mail Extensions）\n  MIME 协议使 SMTP 有能力通过 TCP/IP 网络传输多媒体文件，包括声音、视频和二进制数据。\n\nIMAP - 因特网消息访问协议（Internet Message Access Protocol）\n  IMAP 用于存储和取回电子邮件。\n\nPOP - 邮局协议（Post Office Protocol）\n  POP 用于从电子邮件服务器向个人电脑下载电子邮件。\n\nFTP - 文件传输协议（File Transfer Protocol）\n  FTP 负责计算机之间的文件传输。\n\nNTP - 网络时间协议（Network Time Protocol）\n  NTP 用于在计算机之间同步时间（钟）。\n\nDHCP - 动态主机配置协议（Dynamic Host Configuration Protocol）\n  DHCP 用于向网络中的计算机分配动态 IP 地址。\n\nSNMP - 简单网络管理协议（Simple Network Management Protocol）\n  SNMP 用于计算机网络的管理。\n\nLDAP - 轻量级的目录访问协议（Lightweight Directory Access Protocol）\n  LDAP 用于从因特网搜集关于用户和电子邮件地址的信息。\n\nICMP - 因特网消息控制协议（Internet Control Message Protocol）\n  ICMP 负责网络中的错误处理。\n\nARP - 地址解析协议（Address Resolution Protocol）\n  ARP - 用于通过 IP 来查找基于 IP 地址的计算机网卡的硬件地址。\n\nRARP - 反向地址转换协议（Reverse Address Resolution Protocol）\n  RARP 用于通过 IP 查找基于硬件地址的计算机网卡的 IP 地址。\n\nBOOTP - 自举协议（Boot Protocol）\n  BOOTP 用于从网络启动计算机。\n\nPPTP - 点对点隧道协议（Point to Point Tunneling Protocol）\n  PPTP 用于私人网络之间的连接（隧道）。\n\n\n","dateCreated":"2018-12-04T12:09:33+08:00","dateModified":"2018-12-05T22:41:12+08:00","datePublished":"2018-12-04T12:09:33+08:00","description":"","headline":"TCP/IP学习笔记","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://www.jelech.cn/posts/13277/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"http://www.jelech.cn/posts/13277/","keywords":"笔记, TCP/IP, 协议"}</script>
+    <meta name="keywords" content="笔记,TCP&#x2F;IP,协议">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="TCP&#x2F;IP学习笔记">
+<meta property="og:url" content="http://www.jelech.cn/posts/13277/index.html">
+<meta property="og:site_name" content="Jelech的博客">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2018-12-05T14:41:12.163Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="TCP&#x2F;IP学习笔记">
+<meta name="twitter:creator" content="@twitter">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="http://www.jelech.cn/assets/images/avatar.jpg"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
+    <!--STYLES END-->
+    
+
+    
+    <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?c3b0944d9211544bb9fe9d25ce47bac7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">Jelech的博客</a>
+    </div>
+    
+        
+            <a class="header-right-picture " href="#about">
+        
+        
+            <img class="header-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+                </a>
+                <h4 class="sidebar-profile-name">Jelech</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>putty本无树,MinGW亦非台</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/ " title="首页">
+                    
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-categories" title="分类">
+                    
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">分类</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-tags" title="标签">
+                    
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-archives" title="归档">
+                    
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/game" title="游戏">
+                    
+                        <i class="sidebar-button-icon fas fa-gamepad" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">游戏</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="#about" title="关于">
+                    
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="https://github.com/jelech" target="_blank" rel="noopener" title="GitHub">
+                    
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/mailto" title="邮箱">
+                    
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">邮箱</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            TCP/IP学习笔记
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2018-12-04T12:09:33+08:00">
+	
+		    12月 04, 2018
+    	
+    </time>
+    
+        <span>发布在 </span>
+        
+    <a class="category-link" href="/categories/学习笔记/">学习笔记</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            
+            <h1 id="table-of-contents">目录</h1><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#TCP-IP-教程"><span class="toc-text">TCP/IP 教程</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#在-TCP-IP-内部"><span class="toc-text">在 TCP/IP 内部</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#IP-是无连接的协议"><span class="toc-text">IP 是无连接的协议</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IP-路由器"><span class="toc-text">IP 路由器</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#总结TCP-IP是什么"><span class="toc-text">总结TCP/IP是什么</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#TCP-IP-寻址"><span class="toc-text">TCP/IP 寻址</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#IP地址"><span class="toc-text">IP地址</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#IP-V6"><span class="toc-text">IP V6</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#域名"><span class="toc-text">域名</span></a></li></ol></li></ol></li></ol>
+<a id="more"></a>
+<h1 id="TCP-IP-教程"><a href="#TCP-IP-教程" class="headerlink" title="TCP/IP 教程"></a>TCP/IP 教程</h1><ul>
+<li><p>您的浏览器与服务器都在使用 TCP/IP 协议</p>
+</li>
+<li><p>您的 E-Mail 使用 TCP/IP 协议</p>
+</li>
+<li><p>因特网地址是 TCP/IP 协议</p>
+</li>
+</ul>
+<p>网际互联及OSI七层模型：</p>
+<p>物理层、数据链路层、网络层、传输层、表示层、会话层、应用层</p>
+<ul>
+<li><p>物理层</p>
+<p>  作用：定义一些电器，机械，过程和规范，如集线器；</p>
+<p>  PDU(协议数据单元)：bit/比特</p>
+<p>  设备：集线器HUB;</p>
+<p>  注意：没有寻址的概念；</p>
+</li>
+<li><p>数据链路层</p>
+<p>  作用：定义如何格式化数据，支持错误检测；</p>
+<p>  典型协议：以太网，帧中继（古董级VPN）</p>
+<p>  PDU：frame（帧）设备：以太网交换机；</p>
+<p>  备注：交换机通过MAC地址转发数据，逻辑链路控制；</p>
+</li>
+<li><p>网络层</p>
+<p>  作用：定义一个逻辑的寻址，选择最佳路径传输，路由数据包；</p>
+<p>  典型协议：IP，IPX，ICMP,ARP(IP-&gt;MAC),IARP;</p>
+<p>  PDU:packet/数据包；</p>
+<p>  设备：路由器</p>
+<p>  备注：实现寻址</p>
+</li>
+<li><p>传输层：</p>
+<p>  作用：提供可靠和尽力而为的传输；</p>
+<p>  典型协议：TCP,UDP,SPX,port(65535个端口),EIGRP,OSPF,</p>
+<p>  PDU:fragment 段；</p>
+<p>  无典型设备；</p>
+<p>  备注：负责网络传输和会话建立;</p>
+</li>
+<li><p>会话层：</p>
+<p>  作用：控制会话，建立管理终止应用程序会话；</p>
+<p>  典型协议：NFS, SQL, ASP, PHP, JSP, RSVP(资源源预留协议), windows， </p>
+<p>  备注：负责会话建立；</p>
+</li>
+<li><p>表示层：</p>
+<p>  作用：格式化数据；</p>
+<p>  典型协议：ASCII, JPEG. PNG, MP3. WAV, AVI, </p>
+<p>  备注：可以提供加密服务；</p>
+</li>
+<li><p>应用层：</p>
+<p>  作用：控制应用程序；</p>
+<p>  典型协议：telnet, ssh, http, ftp, smtp, rip, BGP, (未完待续)</p>
+<p>  备注：为应用程序提供网络服务；</p>
+</li>
+</ul>
+<h2 id="在-TCP-IP-内部"><a href="#在-TCP-IP-内部" class="headerlink" title="在 TCP/IP 内部"></a>在 TCP/IP 内部</h2><p>在 TCP/IP 中包含一系列用于处理数据通信的协议：</p>
+<ul>
+<li>TCP (传输控制协议) - 应用程序之间通信</li>
+<li>UDP (用户数据报协议) - 应用程序之间的简单通信</li>
+<li>IP (网际协议) - 计算机之间的通信</li>
+<li>ICMP (因特网消息控制协议) - 针对错误和状态</li>
+<li>DHCP (动态主机配置协议) - 针对动态寻址</li>
+</ul>
+<p>当应用程序希望通过 TCP 与另一个应用程序通信时，它会发送一个通信请求。这个请求必须被送到一个确切的地址。在双方”握手”之后，TCP 将在两个应用程序之间建立一个全双工 (full-duplex) 的通信。</p>
+<p>这个全双工的通信将占用两个计算机之间的通信线路，直到它被一方或双方关闭为止。</p>
+<p>UDP 和 TCP 很相似，但是更简单，同时可靠性低于 TCP。</p>
+<h3 id="IP-是无连接的协议"><a href="#IP-是无连接的协议" class="headerlink" title="IP 是无连接的协议"></a>IP 是无连接的协议</h3><p>IP 用于计算机之间的通信。</p>
+<p>IP 是无连接的通信协议。它不会占用两个正在通信的计算机之间的通信线路。这样，IP 就降低了对网络线路的需求。每条线可以同时满足许多不同的计算机之间的通信需要。</p>
+<p>通过 IP，消息（或者其他数据）被<code>分割为小的独立的包</code>，并通过因特网在计算机之间传送。</p>
+<p>IP 负责将每个包<strong>路由</strong>至它的目的地。</p>
+<h3 id="IP-路由器"><a href="#IP-路由器" class="headerlink" title="IP 路由器"></a>IP 路由器</h3><p>当一个 IP 包从一台计算机被发送，它会到达一个 IP 路由器。</p>
+<p>IP 路由器负责将这个包路由至它的目的地，直接地或者通过其他的路由器。</p>
+<p><strong>在一个相同的通信中，一个包所经由的路径可能会和其他的包不同</strong>。而路由器负责根据通信量、网络中的错误或者其他参数来进行正确地寻址。</p>
+<h3 id="总结TCP-IP是什么"><a href="#总结TCP-IP是什么" class="headerlink" title="总结TCP/IP是什么"></a>总结TCP/IP是什么</h3><p>TCP/IP 意味着 TCP 和 IP 在一起协同工作。</p>
+<p>TCP 负责应用软件（比如您的浏览器）和网络软件之间的通信。</p>
+<p>IP 负责计算机之间的通信。</p>
+<p>TCP 负责将数据分割并装入 IP 包，然后在它们到达的时候重新组合它们。</p>
+<p>IP 负责将包发送至接受者。</p>
+<h2 id="TCP-IP-寻址"><a href="#TCP-IP-寻址" class="headerlink" title="TCP/IP 寻址"></a>TCP/IP 寻址</h2><p>TCP/IP 使用 32 个比特或者 4 组 0 到 255 之间的数字来为计算机编址。</p>
+<h3 id="IP地址"><a href="#IP地址" class="headerlink" title="IP地址"></a>IP地址</h3><p>每个计算机必须有一个 IP 地址才能够连入因特网。</p>
+<p>每个 IP 包必须有一个地址才能够发送到另一台计算机。</p>
+<p>每个计算机必须有一个唯一的 4 组数字的地址，每组数字必须在 0 到 255 之间，并由点号隔开，比如：<code>192.168.1.60</code></p>
+<h3 id="IP-V6"><a href="#IP-V6" class="headerlink" title="IP V6"></a>IP V6</h3><blockquote>
+<p>IPv6 是 “Internet Protocol Version 6” 的缩写，也被称作下一代互联网协议，它是由 IETF 小组（Internet 工程任务组Internet Engineering Task Force）设计的用来替代现行的 IPv4（现行的）协议的一种新的 IP 协议。</p>
+</blockquote>
+<p>规定的标准语法建议把 IPv6 地址的 128 位（16 个字节）写成 8 个 16 位的无符号整数，每个整数用 4 个十六进制位表示，这些数之间用冒号（:）分开，例如：</p>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">686</span>E：<span class="number">8</span>C64：FFFF：FFFF：<span class="number">0</span>：<span class="number">1180</span>：<span class="number">96</span>A：FFFF</span><br></pre></td></tr></table></figure>
+<p>冒号十六进制记法允许零压缩，即一串连续的0可以用一对冒号取代，只能使用一次零压缩。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">FF05：0：0：0：0：0：0：B3 /*可以定成：*/ FF05：：B3</span><br></pre></td></tr></table></figure></p>
+<h3 id="域名"><a href="#域名" class="headerlink" title="域名"></a>域名</h3><p>12 个阿拉伯数字很难记忆。使用一个名称更容易。</p>
+<p>用于 TCP/IP 地址的名字被称为域名。jelech.cn 就是一个域名。</p>
+<ul>
+<li><p><code>SSL</code> - 安全套接字层（Secure Sockets Layer）</p>
+<p>  SSL 协议用于为安全数据传输加密数据。</p>
+</li>
+<li><p><code>SMTP</code> - 简易邮件传输协议（Simple Mail Transfer Protocol）</p>
+<p>  SMTP 用于电子邮件的传输。</p>
+</li>
+<li><p><code>MIME</code> - 多用途因特网邮件扩展（Multi-purpose Internet Mail Extensions）</p>
+<p>  MIME 协议使 SMTP 有能力通过 TCP/IP 网络传输多媒体文件，包括声音、视频和二进制数据。</p>
+</li>
+<li><p><code>IMAP</code> - 因特网消息访问协议（Internet Message Access Protocol）</p>
+<p>  IMAP 用于存储和取回电子邮件。</p>
+</li>
+<li><p>POP - 邮局协议（Post Office Protocol）</p>
+<p>  POP 用于从电子邮件服务器向个人电脑下载电子邮件。</p>
+</li>
+<li><p><code>FTP</code> - 文件传输协议（File Transfer Protocol）</p>
+<p>  FTP 负责计算机之间的文件传输。</p>
+</li>
+<li><p><code>NTP</code> - 网络时间协议（Network Time Protocol）</p>
+<p>  NTP 用于在计算机之间同步时间（钟）。</p>
+</li>
+<li><p><code>DHCP</code> - 动态主机配置协议（Dynamic Host Configuration Protocol）</p>
+<p>  DHCP 用于向网络中的计算机分配动态 IP 地址。</p>
+</li>
+<li><p>SNMP - 简单网络管理协议（Simple Network Management Protocol）</p>
+<p>  SNMP 用于计算机网络的管理。</p>
+</li>
+<li><p>LDAP - 轻量级的目录访问协议（Lightweight Directory Access Protocol）</p>
+<p>  LDAP 用于从因特网搜集关于用户和电子邮件地址的信息。</p>
+</li>
+<li><p><code>ICMP</code> - 因特网消息控制协议（Internet Control Message Protocol）</p>
+<p>  ICMP 负责网络中的错误处理。</p>
+</li>
+<li><p><code>ARP</code> - 地址解析协议（Address Resolution Protocol）</p>
+<p>  ARP - 用于通过 IP 来查找基于 IP 地址的计算机网卡的硬件地址。</p>
+</li>
+<li><p>RARP - 反向地址转换协议（Reverse Address Resolution Protocol）</p>
+<p>  RARP 用于通过 IP 查找基于硬件地址的计算机网卡的 IP 地址。</p>
+</li>
+<li><p>BOOTP - 自举协议（Boot Protocol）</p>
+<p>  BOOTP 用于从网络启动计算机。</p>
+</li>
+<li><p><code>PPTP</code> - 点对点隧道协议（Point to Point Tunneling Protocol）</p>
+<p>  PPTP 用于私人网络之间的连接（隧道）。</p>
+</li>
+</ul>
+
+            
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">标签</span><br>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/TCP-IP/">TCP/IP</a> <a class="tag tag--primary tag--small t-link" href="/tags/协议/">协议</a> <a class="tag tag--primary tag--small t-link" href="/tags/笔记/">笔记</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/864/" data-tooltip="HTTP学习笔记" aria-label="下一篇: HTTP学习笔记">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="分享">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/13277/" title="分享到 Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/13277/" title="分享到 Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/13277/" title="分享到 Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <style media="screen">.v .vwrap{overflow: inherit;}</style>
+                <div id="vcomment"></div>
+                <a href="posts/13277/#vcomment" class="disqus-comment-count"></a>
+                <span class="valine-comment-count" data-xid="posts/13277/"></span>
+                <span> Comment</span>
+            
+        
+    </div>
+</article>
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2018 Jelech. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/864/" data-tooltip="HTTP学习笔记" aria-label="下一篇: HTTP学习笔记">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="分享">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/13277/" title="分享到 Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/13277/" title="分享到 Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/13277/" title="分享到 Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+    <i id="btn-close-shareoptions" class="fa fa-times"></i>
+    <ul class="share-options">
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/13277/">
+                    <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/13277/">
+                    <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/13277/">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+        
+            <h4 id="about-card-name">Jelech</h4>
+        
+            <div id="about-card-bio"><p>putty本无树,MinGW亦非台</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br>
+                <p>在校大学生一枚</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br>
+                CHINA.HRB.STU
+            </div>
+        
+
+        
+            <div id="about-card-job">
+                <i class="fa fa-envelope"></i>
+                <br>
+                jelech@hotmail.com
+            </div>
+        
+
+        
+            <div id="about-card-job">
+                <i class="fa fa-phone-square"></i>
+                <br>
+                18.......6
+            </div>
+        
+
+
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js" charset="utf-8"></script>
+        <script src="//unpkg.com/valine@latest/dist/Valine.min.js" charset="utf-8"></script>
+        <script>
+            var notify = 'false' == true ? true : false;
+            var verify = 'false' == true ? true : false;
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1;
+            });
+
+            guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+            window.valine = new Valine({
+                el:'#vcomment',
+                notify:notify,
+                verify:verify,
+                appId:'rwwVeUe3kpfbc0OkoxmgnTKM-gzGzoHsz',
+                appKey:'FcDDW6bpbs5QmH3A1B2Aqmae',
+                placeholder:'Just so so',
+                avatar:'mm',
+                guest_info:guest_info,
+                pageSize:'10'
+            });
+        </script>
+    
+
+
+
+    </body>
+</html>
