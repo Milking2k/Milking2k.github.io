@@ -1,0 +1,579 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Jelech的博客">
+    <title>python爬虫基础 - Jelech的博客</title>
+    <meta name="author" content="Jelech">
+    
+        <meta name="keywords" content="博客,算法,javascript,游戏,">
+    
+    
+        <link rel="icon" href="http://www.jelech.cn/assets/images/favicon.ico">
+        <link rel="Shortcut Icon" type="image/x-icon" href="assets/images/favicon.ico">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\npython爬虫爬虫是什么\n爬虫就是一种自动浏览、获取数据的自动化程序\n一般python大量的包、以及容易入手，使得python成为了爬虫的最大’淫’家\n爬虫能获取网页上，作为一个正常人能获取的所有资源。\n但是更方便、快速、简单了\n\n所需安装包在此之前，请先安装好python, pip.   python3的朋友请使用pip3\n\n使用pip安装requests pip install requests\n使用pip安装beautifulsoup4 pip install beautifulsoup4\n\n通过’熬汤’1234567from bs4 import BeautifulSoupfrom urllib.request import urlopenhtml = urlopen(\"https://www.jelech.cn\").read().decode('utf-8')print(html)soup = BeautifulSoup(html, features='lxml')soup.find('h1').get_text()\n\nurlopen( URL ).read().decode(‘utf-8’)\n通过此函数链获取服务器返回的html, 读取后，编码为utf-8形式\n\n\nBeatutifulSoup(html, features=’ ‘)\n将获取到的html文档进行进一步格式化编码。函数返回的对象可以直接find某个标签\n\n\nsoup.find(‘tag’, { key:value })   (find_all(‘tag’))\n获取指定tag名的标签，其中的属性key值为value。相当于筛选，若有多种结果，使用find_all函数可以返回为一个数组\n\n\n\n实例：百度百科的多次连接爬取\n12345678910111213141516171819202122232425# -*- utf8 -*-from bs4 import BeautifulSoupfrom urllib.request import urlopenimport reimport randombase_url = \"https://baike.baidu.com\"his = [r\"/item/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB\"]for i in range(10):    url = base_url + his[-1]  #最后一个    html = urlopen(url).read().decode('utf-8')    soup = BeautifulSoup(html, features='lxml')    print(i, soup.find('h1').get_text(), '   url:',his[-1])    sub_urls = soup.find_all(\"a\", &#123;        \"target\": \"_blank\",        \"href\": re.compile(\"/item/(%.&#123;2&#125;)+$\")    &#125;)    if len(sub_urls) != 0:        his.append(random.sample(sub_urls,1)[0]['href'])    else:        his.pop()\n通过POST&amp;GET\n一般情况下，与服务器的通信最多使用的就是post和get。\npost一般用于有数据给服务器，然后服务器反应回答\nget用于访问某个页面，服务器直接回答\n这里两者的详细区别和安全就不细说了，详情可以看我的其他笔记\n\n\n\n1234567891011121314data = &#123;    'username': 'jelech',    'password': '123456'&#125;r = requests.post('http://pythonscraping.com/pages/files/processing.php', data = data)print(r.url)# 当然，get后面也能像post一样接参数r = requests.get('https://www.baidu.com/s')print(r.url)# 上传文件file = &#123;'uploadFile': open('./image.png', 'rb')&#125;r = requests.post('http//pythonscraping.com/files/processing2.php', files = file)\n通过cookies&amp;session在访问网站后，会有个cookies返回后保存着。之后在使用的时候，可以在requests时，将cookies附加上去\n1234r = requests.get('https://www.baidu.com/s')print(r.cookies.get_dict())r = requests.get('http://pythonscraping.com/pages/cookies/profile.php',cookies = r.cookies)print(r.text)\nsession作为保持会话功能。特别是在登录方面\n12345678session = requests.Session()data = &#123;    'username': 'jelech',    'password': '123456'&#125;r = session.post('http://',data = data)r = session.get('http;//')# 之后就可以直接用session保持当前会话状态下post与get了\n下载文件访问下载地址，保存到文件中。可以设置为stream，边下边保存。\n1234567891011121314from urllib.request import urlretrieveimport requestsimage_url = \"https://\"urlretrieve(image_url, './img/image1.png') # 放到哪里去r = requests.get(image_url)with open('./img/image2.png', 'wb') as f:    f.write(r.content)r = requests.get(image_url, stream=True) # 边下边保存with open('./img/image3.png', 'wb') as f:    for chunk in r.iter_content(chunk_size=32): # 每次下载多少字节后保存        f.write(chunk)\n实例：下载中国地理中的美图\n12345678910111213141516171819202122232425# -*- utf8 -*-from bs4 import BeautifulSoupimport requestsimport osimport timeURL = \"http://www.ngchina.com.cn/animals/\"html = requests.get(URL).text()soup = BeautifulSoup(html, 'lxml')img_url = soup.find_all('ul', &#123;    \"class\":\"img_list\"&#125;)print(len(img_url))for urls in img_url:    imgs = urls.find_all('img')    for img in imgs:        url = img['src']        r = requests.get(url, stream=True)        image_name = url.split('/')[-1]        with open('./img/%s' % image_name, 'wb') as f:            for chunk in r.iter_content(chunk_size = 128):                f.write(chunk)        print('Saved %s' % image_name)\n多进程下的爬虫多进程使用的是multiprocessing包，进行多进程的创建，他和多线程不一样。他更快，更独立。详细请参观我的其他博文。\n实例：爬取网页中的超链接，访问后再获取。\n123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960# -*- utf8 -*-from urllib.request import urlopen, urljoinfrom bs4 import BeautifulSoupimport multiprocessing as mpimport reimport time# 多进程的定义，使用来获取返回的信息def crawl(url):    response = urlopen(url)    time.sleep(0.1)             # slightly delay for downloading    return response.read().decode()# 多进程定义二，对获取到的信息进行解析，获取其中的信息def parse(html):    soup = BeautifulSoup(html, 'lxml')    urls = soup.find_all('a', &#123;\"href\": re.compile('^/.+?/$')&#125;)    title = soup.find('h1').get_text().strip()    page_urls = set([urljoin(base_url, url['href']) for url in urls])   # remove duplication    url = soup.find('meta', &#123;'property': \"og:url\"&#125;)['content']    return title, page_urls, urlif __name__ == '__main__':    # base_url = \"http://127.0.0.1:4000/\"    # DON'T OVER CRAWL THE WEBSITE OR YOU MAY NEVER VISIT AGAIN    if base_url != \"http://127.0.0.1:4000/\":        restricted_crawl = True    else:        restricted_crawl = False    unseen = set([base_url,])    seen = set()\t\t# 进程池，声明了4个，在其中拿。    pool = mp.Pool(4)                       # number strongly affected    count, t1 = 1, time.time()    while len(unseen) != 0:              # still get some url to visit        if restricted_crawl and len(seen) &gt; 20:            break        # 获取返回数据的进程设置。        crawl_jobs = [pool.apply_async(crawl, args=(url,)) for url in unseen]        htmls = [j.get() for j in crawl_jobs] # request connection        htmls = [h for h in htmls if h is not None]     # remove None        # 获取分析数据的进程设置。        parse_jobs = [pool.apply_async(parse, args=(html,)) for html in htmls]        results = [j.get() for j in parse_jobs] # parse html        # 分析完后,需要将已看过的进行合并        seen.update(unseen)        unseen.clear()\t\t\t\t# 获取新的，未访问的路径        for title, page_urls, url in results:                print(count, title, url)                count += 1                unseen.update(page_urls - seen)    print('Total time: %.1f s' % (time.time()-t1, ))\n","dateCreated":"2018-12-25T10:09:33+08:00","dateModified":"2018-12-25T13:25:18+08:00","datePublished":"2018-12-25T10:09:33+08:00","description":"","headline":"python爬虫基础","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://www.jelech.cn/posts/52862/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"http://www.jelech.cn/posts/52862/","keywords":"笔记, python, 爬虫"}</script>
+    <meta name="keywords" content="笔记,python,爬虫">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="python爬虫基础">
+<meta property="og:url" content="http://www.jelech.cn/posts/52862/index.html">
+<meta property="og:site_name" content="Jelech的博客">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2018-12-25T05:25:18.757Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="python爬虫基础">
+<meta name="twitter:creator" content="@twitter">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="http://www.jelech.cn/assets/images/avatar.jpg"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
+    <!--STYLES END-->
+    
+
+    
+    <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?c3b0944d9211544bb9fe9d25ce47bac7";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">Jelech的博客</a>
+    </div>
+    
+        
+            <a class="header-right-picture " href="#about">
+        
+        
+            <img class="header-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+                </a>
+                <h4 class="sidebar-profile-name">Jelech</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>putty本无树,MinGW亦非台</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/ " title="首页">
+                    
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-categories" title="分类">
+                    
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">分类</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-tags" title="标签">
+                    
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-archives" title="归档">
+                    
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/game" title="游戏">
+                    
+                        <i class="sidebar-button-icon fas fa-gamepad" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">游戏</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="#about" title="关于">
+                    
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="https://github.com/jelech" target="_blank" rel="noopener" title="GitHub">
+                    
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/mailto" title="邮箱">
+                    
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">邮箱</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            python爬虫基础
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2018-12-25T10:09:33+08:00">
+	
+		    12月 25, 2018
+    	
+    </time>
+    
+        <span>发布在 </span>
+        
+    <a class="category-link" href="/categories/学习笔记/">学习笔记</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            
+            <h1 id="table-of-contents">目录</h1><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#python爬虫"><span class="toc-text">python爬虫</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#爬虫是什么"><span class="toc-text">爬虫是什么</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#所需安装包"><span class="toc-text">所需安装包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#通过’熬汤’"><span class="toc-text">通过’熬汤’</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#通过POST-amp-GET"><span class="toc-text">通过POST&amp;GET</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#通过cookies-amp-session"><span class="toc-text">通过cookies&amp;session</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#下载文件"><span class="toc-text">下载文件</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#多进程下的爬虫"><span class="toc-text">多进程下的爬虫</span></a></li></ol></li></ol>
+<a id="more"></a>
+<h1 id="python爬虫"><a href="#python爬虫" class="headerlink" title="python爬虫"></a>python爬虫</h1><h2 id="爬虫是什么"><a href="#爬虫是什么" class="headerlink" title="爬虫是什么"></a>爬虫是什么</h2><ul>
+<li>爬虫就是一种自动浏览、获取数据的自动化程序</li>
+<li>一般python大量的包、以及容易入手，使得python成为了爬虫的最大’淫’家</li>
+<li>爬虫能获取网页上，作为一个正常人能获取的所有资源。</li>
+<li>但是更方便、快速、简单了</li>
+</ul>
+<h2 id="所需安装包"><a href="#所需安装包" class="headerlink" title="所需安装包"></a>所需安装包</h2><p>在此之前，请先安装好python, pip.   <em>python3的朋友请使用pip3</em></p>
+<ul>
+<li>使用pip安装requests <code>pip install requests</code></li>
+<li>使用pip安装beautifulsoup4 <code>pip install beautifulsoup4</code></li>
+</ul>
+<h2 id="通过’熬汤’"><a href="#通过’熬汤’" class="headerlink" title="通过’熬汤’"></a>通过’熬汤’</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlopen</span><br><span class="line"></span><br><span class="line">html = urlopen(<span class="string">"https://www.jelech.cn"</span>).read().decode(<span class="string">'utf-8'</span>)</span><br><span class="line">print(html)</span><br><span class="line">soup = BeautifulSoup(html, features=<span class="string">'lxml'</span>)</span><br><span class="line">soup.find(<span class="string">'h1'</span>).get_text()</span><br></pre></td></tr></table></figure>
+<ul>
+<li>urlopen( URL ).read().decode(‘utf-8’)<ul>
+<li>通过此函数链获取服务器返回的html, 读取后，编码为utf-8形式</li>
+</ul>
+</li>
+<li>BeatutifulSoup(html, features=’ ‘)<ul>
+<li>将获取到的html文档进行进一步格式化编码。函数返回的对象可以直接find某个标签</li>
+</ul>
+</li>
+<li>soup.find(‘tag’, { key:value })   <em>(find_all(‘tag’))</em><ul>
+<li>获取指定tag名的标签，其中的属性key值为value。相当于筛选，若有多种结果，使用find_all函数可以返回为一个数组</li>
+</ul>
+</li>
+</ul>
+<p>实例：百度百科的多次连接爬取</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- utf8 -*-</span></span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlopen</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line"></span><br><span class="line">base_url = <span class="string">"https://baike.baidu.com"</span></span><br><span class="line">his = [<span class="string">r"/item/%E7%BD%91%E7%BB%9C%E7%88%AC%E8%99%AB"</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> range(<span class="number">10</span>):</span><br><span class="line">    url = base_url + his[<span class="number">-1</span>]  <span class="comment">#最后一个</span></span><br><span class="line">    html = urlopen(url).read().decode(<span class="string">'utf-8'</span>)</span><br><span class="line">    soup = BeautifulSoup(html, features=<span class="string">'lxml'</span>)</span><br><span class="line"></span><br><span class="line">    print(i, soup.find(<span class="string">'h1'</span>).get_text(), <span class="string">'   url:'</span>,his[<span class="number">-1</span>])</span><br><span class="line"></span><br><span class="line">    sub_urls = soup.find_all(<span class="string">"a"</span>, &#123;</span><br><span class="line">        <span class="string">"target"</span>: <span class="string">"_blank"</span>,</span><br><span class="line">        <span class="string">"href"</span>: re.compile(<span class="string">"/item/(%.&#123;2&#125;)+$"</span>)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">if</span> len(sub_urls) != <span class="number">0</span>:</span><br><span class="line">        his.append(random.sample(sub_urls,<span class="number">1</span>)[<span class="number">0</span>][<span class="string">'href'</span>])</span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        his.pop()</span><br></pre></td></tr></table></figure>
+<h2 id="通过POST-amp-GET"><a href="#通过POST-amp-GET" class="headerlink" title="通过POST&amp;GET"></a>通过POST&amp;GET</h2><ul>
+<li>一般情况下，与服务器的通信最多使用的就是post和get。<ul>
+<li>post一般用于有数据给服务器，然后服务器反应回答</li>
+<li>get用于访问某个页面，服务器直接回答</li>
+<li>这里两者的详细区别和安全就不细说了，详情可以看我的其他笔记</li>
+</ul>
+</li>
+</ul>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">data = &#123;</span><br><span class="line">    <span class="string">'username'</span>: <span class="string">'jelech'</span>,</span><br><span class="line">    <span class="string">'password'</span>: <span class="string">'123456'</span></span><br><span class="line">&#125;</span><br><span class="line">r = requests.post(<span class="string">'http://pythonscraping.com/pages/files/processing.php'</span>, data = data)</span><br><span class="line">print(r.url)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 当然，get后面也能像post一样接参数</span></span><br><span class="line">r = requests.get(<span class="string">'https://www.baidu.com/s'</span>)</span><br><span class="line">print(r.url)</span><br><span class="line"></span><br><span class="line"><span class="comment"># 上传文件</span></span><br><span class="line">file = &#123;<span class="string">'uploadFile'</span>: open(<span class="string">'./image.png'</span>, <span class="string">'rb'</span>)&#125;</span><br><span class="line">r = requests.post(<span class="string">'http//pythonscraping.com/files/processing2.php'</span>, files = file)</span><br></pre></td></tr></table></figure>
+<h2 id="通过cookies-amp-session"><a href="#通过cookies-amp-session" class="headerlink" title="通过cookies&amp;session"></a>通过cookies&amp;session</h2><p>在访问网站后，会有个cookies返回后保存着。之后在使用的时候，可以在requests时，将cookies附加上去</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">r = requests.get(<span class="string">'https://www.baidu.com/s'</span>)</span><br><span class="line">print(r.cookies.get_dict())</span><br><span class="line">r = requests.get(<span class="string">'http://pythonscraping.com/pages/cookies/profile.php'</span>,cookies = r.cookies)</span><br><span class="line">print(r.text)</span><br></pre></td></tr></table></figure>
+<p>session作为保持会话功能。特别是在登录方面</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">session = requests.Session()</span><br><span class="line">data = &#123;</span><br><span class="line">    <span class="string">'username'</span>: <span class="string">'jelech'</span>,</span><br><span class="line">    <span class="string">'password'</span>: <span class="string">'123456'</span></span><br><span class="line">&#125;</span><br><span class="line">r = session.post(<span class="string">'http://'</span>,data = data)</span><br><span class="line">r = session.get(<span class="string">'http;//'</span>)</span><br><span class="line"><span class="comment"># 之后就可以直接用session保持当前会话状态下post与get了</span></span><br></pre></td></tr></table></figure>
+<h2 id="下载文件"><a href="#下载文件" class="headerlink" title="下载文件"></a>下载文件</h2><p>访问下载地址，保存到文件中。可以设置为stream，边下边保存。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlretrieve</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"></span><br><span class="line">image_url = <span class="string">"https://"</span></span><br><span class="line">urlretrieve(image_url, <span class="string">'./img/image1.png'</span>) <span class="comment"># 放到哪里去</span></span><br><span class="line"></span><br><span class="line">r = requests.get(image_url)</span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'./img/image2.png'</span>, <span class="string">'wb'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    f.write(r.content)</span><br><span class="line"></span><br><span class="line">r = requests.get(image_url, stream=<span class="keyword">True</span>) <span class="comment"># 边下边保存</span></span><br><span class="line"><span class="keyword">with</span> open(<span class="string">'./img/image3.png'</span>, <span class="string">'wb'</span>) <span class="keyword">as</span> f:</span><br><span class="line">    <span class="keyword">for</span> chunk <span class="keyword">in</span> r.iter_content(chunk_size=<span class="number">32</span>): <span class="comment"># 每次下载多少字节后保存</span></span><br><span class="line">        f.write(chunk)</span><br></pre></td></tr></table></figure>
+<p>实例：下载中国地理中的美图</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- utf8 -*-</span></span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> requests</span><br><span class="line"><span class="keyword">import</span> os</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line">URL = <span class="string">"http://www.ngchina.com.cn/animals/"</span></span><br><span class="line"></span><br><span class="line">html = requests.get(URL).text()</span><br><span class="line">soup = BeautifulSoup(html, <span class="string">'lxml'</span>)</span><br><span class="line">img_url = soup.find_all(<span class="string">'ul'</span>, &#123;</span><br><span class="line">    <span class="string">"class"</span>:<span class="string">"img_list"</span></span><br><span class="line">&#125;)</span><br><span class="line">print(len(img_url))</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> urls <span class="keyword">in</span> img_url:</span><br><span class="line">    imgs = urls.find_all(<span class="string">'img'</span>)</span><br><span class="line">    <span class="keyword">for</span> img <span class="keyword">in</span> imgs:</span><br><span class="line">        url = img[<span class="string">'src'</span>]</span><br><span class="line">        r = requests.get(url, stream=<span class="keyword">True</span>)</span><br><span class="line">        image_name = url.split(<span class="string">'/'</span>)[<span class="number">-1</span>]</span><br><span class="line">        <span class="keyword">with</span> open(<span class="string">'./img/%s'</span> % image_name, <span class="string">'wb'</span>) <span class="keyword">as</span> f:</span><br><span class="line">            <span class="keyword">for</span> chunk <span class="keyword">in</span> r.iter_content(chunk_size = <span class="number">128</span>):</span><br><span class="line">                f.write(chunk)</span><br><span class="line">        print(<span class="string">'Saved %s'</span> % image_name)</span><br></pre></td></tr></table></figure>
+<h2 id="多进程下的爬虫"><a href="#多进程下的爬虫" class="headerlink" title="多进程下的爬虫"></a>多进程下的爬虫</h2><p>多进程使用的是multiprocessing包，进行多进程的创建，他和多线程不一样。他更快，更独立。详细请参观我的其他博文。</p>
+<p>实例：爬取网页中的超链接，访问后再获取。</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># -*- utf8 -*-</span></span><br><span class="line"><span class="keyword">from</span> urllib.request <span class="keyword">import</span> urlopen, urljoin</span><br><span class="line"><span class="keyword">from</span> bs4 <span class="keyword">import</span> BeautifulSoup</span><br><span class="line"><span class="keyword">import</span> multiprocessing <span class="keyword">as</span> mp</span><br><span class="line"><span class="keyword">import</span> re</span><br><span class="line"><span class="keyword">import</span> time</span><br><span class="line"></span><br><span class="line"><span class="comment"># 多进程的定义，使用来获取返回的信息</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">crawl</span><span class="params">(url)</span>:</span></span><br><span class="line">    response = urlopen(url)</span><br><span class="line">    time.sleep(<span class="number">0.1</span>)             <span class="comment"># slightly delay for downloading</span></span><br><span class="line">    <span class="keyword">return</span> response.read().decode()</span><br><span class="line"></span><br><span class="line"><span class="comment"># 多进程定义二，对获取到的信息进行解析，获取其中的信息</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">parse</span><span class="params">(html)</span>:</span></span><br><span class="line">    soup = BeautifulSoup(html, <span class="string">'lxml'</span>)</span><br><span class="line">    urls = soup.find_all(<span class="string">'a'</span>, &#123;<span class="string">"href"</span>: re.compile(<span class="string">'^/.+?/$'</span>)&#125;)</span><br><span class="line">    title = soup.find(<span class="string">'h1'</span>).get_text().strip()</span><br><span class="line">    page_urls = set([urljoin(base_url, url[<span class="string">'href'</span>]) <span class="keyword">for</span> url <span class="keyword">in</span> urls])   <span class="comment"># remove duplication</span></span><br><span class="line">    url = soup.find(<span class="string">'meta'</span>, &#123;<span class="string">'property'</span>: <span class="string">"og:url"</span>&#125;)[<span class="string">'content'</span>]</span><br><span class="line">    <span class="keyword">return</span> title, page_urls, url</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> __name__ == <span class="string">'__main__'</span>:</span><br><span class="line">    <span class="comment"># base_url = "http://127.0.0.1:4000/"</span></span><br><span class="line"></span><br><span class="line">    <span class="comment"># DON'T OVER CRAWL THE WEBSITE OR YOU MAY NEVER VISIT AGAIN</span></span><br><span class="line">    <span class="keyword">if</span> base_url != <span class="string">"http://127.0.0.1:4000/"</span>:</span><br><span class="line">        restricted_crawl = <span class="keyword">True</span></span><br><span class="line">    <span class="keyword">else</span>:</span><br><span class="line">        restricted_crawl = <span class="keyword">False</span></span><br><span class="line"></span><br><span class="line">    unseen = set([base_url,])</span><br><span class="line">    seen = set()</span><br><span class="line">		<span class="comment"># 进程池，声明了4个，在其中拿。</span></span><br><span class="line">    pool = mp.Pool(<span class="number">4</span>)                       <span class="comment"># number strongly affected</span></span><br><span class="line">    count, t1 = <span class="number">1</span>, time.time()</span><br><span class="line"></span><br><span class="line">    <span class="keyword">while</span> len(unseen) != <span class="number">0</span>:              <span class="comment"># still get some url to visit</span></span><br><span class="line">        <span class="keyword">if</span> restricted_crawl <span class="keyword">and</span> len(seen) &gt; <span class="number">20</span>:</span><br><span class="line">            <span class="keyword">break</span></span><br><span class="line">        <span class="comment"># 获取返回数据的进程设置。</span></span><br><span class="line">        crawl_jobs = [pool.apply_async(crawl, args=(url,)) <span class="keyword">for</span> url <span class="keyword">in</span> unseen]</span><br><span class="line">        htmls = [j.get() <span class="keyword">for</span> j <span class="keyword">in</span> crawl_jobs] <span class="comment"># request connection</span></span><br><span class="line">        htmls = [h <span class="keyword">for</span> h <span class="keyword">in</span> htmls <span class="keyword">if</span> h <span class="keyword">is</span> <span class="keyword">not</span> <span class="keyword">None</span>]     <span class="comment"># remove None</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 获取分析数据的进程设置。</span></span><br><span class="line">        parse_jobs = [pool.apply_async(parse, args=(html,)) <span class="keyword">for</span> html <span class="keyword">in</span> htmls]</span><br><span class="line">        results = [j.get() <span class="keyword">for</span> j <span class="keyword">in</span> parse_jobs] <span class="comment"># parse html</span></span><br><span class="line"></span><br><span class="line">        <span class="comment"># 分析完后,需要将已看过的进行合并</span></span><br><span class="line">        seen.update(unseen)</span><br><span class="line">        unseen.clear()</span><br><span class="line">				<span class="comment"># 获取新的，未访问的路径</span></span><br><span class="line">        <span class="keyword">for</span> title, page_urls, url <span class="keyword">in</span> results:</span><br><span class="line">                print(count, title, url)</span><br><span class="line">                count += <span class="number">1</span></span><br><span class="line">                unseen.update(page_urls - seen)</span><br><span class="line"></span><br><span class="line">    print(<span class="string">'Total time: %.1f s'</span> % (time.time()-t1, ))</span><br></pre></td></tr></table></figure>
+
+            
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">标签</span><br>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/python/">python</a> <a class="tag tag--primary tag--small t-link" href="/tags/爬虫/">爬虫</a> <a class="tag tag--primary tag--small t-link" href="/tags/笔记/">笔记</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/63716/" data-tooltip="python线程" aria-label="下一篇: python线程">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="分享">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/52862/" title="分享到 Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/52862/" title="分享到 Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/52862/" title="分享到 Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <style media="screen">.v .vwrap{overflow: inherit;}</style>
+                <div id="vcomment"></div>
+                <a href="posts/52862/#vcomment" class="disqus-comment-count"></a>
+                <span class="valine-comment-count" data-xid="posts/52862/"></span>
+                <span> Comment</span>
+            
+        
+    </div>
+</article>
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2018 Jelech. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/63716/" data-tooltip="python线程" aria-label="下一篇: python线程">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="分享">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/52862/" title="分享到 Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/52862/" title="分享到 Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/52862/" title="分享到 Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+    <i id="btn-close-shareoptions" class="fa fa-times"></i>
+    <ul class="share-options">
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/52862/">
+                    <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/52862/">
+                    <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/52862/">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+        
+            <h4 id="about-card-name">Jelech</h4>
+        
+            <div id="about-card-bio"><p>putty本无树,MinGW亦非台</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br>
+                <p>在校大学生一枚</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br>
+                CHINA.HRB.STU
+            </div>
+        
+
+        
+            <div id="about-card-job">
+                <i class="fa fa-envelope"></i>
+                <br>
+                jelech@hotmail.com
+            </div>
+        
+
+        
+            <div id="about-card-job">
+                <i class="fa fa-phone-square"></i>
+                <br>
+                18.......6
+            </div>
+        
+
+
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js" charset="utf-8"></script>
+        <script src="//unpkg.com/valine@latest/dist/Valine.min.js" charset="utf-8"></script>
+        <script>
+            var notify = 'false' == true ? true : false;
+            var verify = 'false' == true ? true : false;
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1;
+            });
+
+            guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+            window.valine = new Valine({
+                el:'#vcomment',
+                notify:notify,
+                verify:verify,
+                appId:'rwwVeUe3kpfbc0OkoxmgnTKM-gzGzoHsz',
+                appKey:'FcDDW6bpbs5QmH3A1B2Aqmae',
+                placeholder:'Just so so',
+                avatar:'mm',
+                guest_info:guest_info,
+                pageSize:'10'
+            });
+        </script>
+    
+
+
+
+    </body>
+</html>
