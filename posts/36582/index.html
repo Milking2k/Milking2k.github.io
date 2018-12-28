@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="Jelech的博客">
-    <title>如何安装opencv - Jelech的博客</title>
+    <title>unix下c语言编程 - Jelech的博客</title>
     <meta name="author" content="Jelech">
     
         <meta name="keywords" content="博客,算法,javascript,游戏,">
@@ -18,19 +18,16 @@
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n  \n  \n    欢迎参观我的博客，这篇文章需要密码才能阅读哦 O(∩_∩)O(点我一下)\n    \n  \n\nIncorrect Password!\nNo content to display!\n\nU2FsdGVkX19xBBnlahYeMl6G0KsZTlzwTxfrlfDq08ySzlWrEjg+ao9RXiqklDISL51b6vaUWVBPE1HdXtqBz7QquA9TVFZIz0SphgzCd3MLpJqdZR79fHeAAkpei31phSZwQL4N2/a7uMq36Vu6SIFXTPMFJWvSThcLztaUKbNmKNqZRezqDKeyorrYUkw6cTxHc9lifTMPmIzz7d7Mnk6ZVye76oqcxNzAtdkj/hgrB/b3OtXT2ZNTlCrRlIHXElXEZ7tD3W2EqwxTYrLZ+1vcOU7JO8wpehHB6JbiFPFqbzdwCxsasCSvZEXJvYSjd6QUvZkmq/KJ98Wo+v8pSK6xuviWassgHfT8vvY9tU66tT6mpdWZTkJQ5F0oT6lgURX+sgEYvnZmXULEf6V+uuM1VHmQoGSrfRMGwfnENlk5CNj1KthBroFCgzkIZyXmHR4Rfyf7e5J4FAYksipJ9FkRdoPXN0BRHBIGZ1lCmWaEfxoeAoJiBB4yUA4EHGCHQRiSQd6pTth1WjRl25Hkyt3rOks3hhKw/KVBv9TFHEKwjgk/RK8cHvsVnOK/i5vTiFLSdkDCvhBwGKPZu40EWXaBZR6tRgnePuS9QnOsXoZ79/xuPXMsacJvXwmUh5Cfw/xOHmXdmttuYPDOq4Q7GYDwLrJoLxHv9qHOqeUnbSaE4idmOoBkxaxR+tWqjyYkPzc0ZrksTu65odnq5rbkkUDp0Jf0Hfh9g4jQd2AAMAP1Km8rtwAeCJ+U6w2yXoaLLKyPA+rWFjYYtlFBx1OCoToCO3sBjJGBRdmp4PwWI2F7UKhfpz9km6lFOqbFk7/3UINHkk4djebYMQcDHThbVfZfp792Kon9M4JE9uxGUndWYAWPBzYx+0HwAUJ1DaBxrAm7l73Hd00owzvynPNxBEbClwRD0X8rfU5LiW388Hs77mqqVw4XdGvRSQdZkRFplOLhjfjvjpU07fqntOHUC4B9xop5BAuTBMaQ9cT9sYvOxMemKaIQj4fNweQlBxYx1ezma9jq31Z/r+1KgWgjLkOpn83h1OF1ITTD7nFdrrkNRIbZvTfdC1IddkFN0MGhUEKBvAY1hBqUn62Oc/7lgIKNMhq1Yw8PBNxdKM/MxanjH7Npq6HysGUWEumf6F++lHrtRIthNxcudgJP+RO75WoJep8vllXLlLUdQQWWPo3h/CG10+f7R9uv0dKNuKSlMRy3VEhrAgD119lUBUCmERZnotmjT4LzushHP72Z2aZG+xTGkP5L1DUJj9u1hux5C/87OezORmm0LHhxnHgHhJCU6HI1QIKySN9gaLOpd9PmZg6nbGU/8Rw5KF0jyCdHRu2mdxAr/6WfE7ZZb3SP4K1TlrX09kJwb/yqJHuLgRjRxQ5bczGzuD+48Y2qx5+k\n\n","dateCreated":"2018-05-04T22:16:46+08:00","dateModified":"2018-12-05T23:03:49+08:00","datePublished":"2018-05-04T22:16:46+08:00","description":"欢迎参观我的博客，O(∩_∩)O但是这篇文章是私人的哦","headline":"如何安装opencv","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://www.jelech.cn/posts/13833/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"http://www.jelech.cn/posts/13833/","keywords":"软件安装, opencv"}</script>
-    <meta name="description" content="欢迎参观我的博客，O(∩_∩)O但是这篇文章是私人的哦">
-<meta name="keywords" content="软件安装,opencv">
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\nGDB\n编译时需加上 -g \n\n12cc -g -o test test.cgdb test\n\ngdb中使用\n\nlist：显示源代码\nbreak n：在第n行添加断点\nrun：执行被调试的程序\ninterrupt：终止正在调试的程序\nstep：单步执行代码，可进入函数\nnext：单步执行代码，不可进入函数\ncontinue：继续执行，知道下一个断点\nwatch j：监控 j 变量，在变化时打印\nquit：退出\n\n\n\n","dateCreated":"2018-12-26T16:09:33+08:00","dateModified":"2018-12-26T20:19:19+08:00","datePublished":"2018-12-26T16:09:33+08:00","description":"","headline":"unix下c语言编程","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://www.jelech.cn/posts/36582/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"http://www.jelech.cn/posts/36582/","keywords":"笔记, unix"}</script>
+    <meta name="keywords" content="笔记,unix">
 <meta property="og:type" content="blog">
-<meta property="og:title" content="如何安装opencv">
-<meta property="og:url" content="http://www.jelech.cn/posts/13833/index.html">
+<meta property="og:title" content="unix下c语言编程">
+<meta property="og:url" content="http://www.jelech.cn/posts/36582/index.html">
 <meta property="og:site_name" content="Jelech的博客">
-<meta property="og:description" content="欢迎参观我的博客，O(∩_∩)O但是这篇文章是私人的哦">
 <meta property="og:locale" content="zh-cn">
-<meta property="og:updated_time" content="2018-12-05T15:03:49.846Z">
+<meta property="og:updated_time" content="2018-12-26T12:19:19.170Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="如何安装opencv">
-<meta name="twitter:description" content="欢迎参观我的博客，O(∩_∩)O但是这篇文章是私人的哦">
+<meta name="twitter:title" content="unix下c语言编程">
 <meta name="twitter:creator" content="@twitter">
     
     
@@ -204,20 +201,20 @@
         <div class="post-header main-content-wrap text-left">
     
         <h1 class="post-title">
-            如何安装opencv
+            unix下c语言编程
         </h1>
     
     
         <div class="post-meta">
-    <time datetime="2018-05-04T22:16:46+08:00">
+    <time datetime="2018-12-26T16:09:33+08:00">
 	
-		    5月 04, 2018
+		    12月 26, 2018
     	
     </time>
     
         <span>发布在 </span>
         
-    <a class="category-link" href="/categories/软件配置/">软件配置</a>
+    <a class="category-link" href="/categories/学习笔记/">学习笔记</a>
 
 
     
@@ -230,20 +227,28 @@
     <div class="post-content markdown">
         <div class="main-content-wrap">
             
-            <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
-<div id="hbe-security">
-  <div class="hbe-input-container">
-  <input type="password" class="hbe-form-control" id="pass" placeholder="欢迎参观我的博客，这篇文章需要密码才能阅读哦 O(∩_∩)O(点我一下)">
-    <label for="pass">欢迎参观我的博客，这篇文章需要密码才能阅读哦 O(∩_∩)O(点我一下)</label>
-    <div class="bottom-line"></div>
-  </div>
-</div>
-<div id="decryptionError" style="display: none;">Incorrect Password!</div>
-<div id="noContentError" style="display: none;">No content to display!</div>
-<div id="encrypt-blog" style="display:none">
-U2FsdGVkX19xBBnlahYeMl6G0KsZTlzwTxfrlfDq08ySzlWrEjg+ao9RXiqklDISL51b6vaUWVBPE1HdXtqBz7QquA9TVFZIz0SphgzCd3MLpJqdZR79fHeAAkpei31phSZwQL4N2/a7uMq36Vu6SIFXTPMFJWvSThcLztaUKbNmKNqZRezqDKeyorrYUkw6cTxHc9lifTMPmIzz7d7Mnk6ZVye76oqcxNzAtdkj/hgrB/b3OtXT2ZNTlCrRlIHXElXEZ7tD3W2EqwxTYrLZ+1vcOU7JO8wpehHB6JbiFPFqbzdwCxsasCSvZEXJvYSjd6QUvZkmq/KJ98Wo+v8pSK6xuviWassgHfT8vvY9tU66tT6mpdWZTkJQ5F0oT6lgURX+sgEYvnZmXULEf6V+uuM1VHmQoGSrfRMGwfnENlk5CNj1KthBroFCgzkIZyXmHR4Rfyf7e5J4FAYksipJ9FkRdoPXN0BRHBIGZ1lCmWaEfxoeAoJiBB4yUA4EHGCHQRiSQd6pTth1WjRl25Hkyt3rOks3hhKw/KVBv9TFHEKwjgk/RK8cHvsVnOK/i5vTiFLSdkDCvhBwGKPZu40EWXaBZR6tRgnePuS9QnOsXoZ79/xuPXMsacJvXwmUh5Cfw/xOHmXdmttuYPDOq4Q7GYDwLrJoLxHv9qHOqeUnbSaE4idmOoBkxaxR+tWqjyYkPzc0ZrksTu65odnq5rbkkUDp0Jf0Hfh9g4jQd2AAMAP1Km8rtwAeCJ+U6w2yXoaLLKyPA+rWFjYYtlFBx1OCoToCO3sBjJGBRdmp4PwWI2F7UKhfpz9km6lFOqbFk7/3UINHkk4djebYMQcDHThbVfZfp792Kon9M4JE9uxGUndWYAWPBzYx+0HwAUJ1DaBxrAm7l73Hd00owzvynPNxBEbClwRD0X8rfU5LiW388Hs77mqqVw4XdGvRSQdZkRFplOLhjfjvjpU07fqntOHUC4B9xop5BAuTBMaQ9cT9sYvOxMemKaIQj4fNweQlBxYx1ezma9jq31Z/r+1KgWgjLkOpn83h1OF1ITTD7nFdrrkNRIbZvTfdC1IddkFN0MGhUEKBvAY1hBqUn62Oc/7lgIKNMhq1Yw8PBNxdKM/MxanjH7Npq6HysGUWEumf6F++lHrtRIthNxcudgJP+RO75WoJep8vllXLlLUdQQWWPo3h/CG10+f7R9uv0dKNuKSlMRy3VEhrAgD119lUBUCmERZnotmjT4LzushHP72Z2aZG+xTGkP5L1DUJj9u1hux5C/87OezORmm0LHhxnHgHhJCU6HI1QIKySN9gaLOpd9PmZg6nbGU/8Rw5KF0jyCdHRu2mdxAr/6WfE7ZZb3SP4K1TlrX09kJwb/yqJHuLgRjRxQ5bczGzuD+48Y2qx5+k
-</div>
-<script src="/lib/crypto-js.js"></script><script src="/lib/blog-encrypt.js"></script><link href="/css/blog-encrypt.css" rel="stylesheet" type="text/css">
+            <h1 id="table-of-contents">目录</h1><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#GDB"><span class="toc-text">GDB</span></a></li></ol>
+<a id="more"></a>
+<h2 id="GDB"><a href="#GDB" class="headerlink" title="GDB"></a>GDB</h2><ul>
+<li><p>编译时需加上 <strong>-g</strong> </p>
+</li>
+<li><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">cc -g -o test test.c</span><br><span class="line">gdb test</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>gdb中使用</p>
+<ul>
+<li><code>list</code>：显示源代码</li>
+<li><code>break n</code>：在第n行添加断点</li>
+<li><code>run</code>：执行被调试的程序</li>
+<li><code>interrupt</code>：终止正在调试的程序</li>
+<li><code>step</code>：单步执行代码，可进入函数</li>
+<li><code>next</code>：单步执行代码，不可进入函数</li>
+<li><code>continue</code>：继续执行，知道下一个断点</li>
+<li><code>watch j</code>：监控 j 变量，在变化时打印</li>
+<li><code>quit</code>：退出</li>
+</ul>
+</li>
+</ul>
+
             
 
         </div>
@@ -253,7 +258,7 @@ U2FsdGVkX19xBBnlahYeMl6G0KsZTlzwTxfrlfDq08ySzlWrEjg+ao9RXiqklDISL51b6vaUWVBPE1Hd
             <div class="post-footer-tags">
                 <span class="text-color-light text-small">标签</span><br>
                 
-    <a class="tag tag--primary tag--small t-link" href="/tags/opencv/">opencv</a> <a class="tag tag--primary tag--small t-link" href="/tags/软件安装/">软件安装</a>
+    <a class="tag tag--primary tag--small t-link" href="/tags/unix/">unix</a> <a class="tag tag--primary tag--small t-link" href="/tags/笔记/">笔记</a>
 
             </div>
         
@@ -263,8 +268,7 @@ U2FsdGVkX19xBBnlahYeMl6G0KsZTlzwTxfrlfDq08ySzlWrEjg+ao9RXiqklDISL51b6vaUWVBPE1Hd
         <ul class="post-actions post-action-nav">
             <li class="post-action">
                 
-                    
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/30324/" data-tooltip="释放囚犯" aria-label="上一篇: 释放囚犯">
+                    <a class="post-action-btn btn btn--disabled">
                 
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
@@ -273,7 +277,7 @@ U2FsdGVkX19xBBnlahYeMl6G0KsZTlzwTxfrlfDq08ySzlWrEjg+ao9RXiqklDISL51b6vaUWVBPE1Hd
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/4499/" data-tooltip="github被封以及HOST的使用" aria-label="下一篇: github被封以及HOST的使用">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/52862/" data-tooltip="python爬虫基础" aria-label="下一篇: python爬虫基础">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -291,7 +295,7 @@ U2FsdGVkX19xBBnlahYeMl6G0KsZTlzwTxfrlfDq08ySzlWrEjg+ao9RXiqklDISL51b6vaUWVBPE1Hd
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/13833/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/36582/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -299,7 +303,7 @@ U2FsdGVkX19xBBnlahYeMl6G0KsZTlzwTxfrlfDq08ySzlWrEjg+ao9RXiqklDISL51b6vaUWVBPE1Hd
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/13833/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/36582/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -307,7 +311,7 @@ U2FsdGVkX19xBBnlahYeMl6G0KsZTlzwTxfrlfDq08ySzlWrEjg+ao9RXiqklDISL51b6vaUWVBPE1Hd
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/13833/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/36582/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -317,7 +321,7 @@ U2FsdGVkX19xBBnlahYeMl6G0KsZTlzwTxfrlfDq08ySzlWrEjg+ao9RXiqklDISL51b6vaUWVBPE1Hd
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#" aria-label="返回到头顶">
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
@@ -331,8 +335,8 @@ U2FsdGVkX19xBBnlahYeMl6G0KsZTlzwTxfrlfDq08ySzlWrEjg+ao9RXiqklDISL51b6vaUWVBPE1Hd
             
                 <style media="screen">.v .vwrap{overflow: inherit;}</style>
                 <div id="vcomment"></div>
-                <a href="posts/13833/#vcomment" class="disqus-comment-count"></a>
-                <span class="valine-comment-count" data-xid="posts/13833/"></span>
+                <a href="posts/36582/#vcomment" class="disqus-comment-count"></a>
+                <span class="valine-comment-count" data-xid="posts/36582/"></span>
                 <span> Comment</span>
             
         
@@ -354,8 +358,7 @@ U2FsdGVkX19xBBnlahYeMl6G0KsZTlzwTxfrlfDq08ySzlWrEjg+ao9RXiqklDISL51b6vaUWVBPE1Hd
         <ul class="post-actions post-action-nav">
             <li class="post-action">
                 
-                    
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/30324/" data-tooltip="释放囚犯" aria-label="上一篇: 释放囚犯">
+                    <a class="post-action-btn btn btn--disabled">
                 
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
@@ -364,7 +367,7 @@ U2FsdGVkX19xBBnlahYeMl6G0KsZTlzwTxfrlfDq08ySzlWrEjg+ao9RXiqklDISL51b6vaUWVBPE1Hd
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/4499/" data-tooltip="github被封以及HOST的使用" aria-label="下一篇: github被封以及HOST的使用">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/52862/" data-tooltip="python爬虫基础" aria-label="下一篇: python爬虫基础">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -382,7 +385,7 @@ U2FsdGVkX19xBBnlahYeMl6G0KsZTlzwTxfrlfDq08ySzlWrEjg+ao9RXiqklDISL51b6vaUWVBPE1Hd
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/13833/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/36582/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -390,7 +393,7 @@ U2FsdGVkX19xBBnlahYeMl6G0KsZTlzwTxfrlfDq08ySzlWrEjg+ao9RXiqklDISL51b6vaUWVBPE1Hd
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/13833/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/36582/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -398,7 +401,7 @@ U2FsdGVkX19xBBnlahYeMl6G0KsZTlzwTxfrlfDq08ySzlWrEjg+ao9RXiqklDISL51b6vaUWVBPE1Hd
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/13833/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/36582/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -408,7 +411,7 @@ U2FsdGVkX19xBBnlahYeMl6G0KsZTlzwTxfrlfDq08ySzlWrEjg+ao9RXiqklDISL51b6vaUWVBPE1Hd
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#" aria-label="返回到头顶">
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
@@ -425,7 +428,7 @@ U2FsdGVkX19xBBnlahYeMl6G0KsZTlzwTxfrlfDq08ySzlWrEjg+ao9RXiqklDISL51b6vaUWVBPE1Hd
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/13833/">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/36582/">
                     <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
                 </a>
             </li>
@@ -433,7 +436,7 @@ U2FsdGVkX19xBBnlahYeMl6G0KsZTlzwTxfrlfDq08ySzlWrEjg+ao9RXiqklDISL51b6vaUWVBPE1Hd
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/13833/">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/36582/">
                     <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
                 </a>
             </li>
@@ -441,7 +444,7 @@ U2FsdGVkX19xBBnlahYeMl6G0KsZTlzwTxfrlfDq08ySzlWrEjg+ao9RXiqklDISL51b6vaUWVBPE1Hd
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/13833/">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/36582/">
                     <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
                 </a>
             </li>
