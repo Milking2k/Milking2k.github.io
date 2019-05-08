@@ -6,7 +6,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="generator" content="Jelech的博客">
-    <title>又是期末 - Jelech的博客</title>
+    <title>Redis学习（一） - Jelech的博客</title>
     <meta name="author" content="Jelech">
     
         <meta name="keywords" content="博客,算法,javascript,游戏,">
@@ -18,19 +18,16 @@
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n  \n  \n    欢迎参观我的博客，这篇文章需要密码才能阅读哦 O(∩_∩)O(点我一下)\n    \n  \n\nIncorrect Password!\nNo content to display!\n\nU2FsdGVkX188F8ZkmbuK/k1aEUiQCPgr+EsRPGudpHnLQaNaq1SFqDC4ZoSFJB2uYCjKgDI1OliQrKl7ihXWQ1Aqp9/LMO73mAMDyjGVAFQn+75KzKw/Msc3tAIlBS5oYtM9Et7NMuiGJpCy9qqqHqp8XJbwEAMq857XCdyUZKjPZnJXyubj/eY1JqsEl5G/d/K2a2+8LXJ9ppQcN3tMMXTukLxU2Em2IPjWgNtCNitcuAbqeP7KuVm96UnwO36iTJWbrjyQbOklV4NehmRdB+PTzVcOxjLt/CwTSJcS+KRJX+GQOEHr6wyIm9iHhazsGI58wXKFNHMsNxFZPX6N9LZuoSQXF6VmshPefGI364CGVQ9gq4nqgufCRZp3pN+VnXEYg8FbTPlcCY88LmG8Fwmube3fpHd8jpQnCqCt1u7YL/A3Am89/g+e1FSF7dzmKeKKsuXCQ0k/yNrx5GGGxQLVRcwk8fhqtvjQLSZTjwl9Quva9euZZm5bbw2JTa2dTEWQst/9m6esFvMYPMMfl7VDGgDAwxLooXz4WfUT1gapdO8OFYhTTjTXAxmyyynTvv3Ynm7bbz19GUR5gpg11QsxHoaZMxGlg4FoPpzF4im283ATW0L0KTUd44SLC0uFm50Al98UFxX7l+T6W32u9PMwb8zuPDnNZYmz2h3FOGmR2T4QTvFcdlBi+dwWHmZBEd+jNwLqbN0HUHkCYI+8n2p3Apzwa5pjv6/2c8J13AySXOUNO0qUBfzGUarELNNmTzeJ44e0hGwcjoFKB3KMC1VUQZ4lf1rRCf6RMaOkuMFy5BE32cwrldFjpLjfk+mtfg4i8cQTOAzHwcsdQdKNwrbt6w2evzaGFXlDbvOzWkCbP2OMIF/X25NhbjrGivtoeIqGEE7WlxcFz8OzaNBtuVasW4Lvnm+9cCEhPyEcrrwrZmmxCy99qpADqqq0rtud20aM6qF7cLUcYeI7ZA5mkPkYG1Es4PHieHQUYCDDhazN83AE2hndypPtno1ZRisq\n\n","dateCreated":"2018-07-17T22:56:50+08:00","dateModified":"2018-12-01T21:41:48+08:00","datePublished":"2018-07-17T22:56:50+08:00","description":"欢迎参观我的博客，O(∩_∩)O但是这篇文章是私有的哦","headline":"又是期末","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://www.jelech.cn/posts/50181/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"http://www.jelech.cn/posts/50181/","keywords":"日常"}</script>
-    <meta name="description" content="欢迎参观我的博客，O(∩_∩)O但是这篇文章是私有的哦">
-<meta name="keywords" content="日常">
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\nRedis key-value数据库（一）\n基础使用移植到单独的一篇文章中：《速查Redis》\n\n数据结构与对象\nredis中实现了一些redis自用的、快速的数据结构。他们组成了redis内部的运行结构，也展现了redis是如何存储key-value值的。他们分别为：\n\n\n简单动态字符串 | 对c语言字符串的封装，优化了许多特性\n链表 | 双向链表\n字典 | 哈希字典，可以进行扩展收缩操作\n跳跃表 | 快查节点，有序集合的底层与内部数据结构中使用\n整数集合 | 集合键的底层实现，只支持升级操作\n压缩列表 | 列表键与哈希键的底层实现\n对象 | 对以上结构进行包装，每个两种以上的编码方式，自带内存回收机制\n\n\n之后再详细更新数据结构的内容\n\n单机数据库操作\n基础使用移植到单独的一篇文章中：《速查Redis》\n\n\n数据库由dict和expires两个字典构成，dict负责保存键值对，expires负责键的过期时间\n主服务器发现过期键后会给所有的从服务器发送DEL命令，显式地删除键。而从服务器发现过期键后并不会删除，而是等待主节点发来DEL命令\n\n过期键的删除策略\n定时删除：（主动）创建一个定时器，让键在过期时间来临时，立即对键进行删除操作\n\n惰性删除：（被动）放任过期的键不管，只有在对键进行访问前，进行检查。如果过期，则删除并返回null\n\n定期删除：（主动）每隔一段时间对数据库进行全盘检查，删除过期的键\n  而我们常使用的是第二个与第三个的结合\n\n\nRDB持久化\nRedis是保存在内存上的数据库，如果断电，则数据会被完全清除。为了持久化数据，出现了RDB持久化技术。他的工作方法是对内存上的键值对数据进行二进制压缩后，写入到磁盘中。\n\nSAVE停止redis现在的工作，进行RDB保存，数据量大的时候会让数据库怠机\nBGSAVE创建一个子进程进行RDB保存，父进程继续进行数据接收返回操作，但操作的数据会暂时保存在RDB缓存空间\n自动保存则需要在配置文件中设置save选线项比如save 900 1代表如果900秒之内有进行1次操作，就进行保存。当然，他是可以设置多个的。\n如果不设置，redis会有默认的save 900 1save 300 10save 60 10000\n​    \ndirty计数器记录了距离上一次save/bgsave操作经历了多少次操作，lastsave保存的是时间\nRDB文件的结构\n\n\nREDIS\ndb_version\ndatabases\nEOF\ncheck_sum\n\n\n\n\n5字节\n4字节\n数据库大小字节\n1字节\n8字节\n\n\n字符’REDIS’\n0006版本号\n数据库号与保存的键值对\n结束符\n校验和\n\n\n\n\nSELECTDB 表示接下来要读一个数据库号\n\n\n\n\n\n\ndb_number 数据库号\n\n\n\n\n\n\nkey_value_pairs键值对[EXPIRESTIME_MS/]TYPE/key/values\n\n\n\n\nAOF持久化\n翻书更新累了。。休一下\n\n","dateCreated":"2019-05-08T11:15:09+08:00","dateModified":"2019-05-08T12:26:55+08:00","datePublished":"2019-05-08T11:15:09+08:00","description":"","headline":"Redis学习（一）","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://www.jelech.cn/posts/4539/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"http://www.jelech.cn/posts/4539/","keywords":"笔记, redis"}</script>
+    <meta name="keywords" content="笔记,redis">
 <meta property="og:type" content="blog">
-<meta property="og:title" content="又是期末">
-<meta property="og:url" content="http://www.jelech.cn/posts/50181/index.html">
+<meta property="og:title" content="Redis学习（一）">
+<meta property="og:url" content="http://www.jelech.cn/posts/4539/index.html">
 <meta property="og:site_name" content="Jelech的博客">
-<meta property="og:description" content="欢迎参观我的博客，O(∩_∩)O但是这篇文章是私有的哦">
 <meta property="og:locale" content="zh-cn">
-<meta property="og:updated_time" content="2018-12-01T13:41:48.295Z">
+<meta property="og:updated_time" content="2019-05-08T04:26:55.961Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="又是期末">
-<meta name="twitter:description" content="欢迎参观我的博客，O(∩_∩)O但是这篇文章是私有的哦">
+<meta name="twitter:title" content="Redis学习（一）">
 <meta name="twitter:creator" content="@twitter">
     
     
@@ -204,20 +201,20 @@
         <div class="post-header main-content-wrap text-left">
     
         <h1 class="post-title">
-            又是期末
+            Redis学习（一）
         </h1>
     
     
         <div class="post-meta">
-    <time datetime="2018-07-17T22:56:50+08:00">
+    <time datetime="2019-05-08T11:15:09+08:00">
 	
-		    7月 17, 2018
+		    5月 08, 2019
     	
     </time>
     
         <span>发布在 </span>
         
-    <a class="category-link" href="/categories/随笔/">随笔</a>
+    <a class="category-link" href="/categories/学习笔记/">学习笔记</a>
 
 
     
@@ -230,20 +227,102 @@
     <div class="post-content markdown">
         <div class="main-content-wrap">
             
-            <script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
-<div id="hbe-security">
-  <div class="hbe-input-container">
-  <input type="password" class="hbe-form-control" id="pass" placeholder="欢迎参观我的博客，这篇文章需要密码才能阅读哦 O(∩_∩)O(点我一下)">
-    <label for="pass">欢迎参观我的博客，这篇文章需要密码才能阅读哦 O(∩_∩)O(点我一下)</label>
-    <div class="bottom-line"></div>
-  </div>
-</div>
-<div id="decryptionError" style="display: none;">Incorrect Password!</div>
-<div id="noContentError" style="display: none;">No content to display!</div>
-<div id="encrypt-blog" style="display:none">
-U2FsdGVkX188F8ZkmbuK/k1aEUiQCPgr+EsRPGudpHnLQaNaq1SFqDC4ZoSFJB2uYCjKgDI1OliQrKl7ihXWQ1Aqp9/LMO73mAMDyjGVAFQn+75KzKw/Msc3tAIlBS5oYtM9Et7NMuiGJpCy9qqqHqp8XJbwEAMq857XCdyUZKjPZnJXyubj/eY1JqsEl5G/d/K2a2+8LXJ9ppQcN3tMMXTukLxU2Em2IPjWgNtCNitcuAbqeP7KuVm96UnwO36iTJWbrjyQbOklV4NehmRdB+PTzVcOxjLt/CwTSJcS+KRJX+GQOEHr6wyIm9iHhazsGI58wXKFNHMsNxFZPX6N9LZuoSQXF6VmshPefGI364CGVQ9gq4nqgufCRZp3pN+VnXEYg8FbTPlcCY88LmG8Fwmube3fpHd8jpQnCqCt1u7YL/A3Am89/g+e1FSF7dzmKeKKsuXCQ0k/yNrx5GGGxQLVRcwk8fhqtvjQLSZTjwl9Quva9euZZm5bbw2JTa2dTEWQst/9m6esFvMYPMMfl7VDGgDAwxLooXz4WfUT1gapdO8OFYhTTjTXAxmyyynTvv3Ynm7bbz19GUR5gpg11QsxHoaZMxGlg4FoPpzF4im283ATW0L0KTUd44SLC0uFm50Al98UFxX7l+T6W32u9PMwb8zuPDnNZYmz2h3FOGmR2T4QTvFcdlBi+dwWHmZBEd+jNwLqbN0HUHkCYI+8n2p3Apzwa5pjv6/2c8J13AySXOUNO0qUBfzGUarELNNmTzeJ44e0hGwcjoFKB3KMC1VUQZ4lf1rRCf6RMaOkuMFy5BE32cwrldFjpLjfk+mtfg4i8cQTOAzHwcsdQdKNwrbt6w2evzaGFXlDbvOzWkCbP2OMIF/X25NhbjrGivtoeIqGEE7WlxcFz8OzaNBtuVasW4Lvnm+9cCEhPyEcrrwrZmmxCy99qpADqqq0rtud20aM6qF7cLUcYeI7ZA5mkPkYG1Es4PHieHQUYCDDhazN83AE2hndypPtno1ZRisq
-</div>
-<script src="/lib/crypto-js.js"></script><script src="/lib/blog-encrypt.js"></script><link href="/css/blog-encrypt.css" rel="stylesheet" type="text/css">
+            <h1 id="table-of-contents">目录</h1><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#Redis-key-value数据库（一）"><span class="toc-text">Redis key-value数据库（一）</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#数据结构与对象"><span class="toc-text">数据结构与对象</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#单机数据库操作"><span class="toc-text">单机数据库操作</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#过期键的删除策略"><span class="toc-text">过期键的删除策略</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#RDB持久化"><span class="toc-text">RDB持久化</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#RDB文件的结构"><span class="toc-text">RDB文件的结构</span></a></li></ol></li></ol><li class="toc-item toc-level-2"><a class="toc-link" href="#AOF持久化"><span class="toc-text">AOF持久化</span></a></li>
+<a id="more"></a>
+<h1 id="Redis-key-value数据库（一）"><a href="#Redis-key-value数据库（一）" class="headerlink" title="Redis key-value数据库（一）"></a>Redis key-value数据库（一）</h1><blockquote>
+<p>基础使用移植到单独的一篇文章中：《速查Redis》</p>
+</blockquote>
+<h2 id="数据结构与对象"><a href="#数据结构与对象" class="headerlink" title="数据结构与对象"></a>数据结构与对象</h2><blockquote>
+<p>redis中实现了一些redis自用的、快速的数据结构。他们组成了redis内部的运行结构，也展现了redis是如何存储key-value值的。他们分别为：</p>
+</blockquote>
+<ul>
+<li>简单动态字符串 | 对c语言字符串的封装，优化了许多特性</li>
+<li>链表 | 双向链表</li>
+<li>字典 | 哈希字典，可以进行扩展收缩操作</li>
+<li>跳跃表 | 快查节点，有序集合的底层与内部数据结构中使用</li>
+<li>整数集合 | 集合键的底层实现，只支持升级操作</li>
+<li>压缩列表 | 列表键与哈希键的底层实现</li>
+<li>对象 | 对以上结构进行包装，每个两种以上的编码方式，自带内存回收机制</li>
+</ul>
+<blockquote>
+<p>之后再详细更新数据结构的内容</p>
+</blockquote>
+<h2 id="单机数据库操作"><a href="#单机数据库操作" class="headerlink" title="单机数据库操作"></a>单机数据库操作</h2><blockquote>
+<p>基础使用移植到单独的一篇文章中：《速查Redis》</p>
+</blockquote>
+<ol>
+<li>数据库由dict和expires两个字典构成，dict负责保存键值对，expires负责键的过期时间</li>
+<li>主服务器发现过期键后会给所有的从服务器发送DEL命令，显式地删除键。而从服务器发现过期键后并不会删除，而是等待主节点发来DEL命令</li>
+</ol>
+<h4 id="过期键的删除策略"><a href="#过期键的删除策略" class="headerlink" title="过期键的删除策略"></a>过期键的删除策略</h4><ul>
+<li><p>定时删除：（主动）创建一个定时器，让键在<strong>过期时间来临</strong>时，立即对键进行删除操作</p>
+</li>
+<li><p>惰性删除：（被动）放任过期的键不管，只有在对键进行访问前，进行检查。如果过期，则删除并返回null</p>
+</li>
+<li><p>定期删除：（主动）<strong>每隔一段时间</strong>对数据库进行全盘检查，删除过期的键</p>
+<p>  而我们常使用的是第二个与第三个的结合</p>
+</li>
+</ul>
+<h2 id="RDB持久化"><a href="#RDB持久化" class="headerlink" title="RDB持久化"></a>RDB持久化</h2><blockquote>
+<p>Redis是保存在内存上的数据库，如果断电，则数据会被完全清除。为了持久化数据，出现了RDB持久化技术。他的工作方法是对内存上的键值对数据进行二进制压缩后，写入到磁盘中。</p>
+</blockquote>
+<p><code>SAVE</code>停止redis现在的工作，进行RDB保存，数据量大的时候会让数据库怠机</p>
+<p><code>BGSAVE</code>创建一个子进程进行RDB保存，父进程继续进行数据接收返回操作，但操作的数据会暂时保存在RDB缓存空间</p>
+<p><strong>自动保存</strong>则需要在配置文件中设置save选线项<br>比如<br>save 900 1代表如果900秒之内有进行1次操作，就进行保存。当然，他是可以设置多个的。</p>
+<p>如果不设置，redis会有默认的<br><code>save 900 1</code><br><code>save 300 10</code><br><code>save 60 10000</code></p>
+<p>​    </p>
+<p>dirty计数器记录了距离上一次save/bgsave操作经历了多少次操作，lastsave保存的是时间</p>
+<h4 id="RDB文件的结构"><a href="#RDB文件的结构" class="headerlink" title="RDB文件的结构"></a>RDB文件的结构</h4><table>
+<thead>
+<tr>
+<th style="text-align:left">REDIS</th>
+<th>db_version</th>
+<th>databases</th>
+<th>EOF</th>
+<th>check_sum</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td style="text-align:left">5字节</td>
+<td>4字节</td>
+<td>数据库大小字节</td>
+<td>1字节</td>
+<td>8字节</td>
+</tr>
+<tr>
+<td style="text-align:left">字符’REDIS’</td>
+<td>0006版本号</td>
+<td>数据库号与保存的键值对</td>
+<td>结束符</td>
+<td>校验和</td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td></td>
+<td>SELECTDB 表示接下来要读一个数据库号</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td></td>
+<td>db_number 数据库号</td>
+<td></td>
+<td></td>
+</tr>
+<tr>
+<td style="text-align:left"></td>
+<td></td>
+<td>key_value_pairs键值对<br><code>[EXPIRESTIME_MS/]TYPE/key/values</code></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+<h2 id="AOF持久化"><a href="#AOF持久化" class="headerlink" title="AOF持久化"></a>AOF持久化</h2><blockquote>
+<p>翻书更新累了。。休一下</p>
+</blockquote>
+
             
 
         </div>
@@ -253,7 +332,7 @@ U2FsdGVkX188F8ZkmbuK/k1aEUiQCPgr+EsRPGudpHnLQaNaq1SFqDC4ZoSFJB2uYCjKgDI1OliQrKl7
             <div class="post-footer-tags">
                 <span class="text-color-light text-small">标签</span><br>
                 
-    <a class="tag tag--primary tag--small t-link" href="/tags/日常/">日常</a>
+    <a class="tag tag--primary tag--small t-link" href="/tags/redis/">redis</a> <a class="tag tag--primary tag--small t-link" href="/tags/笔记/">笔记</a>
 
             </div>
         
@@ -263,8 +342,7 @@ U2FsdGVkX188F8ZkmbuK/k1aEUiQCPgr+EsRPGudpHnLQaNaq1SFqDC4ZoSFJB2uYCjKgDI1OliQrKl7
         <ul class="post-actions post-action-nav">
             <li class="post-action">
                 
-                    
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/40135/" data-tooltip="CodeForces Round 47 题解" aria-label="上一篇: CodeForces Round 47 题解">
+                    <a class="post-action-btn btn btn--disabled">
                 
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
@@ -273,7 +351,7 @@ U2FsdGVkX188F8ZkmbuK/k1aEUiQCPgr+EsRPGudpHnLQaNaq1SFqDC4ZoSFJB2uYCjKgDI1OliQrKl7
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/40608/" data-tooltip="用Hexo + GitPage建立博客遇到的bug和解决办法" aria-label="下一篇: 用Hexo + GitPage建立博客遇到的bug和解决办法">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/10156/" data-tooltip="关于高并发和秒杀系统的讨论" aria-label="下一篇: 关于高并发和秒杀系统的讨论">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -291,7 +369,7 @@ U2FsdGVkX188F8ZkmbuK/k1aEUiQCPgr+EsRPGudpHnLQaNaq1SFqDC4ZoSFJB2uYCjKgDI1OliQrKl7
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/50181/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/4539/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -299,7 +377,7 @@ U2FsdGVkX188F8ZkmbuK/k1aEUiQCPgr+EsRPGudpHnLQaNaq1SFqDC4ZoSFJB2uYCjKgDI1OliQrKl7
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/50181/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/4539/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -307,7 +385,7 @@ U2FsdGVkX188F8ZkmbuK/k1aEUiQCPgr+EsRPGudpHnLQaNaq1SFqDC4ZoSFJB2uYCjKgDI1OliQrKl7
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/50181/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/4539/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -317,7 +395,7 @@ U2FsdGVkX188F8ZkmbuK/k1aEUiQCPgr+EsRPGudpHnLQaNaq1SFqDC4ZoSFJB2uYCjKgDI1OliQrKl7
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#" aria-label="返回到头顶">
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
@@ -331,8 +409,8 @@ U2FsdGVkX188F8ZkmbuK/k1aEUiQCPgr+EsRPGudpHnLQaNaq1SFqDC4ZoSFJB2uYCjKgDI1OliQrKl7
             
                 <style media="screen">.v .vwrap{overflow: inherit;}</style>
                 <div id="vcomment"></div>
-                <a href="posts/50181/#vcomment" class="disqus-comment-count"></a>
-                <span class="valine-comment-count" data-xid="posts/50181/"></span>
+                <a href="posts/4539/#vcomment" class="disqus-comment-count"></a>
+                <span class="valine-comment-count" data-xid="posts/4539/"></span>
                 <span> Comment</span>
             
         
@@ -354,8 +432,7 @@ U2FsdGVkX188F8ZkmbuK/k1aEUiQCPgr+EsRPGudpHnLQaNaq1SFqDC4ZoSFJB2uYCjKgDI1OliQrKl7
         <ul class="post-actions post-action-nav">
             <li class="post-action">
                 
-                    
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/40135/" data-tooltip="CodeForces Round 47 题解" aria-label="上一篇: CodeForces Round 47 题解">
+                    <a class="post-action-btn btn btn--disabled">
                 
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
@@ -364,7 +441,7 @@ U2FsdGVkX188F8ZkmbuK/k1aEUiQCPgr+EsRPGudpHnLQaNaq1SFqDC4ZoSFJB2uYCjKgDI1OliQrKl7
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/40608/" data-tooltip="用Hexo + GitPage建立博客遇到的bug和解决办法" aria-label="下一篇: 用Hexo + GitPage建立博客遇到的bug和解决办法">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/10156/" data-tooltip="关于高并发和秒杀系统的讨论" aria-label="下一篇: 关于高并发和秒杀系统的讨论">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -382,7 +459,7 @@ U2FsdGVkX188F8ZkmbuK/k1aEUiQCPgr+EsRPGudpHnLQaNaq1SFqDC4ZoSFJB2uYCjKgDI1OliQrKl7
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/50181/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/4539/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -390,7 +467,7 @@ U2FsdGVkX188F8ZkmbuK/k1aEUiQCPgr+EsRPGudpHnLQaNaq1SFqDC4ZoSFJB2uYCjKgDI1OliQrKl7
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/50181/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/4539/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -398,7 +475,7 @@ U2FsdGVkX188F8ZkmbuK/k1aEUiQCPgr+EsRPGudpHnLQaNaq1SFqDC4ZoSFJB2uYCjKgDI1OliQrKl7
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/50181/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/4539/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -408,7 +485,7 @@ U2FsdGVkX188F8ZkmbuK/k1aEUiQCPgr+EsRPGudpHnLQaNaq1SFqDC4ZoSFJB2uYCjKgDI1OliQrKl7
         
         <li class="post-action">
             
-                <a class="post-action-btn btn btn--default" href="#" aria-label="返回到头顶">
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
             
                 <i class="fa fa-list" aria-hidden="true"></i>
             </a>
@@ -425,7 +502,7 @@ U2FsdGVkX188F8ZkmbuK/k1aEUiQCPgr+EsRPGudpHnLQaNaq1SFqDC4ZoSFJB2uYCjKgDI1OliQrKl7
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/50181/">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/4539/">
                     <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
                 </a>
             </li>
@@ -433,7 +510,7 @@ U2FsdGVkX188F8ZkmbuK/k1aEUiQCPgr+EsRPGudpHnLQaNaq1SFqDC4ZoSFJB2uYCjKgDI1OliQrKl7
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/50181/">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/4539/">
                     <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
                 </a>
             </li>
@@ -441,7 +518,7 @@ U2FsdGVkX188F8ZkmbuK/k1aEUiQCPgr+EsRPGudpHnLQaNaq1SFqDC4ZoSFJB2uYCjKgDI1OliQrKl7
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/50181/">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/4539/">
                     <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
                 </a>
             </li>
