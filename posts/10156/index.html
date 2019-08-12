@@ -9,20 +9,20 @@
     <title>关于高并发和秒杀系统的讨论 - Jelech的博客</title>
     <meta name="author" content="Jelech">
     
-        <meta name="keywords" content="博客,算法,javascript,游戏,">
+        <meta name="keywords" content="博客,算法,HTML/CSS/JS,游戏服务器,游戏,">
     
     
-        <link rel="icon" href="http://www.jelech.cn/assets/images/favicon.ico">
+        <link rel="icon" href="http://www.jelech.top/assets/images/favicon.ico">
         <link rel="Shortcut Icon" type="image/x-icon" href="assets/images/favicon.ico">
     
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n此次高并发的讨论先局限于对于设计一个大量请求的秒杀系统。\n何为高并发\n在用户访问请求时，对于一个单机单核的服务器的接受的线性的。那么如果有大量的用户同时访问，那么此时的服务器就需要短时间内接受和处理大量请求。而解决这样的问题，我们可以通过启用多个线/进程，并发地解决问题。\n但是对于这个问题来说，一个电脑的CPU是有限的，那么再多一点的进程，最终也同样会造成服务器的压力。\n\n\n像12306、各种电商平台的秒杀活动那样。对于一个有限的资源，也需要考虑资源的增减。\n\n讨论的问题\n高并发的瓶颈（一）程序设计\n 服务器的优化可以分为三个方向，请求接收、请求处理、请求返回。\n 请求处理中包括数据查询、数据处理。第一，对于高并发的秒杀系统来说，许多数据都是热数据，会被多个用户多次访问。那么这些数据就应该被放到缓存中，包括但不限于redis(yes，非常好用)。第二，数据处理依赖的是服务器程序的优化，这就要看算法的性能了，建议的是能尽量少传数据，少复制数据。\n\n高并发的瓶颈（二）服务器CPU\n 无论程序优化再多，一个服务器的CPU资源是有上限的。\n 解决的一方面可以直接增加服务器的数量以1:1线性增加并发度，这时候就需要设计集群，但是切记拒绝假的分布式，比如：前端服务器是可以独立存在的，但是都依赖集中的一个数据库或者缓存系统，最后，一定是集中的那个数据库或者缓存系统受不了，同样无法做到一个好的分布式。\n 第二方面，逻辑处理中，把速度快且提前中断的逻辑放在最前面，比如：验证登录，验证问答。做分布式方案的时候，尽量把资源调用放在最近的地方。\n 第三方面，不要出现跨机房网络请求，不要出现跨机房网络请求，不要出现跨机房网络请求，重要的事情说三遍。\n\n保证库存原子性\n 可以用数据库操作，由于使用了锁，满足了原子性。但是性能差，访问慢。\n 可以用消息队列，订单全部放到一个消息队列中，服务器一个一个进行处理。但用户等待时间太长，不同请求会因前面的请求等待很久。\n redis递减性能极好。redis-&gt;incrby(‘product’, -1)操作首先是原子性的(应该说redis的操作都是)，并且内存中访问使得性能很好，再加上redis又自带集群操作。何乐而不为？\n\n集群数据一致性\n 现在一种解决办法是通过把多个资源散列到多个集群中，再在外部加一个中控服务来平衡多个集群的资源，这样就能解决出现不同集群的访问差异过大导致的数据差异过多\n\n机器人抢怎么办\n 添加IP限制判断，强制用户登录，提交订单时引入各种验证码、问答。\n\n\n","dateCreated":"2019-05-01T19:44:47+08:00","dateModified":"2019-05-01T21:35:26+08:00","datePublished":"2019-05-01T19:44:47+08:00","description":"","headline":"关于高并发和秒杀系统的讨论","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://www.jelech.cn/posts/10156/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"http://www.jelech.cn/posts/10156/","keywords":"redis, 高并发"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n此次高并发的讨论先局限于对于设计一个大量请求的秒杀系统。\n何为高并发\n在用户访问请求时，对于一个单机单核的服务器的接受的线性的。那么如果有大量的用户同时访问，那么此时的服务器就需要短时间内接受和处理大量请求。而解决这样的问题，我们可以通过启用多个线/进程，并发地解决问题。\n但是对于这个问题来说，一个电脑的CPU是有限的，那么再多一点的进程，最终也同样会造成服务器的压力。\n\n\n像12306、各种电商平台的秒杀活动那样。对于一个有限的资源，也需要考虑资源的增减。\n\n讨论的问题\n高并发的瓶颈（一）程序设计\n 服务器的优化可以分为三个方向，请求接收、请求处理、请求返回。\n 请求处理中包括数据查询、数据处理。第一，对于高并发的秒杀系统来说，许多数据都是热数据，会被多个用户多次访问。那么这些数据就应该被放到缓存中，包括但不限于redis(yes，非常好用)。第二，数据处理依赖的是服务器程序的优化，这就要看算法的性能了，建议的是能尽量少传数据，少复制数据。\n\n高并发的瓶颈（二）服务器CPU\n 无论程序优化再多，一个服务器的CPU资源是有上限的。\n 解决的一方面可以直接增加服务器的数量以1:1线性增加并发度，这时候就需要设计集群，但是切记拒绝假的分布式，比如：前端服务器是可以独立存在的，但是都依赖集中的一个数据库或者缓存系统，最后，一定是集中的那个数据库或者缓存系统受不了，同样无法做到一个好的分布式。\n 第二方面，逻辑处理中，把速度快且提前中断的逻辑放在最前面，比如：验证登录，验证问答。做分布式方案的时候，尽量把资源调用放在最近的地方。\n 第三方面，不要出现跨机房网络请求，不要出现跨机房网络请求，不要出现跨机房网络请求，重要的事情说三遍。\n\n保证库存原子性\n 可以用数据库操作，由于使用了锁，满足了原子性。但是性能差，访问慢。\n 可以用消息队列，订单全部放到一个消息队列中，服务器一个一个进行处理。但用户等待时间太长，不同请求会因前面的请求等待很久。\n redis递减性能极好。redis-&gt;incrby(‘product’, -1)操作首先是原子性的(应该说redis的操作都是)，并且内存中访问使得性能很好，再加上redis又自带集群操作。何乐而不为？\n\n集群数据一致性\n 现在一种解决办法是通过把多个资源散列到多个集群中，再在外部加一个中控服务来平衡多个集群的资源，这样就能解决出现不同集群的访问差异过大导致的数据差异过多\n\n机器人抢怎么办\n 添加IP限制判断，强制用户登录，提交订单时引入各种验证码、问答。\n\n\n","dateCreated":"2019-05-01T19:44:47+08:00","dateModified":"2019-05-01T21:35:26+08:00","datePublished":"2019-05-01T19:44:47+08:00","description":"","headline":"关于高并发和秒杀系统的讨论","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://www.jelech.top/posts/10156/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"http://www.jelech.top/posts/10156/","keywords":"redis, 高并发"}</script>
     <meta name="keywords" content="redis,高并发">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="关于高并发和秒杀系统的讨论">
-<meta property="og:url" content="http://www.jelech.cn/posts/10156/index.html">
+<meta property="og:url" content="http://www.jelech.top/posts/10156/index.html">
 <meta property="og:site_name" content="Jelech的博客">
 <meta property="og:locale" content="zh-cn">
 <meta property="og:updated_time" content="2019-05-01T13:35:26.528Z">
@@ -34,7 +34,7 @@
         
     
     
-        <meta property="og:image" content="http://www.jelech.cn/assets/images/avatar.jpg"/>
+        <meta property="og:image" content="http://www.jelech.top/assets/images/avatar.jpg"/>
     
     
     
@@ -308,7 +308,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/10156/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.top/posts/10156/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -316,7 +316,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/10156/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.top/posts/10156/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -324,7 +324,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/10156/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.top/posts/10156/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -399,7 +399,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/10156/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.top/posts/10156/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -407,7 +407,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/10156/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.top/posts/10156/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -415,7 +415,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/10156/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.top/posts/10156/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -442,7 +442,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/10156/">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.top/posts/10156/">
                     <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
                 </a>
             </li>
@@ -450,7 +450,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/10156/">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.top/posts/10156/">
                     <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
                 </a>
             </li>
@@ -458,7 +458,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/10156/">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://www.jelech.top/posts/10156/">
                     <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
                 </a>
             </li>

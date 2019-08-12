@@ -9,20 +9,20 @@
     <title>linux下安装python3 - Jelech的博客</title>
     <meta name="author" content="Jelech">
     
-        <meta name="keywords" content="博客,算法,javascript,游戏,">
+        <meta name="keywords" content="博客,算法,HTML/CSS/JS,游戏服务器,游戏,">
     
     
-        <link rel="icon" href="http://www.jelech.cn/assets/images/favicon.ico">
+        <link rel="icon" href="http://www.jelech.top/assets/images/favicon.ico">
         <link rel="Shortcut Icon" type="image/x-icon" href="assets/images/favicon.ico">
     
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n一、首先，官网下载python3的所需版本。wget https://www.python.org/ftp/python/3.6.0/Python-3.6.0.tgz\n想下载到那个文件夹下就先进入到那个文件夹下——cd /home/download\n二、然后，解压缩文件tar -xvf Python-3.6.0.tgz\n三、创建安装文件的路径。mkdir /usr/local/python3\n四、编译。./configure –prefix=/usr/local/python3\n五、安装。1、make\n2、make install\n3、完毕\n六、创建新版本的软连接。1、修改旧版本\nmv /usr/bin/python /usr/bin/python_bak\n2、创建新的软连接\nln -s /usr/local/python3/bin/python3 /usr/bin/python\n3、检查python的版本\npython -V\npython-3.6.0\n软连接创建成功\n七、配置成功后，pip3用不了，需进一步配置。若已有pip3：\n1、PATH=$PATH:$HOME/bin:\n2、PATH=$PATH:$HOME/bin:/usr/local/python3/bin\n3、完成\n或者没有pip3：\nsudo apt install python3-pip\n这时pip3就可以使用了。\n","dateCreated":"2018-09-15T22:24:40+08:00","dateModified":"2018-12-01T21:36:22+08:00","datePublished":"2018-09-15T22:24:40+08:00","description":"","headline":"linux下安装python3","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://www.jelech.cn/posts/21344/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"http://www.jelech.cn/posts/21344/","keywords":"linux, 软件配置"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n一、首先，官网下载python3的所需版本。wget https://www.python.org/ftp/python/3.6.0/Python-3.6.0.tgz\n想下载到那个文件夹下就先进入到那个文件夹下——cd /home/download\n二、然后，解压缩文件tar -xvf Python-3.6.0.tgz\n三、创建安装文件的路径。mkdir /usr/local/python3\n四、编译。./configure –prefix=/usr/local/python3\n五、安装。1、make\n2、make install\n3、完毕\n六、创建新版本的软连接。1、修改旧版本\nmv /usr/bin/python /usr/bin/python_bak\n2、创建新的软连接\nln -s /usr/local/python3/bin/python3 /usr/bin/python\n3、检查python的版本\npython -V\npython-3.6.0\n软连接创建成功\n七、配置成功后，pip3用不了，需进一步配置。若已有pip3：\n1、PATH=$PATH:$HOME/bin:\n2、PATH=$PATH:$HOME/bin:/usr/local/python3/bin\n3、完成\n或者没有pip3：\nsudo apt install python3-pip\n这时pip3就可以使用了。\n","dateCreated":"2018-09-15T22:24:40+08:00","dateModified":"2018-12-01T21:36:22+08:00","datePublished":"2018-09-15T22:24:40+08:00","description":"","headline":"linux下安装python3","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://www.jelech.top/posts/21344/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"http://www.jelech.top/posts/21344/","keywords":"linux, 软件配置"}</script>
     <meta name="keywords" content="linux,软件配置">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="linux下安装python3">
-<meta property="og:url" content="http://www.jelech.cn/posts/21344/index.html">
+<meta property="og:url" content="http://www.jelech.top/posts/21344/index.html">
 <meta property="og:site_name" content="Jelech的博客">
 <meta property="og:locale" content="zh-cn">
 <meta property="og:updated_time" content="2018-12-01T13:36:22.891Z">
@@ -34,7 +34,7 @@
         
     
     
-        <meta property="og:image" content="http://www.jelech.cn/assets/images/avatar.jpg"/>
+        <meta property="og:image" content="http://www.jelech.top/assets/images/avatar.jpg"/>
     
     
     
@@ -294,7 +294,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/21344/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.top/posts/21344/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -302,7 +302,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/21344/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.top/posts/21344/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -310,7 +310,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/21344/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.top/posts/21344/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -385,7 +385,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/21344/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.top/posts/21344/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -393,7 +393,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/21344/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.top/posts/21344/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -401,7 +401,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/21344/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.top/posts/21344/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -428,7 +428,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/21344/">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.top/posts/21344/">
                     <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
                 </a>
             </li>
@@ -436,7 +436,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/21344/">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.top/posts/21344/">
                     <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
                 </a>
             </li>
@@ -444,7 +444,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/21344/">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://www.jelech.top/posts/21344/">
                     <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
                 </a>
             </li>

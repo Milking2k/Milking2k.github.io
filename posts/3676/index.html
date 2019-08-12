@@ -9,20 +9,20 @@
     <title>安装Django - Jelech的博客</title>
     <meta name="author" content="Jelech">
     
-        <meta name="keywords" content="博客,算法,javascript,游戏,">
+        <meta name="keywords" content="博客,算法,HTML/CSS/JS,游戏服务器,游戏,">
     
     
-        <link rel="icon" href="http://www.jelech.cn/assets/images/favicon.ico">
+        <link rel="icon" href="http://www.jelech.top/assets/images/favicon.ico">
         <link rel="Shortcut Icon" type="image/x-icon" href="assets/images/favicon.ico">
     
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\nHow 2 Install Django?当然第一步是安装好你的python啦！\n安装djangopip install django(指定版本django==2.1.1)\n基础设置django.setting.py -&gt; DATABASE\n​    //设置为mysql，数据库名，用户名，密码\n1234'ENGINE'     :   'django.db.backends.mysql',​'NAME'       :   'blog-db',​'USER'       :   'jelech',​'PASSWORD'   :   '123456',\n安装memcached django-web缓存当同一个用户(ip)访问时候，缓存会识别出来，直接拿出上次同样的访问进行返回\n\n：cd ..（返回到Downloads目录下，Downloads目录下专门放所有下载的东西）\n：wget http://www.memcached.org/files/memcached-1.4.24.tar.gz（下载地址）\n：tar zxvf memcached-1.4.24.tar.gz（进行解压）\n：cd memcached-1.4.24 （进入到memcached-1.4.24目录下）\n：./configure --with-libevent=/usr（进行配置）\n：Make（编译这些源代码，让它生成库文件\n：make install\n\n安装连接器第一步：pip install python-memcached\n第二步：启动相应服务（因为python-memcached安装完成后只是个可执行文件，我们需要启动它）/usr/local/bin/memcached -u root -d  -p 11211 -c 256 -P /tmp/memcached.pid\n第三步：启动以后，我们要看这个东西有没有在系统中启动ps -ef|grep memca每次启动都需要手动输入，很麻烦。\n修改启动文件vi /etc/rc.local将/usr/local/bin/memcached -u root -d  -p 11211 -c 256 -P /tmp/memcached.pid命令放在里面\nDjango.setting 配置缓存DATABASE下新加\n123456789101112CACHES = &#123;  'default': &#123;    'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',    'LOCATION':'127.0.0.1:11211',  &#125;&#125;#多个缓存服务器，在location写地址数组[,,,]MIDDLEWAREE_CLASSES内(如果没有，就加到MIDDLEWARE)#最前新加'django.middleware.cache.UpdateCacheMiddleware',#最后新加'django.middleware.cache.FetchFromCacheMiddleware',\ndjango manage.py migrate 会自动创建django的app链接数据库，创建相应的表 表会依据models进行创建\ndjango配置神器django-debug-toolbar:123456789#pip 安装好插件pip install django-debug-toolbar#setting中的app加入debug_toolbar#编辑toolbar内部文件python -c \"import django;print(django.__path__);\" #得到pip路径vi ..path/site-pacages/debug_toolbar/settings.py#加入(修改)'JQUERY_URL':'//cdn.bootcss.com/jquery/2.1.4/jquery.min.js'\n开始Django\n创建APP,\n修改setting,\n修改url,\n修改app.views\n\ndjango中配置日志器的建立和使用修改setting,加入123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475LOGGING = &#123;    'version': 1,    'disable_existing_loggers': false,    'formaters': &#123;        'standerd': &#123;            'format':'%(ssctime)s [%(thresdName)s:%(thread)d][%(name)s:%(lineno)d][%(module)s:%(funcName)s][%(levelname)s] - %(message)s'        &#125;,        'filters': &#123;            'mail_admins': &#123;                'level': 'ERROR',                'class': 'django.utils.log.AdminEmailHandler',                'include_html':True,            &#125;            'default': &#123;                'level': 'DEBUG',                'class': 'logging.handlers.RotatingFiileHandler',                'filename': 'log/all.log',                'maxBytes': 1024* 1024* 5,                'backupCount': 5,                'formatter':'standerd',            &#125;            'error': &#123;                'level': 'ERROR',                'class': 'logging.handlers.RotatingFiileHandler',                'filename': 'log/error.log',                'maxBytes': 1024* 1024* 5,                'backupCount': 5,                'formatter':'standerd',            &#125;            'console': &#123;                'level': 'DEBUG',                'class': 'logging.StreamHandler',                'formatter': 'standerd',            &#125;            'request_handler';&#123;                'level': 'DEBUG',                'class': 'logging.handlers.RotatingFiileHandler',                'filename': 'log/script.log',                'maxBytes': 1024* 1024* 5,                'backupCount': 5,                'formatter':'standerd',            &#125;            'scripts_handler';&#123;                'level': 'DEBUG',                'class': 'logging.handlers.RotatingFiileHandler',                'filename': 'log/script.log',                'maxBytes': 1024* 1024* 5,                'backupCount': 5,                'formatter':'standerd',            &#125;        &#125;,        'loggers': &#123;            'django': &#123;                'handlers': ['default', 'console'],                'level': 'DEBUG',                'propaga':False,            &#125;            'django.request': &#123;                'handlers': ['request_handler'],                'level': 'DEBUG',                'propaga':False,            &#125;            'scripts': &#123;                'handlers': ['scripts_handler'],                'level': 'INFO',                'propaga':False,            &#125;            'blog.views': &#123; #app name.views                'handlers': ['default', 'error'],                'level': 'DEBUG',                'propaga':False,            &#125;        &#125;    &#125;&#125;\n使用：1234import logginglogger = logging.getLogger('appName.views')logger.error(x) errorException#抓取x错误登记到error.txt文件里\n其他12345678910111213141516#setting中可以设置网站的基本信息，网站内进行引用SITE_NAME = 'jelech的个人博客'...#1`局部引用from django.conf import settings#2`全局settingdef global_setting(request):  return &#123;    'SITE_NAME':setting.SITE_NAME,    ...  &#125;#settings中TMPLATES中context_processors尾部加入'appName.views.global_setting',#网站内直接使用变量&#123;&#123; SITE_NAME &#125;&#125;\n1234567891011121314151617181920212223242526272829#mysql临时笔记    //修改密码，注意mysql5.7中user表中密码改为了authentication_string    update mysql.user set authentication_string1=password(&apos;123456&apos;) where User=&quot;jelech&quot; and Host=&quot;localhost&quot;;    // 密码进入数据库，创建新数据库，授权新用户，刷新改动，设置根密码(初始使用一次就行)    mysql -u root -p    create database blog_db charset=utf8;    grant all on db_music.* to jelech@localhost identified by &quot;123456&quot;;    flush privileges;    set password for root@localhost=password(&quot;Nozuonodie&quot;);    //修改表格格式信息    ALTER TABLE userInfo MODIFY password VARCHAR(100) NOT NULL;    //删除表中所有内容，以及索引 用这种方法相当于重载了表格内容，全新的！    truncate table wp_comments;安装mysqlclient    pip install mysqlclient    安装Python mysqlclient出现“OSError: mysql_config not found”错误：    安装libmysqlclient-dev包即可，如果还有问题，可以安装python-dev    $ apt-get install libmysqlclient-dev python3-devdjango链接数据库    pip install pymysql     #安装好python和mysql的连接器    python3 manage.py inspectdb &gt; bigDataSwap/models.py     #链接django和mysql，自动生成表中的各种东西\n","dateCreated":"2018-10-10T20:24:40+08:00","dateModified":"2018-12-02T09:16:33+08:00","datePublished":"2018-10-10T20:24:40+08:00","description":"","headline":"安装Django","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://www.jelech.cn/posts/3676/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"http://www.jelech.cn/posts/3676/","keywords":"python, linux, 软件配置, Django"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\nHow 2 Install Django?当然第一步是安装好你的python啦！\n安装djangopip install django(指定版本django==2.1.1)\n基础设置django.setting.py -&gt; DATABASE\n​    //设置为mysql，数据库名，用户名，密码\n1234'ENGINE'     :   'django.db.backends.mysql',​'NAME'       :   'blog-db',​'USER'       :   'jelech',​'PASSWORD'   :   '123456',\n安装memcached django-web缓存当同一个用户(ip)访问时候，缓存会识别出来，直接拿出上次同样的访问进行返回\n\n：cd ..（返回到Downloads目录下，Downloads目录下专门放所有下载的东西）\n：wget http://www.memcached.org/files/memcached-1.4.24.tar.gz（下载地址）\n：tar zxvf memcached-1.4.24.tar.gz（进行解压）\n：cd memcached-1.4.24 （进入到memcached-1.4.24目录下）\n：./configure --with-libevent=/usr（进行配置）\n：Make（编译这些源代码，让它生成库文件\n：make install\n\n安装连接器第一步：pip install python-memcached\n第二步：启动相应服务（因为python-memcached安装完成后只是个可执行文件，我们需要启动它）/usr/local/bin/memcached -u root -d  -p 11211 -c 256 -P /tmp/memcached.pid\n第三步：启动以后，我们要看这个东西有没有在系统中启动ps -ef|grep memca每次启动都需要手动输入，很麻烦。\n修改启动文件vi /etc/rc.local将/usr/local/bin/memcached -u root -d  -p 11211 -c 256 -P /tmp/memcached.pid命令放在里面\nDjango.setting 配置缓存DATABASE下新加\n123456789101112CACHES = &#123;  'default': &#123;    'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',    'LOCATION':'127.0.0.1:11211',  &#125;&#125;#多个缓存服务器，在location写地址数组[,,,]MIDDLEWAREE_CLASSES内(如果没有，就加到MIDDLEWARE)#最前新加'django.middleware.cache.UpdateCacheMiddleware',#最后新加'django.middleware.cache.FetchFromCacheMiddleware',\ndjango manage.py migrate 会自动创建django的app链接数据库，创建相应的表 表会依据models进行创建\ndjango配置神器django-debug-toolbar:123456789#pip 安装好插件pip install django-debug-toolbar#setting中的app加入debug_toolbar#编辑toolbar内部文件python -c \"import django;print(django.__path__);\" #得到pip路径vi ..path/site-pacages/debug_toolbar/settings.py#加入(修改)'JQUERY_URL':'//cdn.bootcss.com/jquery/2.1.4/jquery.min.js'\n开始Django\n创建APP,\n修改setting,\n修改url,\n修改app.views\n\ndjango中配置日志器的建立和使用修改setting,加入123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475LOGGING = &#123;    'version': 1,    'disable_existing_loggers': false,    'formaters': &#123;        'standerd': &#123;            'format':'%(ssctime)s [%(thresdName)s:%(thread)d][%(name)s:%(lineno)d][%(module)s:%(funcName)s][%(levelname)s] - %(message)s'        &#125;,        'filters': &#123;            'mail_admins': &#123;                'level': 'ERROR',                'class': 'django.utils.log.AdminEmailHandler',                'include_html':True,            &#125;            'default': &#123;                'level': 'DEBUG',                'class': 'logging.handlers.RotatingFiileHandler',                'filename': 'log/all.log',                'maxBytes': 1024* 1024* 5,                'backupCount': 5,                'formatter':'standerd',            &#125;            'error': &#123;                'level': 'ERROR',                'class': 'logging.handlers.RotatingFiileHandler',                'filename': 'log/error.log',                'maxBytes': 1024* 1024* 5,                'backupCount': 5,                'formatter':'standerd',            &#125;            'console': &#123;                'level': 'DEBUG',                'class': 'logging.StreamHandler',                'formatter': 'standerd',            &#125;            'request_handler';&#123;                'level': 'DEBUG',                'class': 'logging.handlers.RotatingFiileHandler',                'filename': 'log/script.log',                'maxBytes': 1024* 1024* 5,                'backupCount': 5,                'formatter':'standerd',            &#125;            'scripts_handler';&#123;                'level': 'DEBUG',                'class': 'logging.handlers.RotatingFiileHandler',                'filename': 'log/script.log',                'maxBytes': 1024* 1024* 5,                'backupCount': 5,                'formatter':'standerd',            &#125;        &#125;,        'loggers': &#123;            'django': &#123;                'handlers': ['default', 'console'],                'level': 'DEBUG',                'propaga':False,            &#125;            'django.request': &#123;                'handlers': ['request_handler'],                'level': 'DEBUG',                'propaga':False,            &#125;            'scripts': &#123;                'handlers': ['scripts_handler'],                'level': 'INFO',                'propaga':False,            &#125;            'blog.views': &#123; #app name.views                'handlers': ['default', 'error'],                'level': 'DEBUG',                'propaga':False,            &#125;        &#125;    &#125;&#125;\n使用：1234import logginglogger = logging.getLogger('appName.views')logger.error(x) errorException#抓取x错误登记到error.txt文件里\n其他12345678910111213141516#setting中可以设置网站的基本信息，网站内进行引用SITE_NAME = 'jelech的个人博客'...#1`局部引用from django.conf import settings#2`全局settingdef global_setting(request):  return &#123;    'SITE_NAME':setting.SITE_NAME,    ...  &#125;#settings中TMPLATES中context_processors尾部加入'appName.views.global_setting',#网站内直接使用变量&#123;&#123; SITE_NAME &#125;&#125;\n1234567891011121314151617181920212223242526272829#mysql临时笔记    //修改密码，注意mysql5.7中user表中密码改为了authentication_string    update mysql.user set authentication_string1=password(&apos;123456&apos;) where User=&quot;jelech&quot; and Host=&quot;localhost&quot;;    // 密码进入数据库，创建新数据库，授权新用户，刷新改动，设置根密码(初始使用一次就行)    mysql -u root -p    create database blog_db charset=utf8;    grant all on db_music.* to jelech@localhost identified by &quot;123456&quot;;    flush privileges;    set password for root@localhost=password(&quot;Nozuonodie&quot;);    //修改表格格式信息    ALTER TABLE userInfo MODIFY password VARCHAR(100) NOT NULL;    //删除表中所有内容，以及索引 用这种方法相当于重载了表格内容，全新的！    truncate table wp_comments;安装mysqlclient    pip install mysqlclient    安装Python mysqlclient出现“OSError: mysql_config not found”错误：    安装libmysqlclient-dev包即可，如果还有问题，可以安装python-dev    $ apt-get install libmysqlclient-dev python3-devdjango链接数据库    pip install pymysql     #安装好python和mysql的连接器    python3 manage.py inspectdb &gt; bigDataSwap/models.py     #链接django和mysql，自动生成表中的各种东西\n","dateCreated":"2018-10-10T20:24:40+08:00","dateModified":"2018-12-02T09:16:33+08:00","datePublished":"2018-10-10T20:24:40+08:00","description":"","headline":"安装Django","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://www.jelech.top/posts/3676/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"http://www.jelech.top/posts/3676/","keywords":"python, linux, 软件配置, Django"}</script>
     <meta name="keywords" content="python,linux,软件配置,Django">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="安装Django">
-<meta property="og:url" content="http://www.jelech.cn/posts/3676/index.html">
+<meta property="og:url" content="http://www.jelech.top/posts/3676/index.html">
 <meta property="og:site_name" content="Jelech的博客">
 <meta property="og:locale" content="zh-cn">
 <meta property="og:updated_time" content="2018-12-02T01:16:33.315Z">
@@ -34,7 +34,7 @@
         
     
     
-        <meta property="og:image" content="http://www.jelech.cn/assets/images/avatar.jpg"/>
+        <meta property="og:image" content="http://www.jelech.top/assets/images/avatar.jpg"/>
     
     
     
@@ -310,7 +310,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/3676/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.top/posts/3676/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -318,7 +318,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/3676/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.top/posts/3676/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -326,7 +326,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/3676/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.top/posts/3676/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -401,7 +401,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/3676/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.top/posts/3676/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -409,7 +409,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/3676/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.top/posts/3676/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -417,7 +417,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/3676/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.top/posts/3676/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -444,7 +444,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/3676/">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.top/posts/3676/">
                     <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
                 </a>
             </li>
@@ -452,7 +452,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/3676/">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.top/posts/3676/">
                     <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
                 </a>
             </li>
@@ -460,7 +460,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/3676/">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://www.jelech.top/posts/3676/">
                     <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
                 </a>
             </li>

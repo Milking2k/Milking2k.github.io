@@ -9,20 +9,20 @@
     <title>一些简易的模板 - Jelech的博客</title>
     <meta name="author" content="Jelech">
     
-        <meta name="keywords" content="博客,算法,javascript,游戏,">
+        <meta name="keywords" content="博客,算法,HTML/CSS/JS,游戏服务器,游戏,">
     
     
-        <link rel="icon" href="http://www.jelech.cn/assets/images/favicon.ico">
+        <link rel="icon" href="http://www.jelech.top/assets/images/favicon.ico">
         <link rel="Shortcut Icon" type="image/x-icon" href="assets/images/favicon.ico">
     
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n一些简易模板\n快速幂\n\n123456789101112typedef long long LL;LL powerMod(LL x, LL n, LL m)&#123;    LL res = 1;    while (n &gt; 0)&#123;        if  (n &amp; 1) //  判断是否为奇数，若是则true            res = (res * x) % m;        x = (x * x) % m;        n &gt;&gt;= 1;    //  相当于n /= 2;    &#125;    return res;&#125;\n\n大数相加，但是一般都用java过大数…（逃\n\n123456789101112131415161718192021222324string maxNumAdd(string s1, string s2)&#123;    if (s1 == \"\" &amp;&amp; s2 == \"\")   return \"0\";    if (s1 == \"\")   return s2;    if (s2 == \"\")   return s1;    string maxx = s1, minn = s2;    if (s1.length() &lt; s2.length())&#123;        maxx = s2;        minn = s1;    &#125;    int a = maxx.length() - 1, b = minn.length() - 1;    for (int i = b; i &gt;= 0; --i)        maxx[a--] += minn[i] - '0'; //  a一直在减 ， 额外还要减个'0'    for (int i = maxx.length()-1; i &gt; 0;--i)        if (maxx[i] &gt; '9')&#123;            maxx[i] -= 10;//注意这个是减10            maxx[i - 1]++;        &#125;    if (maxx[0] &gt; '9')&#123;        maxx[0] -= 10;        maxx = '1' + maxx;    &#125;    return maxx;&#125;\n\nGCD 最大公约数\n\n1234567891011121314151617int gcd(int big, int small)&#123;    if (small &gt; big) swap(big, small);    int temp;    while (small != 0)&#123; //  辗转相除法        if (small &gt; big) swap(big, small);        temp = big % small;        big = small;        small = temp;    &#125;    return(big);&#125;/* 方法二： */int gcd(int a,int b)&#123;    if(a%b) return gcd(b, a%b);    return b;&#125;\n\nLCM 最小公倍数\n\n123456int LCM(int a,int b)&#123;    int temp_lcm;    temp_lcm=a*b/gcd(a,b);//最小公倍数等于两数之积除以最大公约数    return temp_lcm;&#125;\n","dateCreated":"2018-04-30T19:35:38+08:00","dateModified":"2018-12-01T21:37:54+08:00","datePublished":"2018-04-30T19:35:38+08:00","description":"","headline":"一些简易的模板","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://www.jelech.cn/posts/38733/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"http://www.jelech.cn/posts/38733/","keywords":"模板"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n一些简易模板\n快速幂\n\n123456789101112typedef long long LL;LL powerMod(LL x, LL n, LL m)&#123;    LL res = 1;    while (n &gt; 0)&#123;        if  (n &amp; 1) //  判断是否为奇数，若是则true            res = (res * x) % m;        x = (x * x) % m;        n &gt;&gt;= 1;    //  相当于n /= 2;    &#125;    return res;&#125;\n\n大数相加，但是一般都用java过大数…（逃\n\n123456789101112131415161718192021222324string maxNumAdd(string s1, string s2)&#123;    if (s1 == \"\" &amp;&amp; s2 == \"\")   return \"0\";    if (s1 == \"\")   return s2;    if (s2 == \"\")   return s1;    string maxx = s1, minn = s2;    if (s1.length() &lt; s2.length())&#123;        maxx = s2;        minn = s1;    &#125;    int a = maxx.length() - 1, b = minn.length() - 1;    for (int i = b; i &gt;= 0; --i)        maxx[a--] += minn[i] - '0'; //  a一直在减 ， 额外还要减个'0'    for (int i = maxx.length()-1; i &gt; 0;--i)        if (maxx[i] &gt; '9')&#123;            maxx[i] -= 10;//注意这个是减10            maxx[i - 1]++;        &#125;    if (maxx[0] &gt; '9')&#123;        maxx[0] -= 10;        maxx = '1' + maxx;    &#125;    return maxx;&#125;\n\nGCD 最大公约数\n\n1234567891011121314151617int gcd(int big, int small)&#123;    if (small &gt; big) swap(big, small);    int temp;    while (small != 0)&#123; //  辗转相除法        if (small &gt; big) swap(big, small);        temp = big % small;        big = small;        small = temp;    &#125;    return(big);&#125;/* 方法二： */int gcd(int a,int b)&#123;    if(a%b) return gcd(b, a%b);    return b;&#125;\n\nLCM 最小公倍数\n\n123456int LCM(int a,int b)&#123;    int temp_lcm;    temp_lcm=a*b/gcd(a,b);//最小公倍数等于两数之积除以最大公约数    return temp_lcm;&#125;\n","dateCreated":"2018-04-30T19:35:38+08:00","dateModified":"2018-12-01T21:37:54+08:00","datePublished":"2018-04-30T19:35:38+08:00","description":"","headline":"一些简易的模板","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://www.jelech.top/posts/38733/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"http://www.jelech.top/posts/38733/","keywords":"模板"}</script>
     <meta name="keywords" content="模板">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="一些简易的模板">
-<meta property="og:url" content="http://www.jelech.cn/posts/38733/index.html">
+<meta property="og:url" content="http://www.jelech.top/posts/38733/index.html">
 <meta property="og:site_name" content="Jelech的博客">
 <meta property="og:locale" content="zh-cn">
 <meta property="og:updated_time" content="2018-12-01T13:37:54.076Z">
@@ -34,7 +34,7 @@
         
     
     
-        <meta property="og:image" content="http://www.jelech.cn/assets/images/avatar.jpg"/>
+        <meta property="og:image" content="http://www.jelech.top/assets/images/avatar.jpg"/>
     
     
     
@@ -293,7 +293,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/38733/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.top/posts/38733/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -301,7 +301,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/38733/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.top/posts/38733/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -309,7 +309,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/38733/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.top/posts/38733/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -384,7 +384,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/38733/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.top/posts/38733/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -392,7 +392,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/38733/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.top/posts/38733/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -400,7 +400,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/38733/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.top/posts/38733/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -427,7 +427,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/38733/">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.top/posts/38733/">
                     <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
                 </a>
             </li>
@@ -435,7 +435,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/38733/">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.top/posts/38733/">
                     <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
                 </a>
             </li>
@@ -443,7 +443,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/38733/">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://www.jelech.top/posts/38733/">
                     <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
                 </a>
             </li>

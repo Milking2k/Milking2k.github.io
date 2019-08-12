@@ -9,20 +9,20 @@
     <title>SWERC2017新一轮训练赛 - Jelech的博客</title>
     <meta name="author" content="Jelech">
     
-        <meta name="keywords" content="博客,算法,javascript,游戏,">
+        <meta name="keywords" content="博客,算法,HTML/CSS/JS,游戏服务器,游戏,">
     
     
-        <link rel="icon" href="http://www.jelech.cn/assets/images/favicon.ico">
+        <link rel="icon" href="http://www.jelech.top/assets/images/favicon.ico">
         <link rel="Shortcut Icon" type="image/x-icon" href="assets/images/favicon.ico">
     
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n组队训练赛4月30日\nSWERC2017\nGYM 101635A\nUVA 13282\n\n单独A了三个水题。\n题意是给定两个序列，n,m长度，找到两个序列单个之间的差值的重复数最多的那个数，如果有数量一样的则输出值更小的。\n\n550 10 12 20 301 5 17 27 50以下是A题的题解。这道题正常存储会发现根本存不下1e10的位置，我发现其中有很多的的地方都可能会是0。因此我先把得到的差值数都保存下来，最多有2e3*2e3的大小。拍个顺序后，再遍历一遍记录下重复的数字的次数，记录到另一个node数组中里去。再次排序，就能得到结果了。\n\n123456789101112131415161718192021222324252627282930313233343536373839404142434445#include&lt;bits/stdc++.h&gt;using namespace std;#define LL long long int#define rd(x) scanf(\"%d\",&amp;x)struct node&#123;    int val;    int time;&#125;finans[4000007];int n,m;int emtfront[2007],emtback[2007];int ans[4000007];bool cmp(node a,node b)&#123;if(a.time==b.time) return a.val&lt;b.val; return a.time&gt;b.time;&#125;int main()&#123;    while(~rd(n))    &#123;        rd(m);        for(int i=1;i&lt;=n;i++) rd(emtfront[i]);        for(int i=1;i&lt;=m;i++) rd(emtback[i]);        int top=0;        for(int i=1;i&lt;=n;i++)            for(int j=1;j&lt;=m;j++)                if(emtback[j] &gt;= emtfront[i])                    ans[top++] = emtback[j] - emtfront[i];        sort(ans,ans+top);        int anstop=0;        finans[anstop].val=ans[0];        finans[anstop].time=1;        for(int i=1;i&lt;top;i++)        &#123;            if(ans[i]==ans[i-1])&#123;                finans[anstop].time++;            &#125;            else&#123;                finans[++anstop].val=ans[i];                finans[anstop].time=1;            &#125;        &#125;        sort(finans,finans+anstop+1,cmp);        printf(\"%d\\n\",finans[0]);    &#125;    return 0;&#125;\n101635K 题是个计算几何问题题意：一个圆内给多个点的坐标，问用最小宽度的矩形将所有点都包起来（忽略长度）\n\ninput:    3 100 010 00 10\noutput:    7.0710678118654755\n\n理解起来就是个简单的计算几何题，首先用凸包算法把所有点都算一下，然后用旋转卡壳算法，计算出点到边的最短距离使用旋转卡壳的原因是在满足所有点都在内部的情况下，必然有一条边上的点数大于或等于2.那么我们可以直接遍历一下所有的凸包边，计算对点到他的距离。在找对边的时候只需要找一次，因为是旋转，所以点也只需要转一个。听起来真不难，难在代码很难写，因此直接套了凸包的模板….\n123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118119120121122123124125126127128129130131132133134135136137138139140141142143144145146147148149150151152153154155156157158159160161162163164165166#include &lt;bits/stdc++.h&gt;using namespace std;const double eps = 1e-16;int sgn(double x)&#123;    if(fabs(x) &lt; eps)return 0;    if(x &lt; 0)return -1;    else return 1;&#125;struct point&#123;    double x,y;    point(int _x = 0,int _y = 0)    &#123;        x = _x;        y = _y;    &#125;    point operator -(const point &amp;b)const    &#123;        return point(x - b.x, y - b.y);    &#125;    double operator ^(const point &amp;b)const    &#123;        return x*b.y - y*b.x;    &#125;    double operator *(const point &amp;b)const    &#123;        return x*b.x + y*b.y;    &#125;    void sc()    &#123;        scanf(\"%lf%lf\",&amp;x,&amp;y);    &#125;&#125;;struct Line&#123;    point s,e;    Line() &#123;&#125;    Line(point _s,point _e)    &#123;        s = _s;        e = _e;    &#125;    pair&lt;int,point&gt; operator &amp;(const Line &amp;b)const    &#123;        point res = s;        if(sgn((s-e)^(b.s-b.e)) == 0)        &#123;            if(sgn((s-b.e)^(b.s-b.e)) == 0)                return make_pair(0,res);            else return make_pair(1,res);        &#125;        double t = ((s-b.s)^(b.s-b.e))/((s-e)^(b.s-b.e));        res.x += (e.x-s.x)*t;        res.y += (e.y-s.y)*t;        return make_pair(2,res);    &#125;&#125;;double dist(point a,point b)&#123;    return (double)sqrt((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y));&#125;point NearestpointToLineSeg(point P,Line L)&#123;    point result;    double t = ((P-L.s)*(L.e-L.s))/((L.e-L.s)*(L.e-L.s));    if(t &gt;= 0.000 &amp;&amp; t &lt;= 1.0000)    &#123;        result.x = L.s.x + (L.e.x - L.s.x)*t;        result.y = L.s.y + (L.e.y - L.s.y)*t;    &#125;    else    &#123;        if(dist(P,L.s) &lt; dist(P,L.e))            result = L.s;        else result = L.e;    &#125;    return result;&#125;double emmm(point P,Line L)&#123;    point zz=NearestpointToLineSeg(P,L);    return dist(zz,P);&#125;const int MAXN = 2e5+7;point List[MAXN];int Stack[MAXN],top;bool _cmp(point p1,point p2)&#123;    double tmp = (p1-List[0])^(p2-List[0]);    if(tmp &gt; 0)return true;    else if(tmp == 0 &amp;&amp; dist(p1,List[0]) &lt;= dist(p2,List[0]))        return true;    else return false;&#125;void Graham(int n)&#123;    point p0;    int k = 0;    p0 = List[0];    for(int i = 1; i &lt; n; i++)&#123;        if(p0.y &gt; List[i].y || (p0.y == List[i].y &amp;&amp; p0.x &gt; List[i].x))        &#123;            p0 = List[i];            k = i;        &#125;    &#125;    swap(List[k],List[0]);    sort(List+1,List+n,_cmp);    if(n == 1)    &#123;        top = 1;        Stack[0] = 0;        return;    &#125;    if(n == 2)    &#123;        top = 2;        Stack[0] = 0;        Stack[1] = 1;        return;    &#125;    Stack[0] = 0;    Stack[1] = 1;    top = 2;    for(int i = 2; i &lt; n; i++)    &#123;        while(top &gt; 1 &amp;&amp;        ((List[Stack[top-1]]-List[Stack[top-2]])^(List[i]-List[Stack[top-2]])) &lt;= 0)            top--;        Stack[top++] = i;    &#125;&#125;double rotating_calipers(point p[],int n)&#123;    double ans = 999999999999999999999.0;    point v;    int cur = 1;    for(int i = 0; i &lt; n; i++)    &#123;        v = p[i]-p[(i+1)%n];        while((v^(p[(cur+1)%n]-p[cur])) &lt; 0)&#123;            cur = (cur+1)%n;        &#125;        Line qw=Line(p[(i)%n],p[(i+1)%n]);//        point zz=NearestpointToLineSeg(p[cur],qw);        double as=emmm(p[cur],qw);        //as=max(as,zx);        ans=min(ans,as);//        ans=min(ans,max(dist(p[i],p[cur]),dist(p[(i+1)%n],p[(cur+1)%n])));    &#125;    return ans;&#125;point p[MAXN];int main()&#123;    int n,r;    while(~scanf(\"%d%d\",&amp;n,&amp;r))    &#123;        for(int i = 0; i &lt; n; i++)List[i].sc();        Graham(n);        for(int i = 0; i &lt; top; i++)p[i] = List[Stack[i]];        printf(\"%.16f\\n\",rotating_calipers(p,top));    &#125;    return 0;&#125;\n","dateCreated":"2018-04-30T23:13:45+08:00","dateModified":"2018-12-01T21:40:05+08:00","datePublished":"2018-04-30T23:13:45+08:00","description":"","headline":"SWERC2017新一轮训练赛","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://www.jelech.cn/posts/18091/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"http://www.jelech.cn/posts/18091/","keywords":"刷题, 组队"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n组队训练赛4月30日\nSWERC2017\nGYM 101635A\nUVA 13282\n\n单独A了三个水题。\n题意是给定两个序列，n,m长度，找到两个序列单个之间的差值的重复数最多的那个数，如果有数量一样的则输出值更小的。\n\n550 10 12 20 301 5 17 27 50以下是A题的题解。这道题正常存储会发现根本存不下1e10的位置，我发现其中有很多的的地方都可能会是0。因此我先把得到的差值数都保存下来，最多有2e3*2e3的大小。拍个顺序后，再遍历一遍记录下重复的数字的次数，记录到另一个node数组中里去。再次排序，就能得到结果了。\n\n123456789101112131415161718192021222324252627282930313233343536373839404142434445#include&lt;bits/stdc++.h&gt;using namespace std;#define LL long long int#define rd(x) scanf(\"%d\",&amp;x)struct node&#123;    int val;    int time;&#125;finans[4000007];int n,m;int emtfront[2007],emtback[2007];int ans[4000007];bool cmp(node a,node b)&#123;if(a.time==b.time) return a.val&lt;b.val; return a.time&gt;b.time;&#125;int main()&#123;    while(~rd(n))    &#123;        rd(m);        for(int i=1;i&lt;=n;i++) rd(emtfront[i]);        for(int i=1;i&lt;=m;i++) rd(emtback[i]);        int top=0;        for(int i=1;i&lt;=n;i++)            for(int j=1;j&lt;=m;j++)                if(emtback[j] &gt;= emtfront[i])                    ans[top++] = emtback[j] - emtfront[i];        sort(ans,ans+top);        int anstop=0;        finans[anstop].val=ans[0];        finans[anstop].time=1;        for(int i=1;i&lt;top;i++)        &#123;            if(ans[i]==ans[i-1])&#123;                finans[anstop].time++;            &#125;            else&#123;                finans[++anstop].val=ans[i];                finans[anstop].time=1;            &#125;        &#125;        sort(finans,finans+anstop+1,cmp);        printf(\"%d\\n\",finans[0]);    &#125;    return 0;&#125;\n101635K 题是个计算几何问题题意：一个圆内给多个点的坐标，问用最小宽度的矩形将所有点都包起来（忽略长度）\n\ninput:    3 100 010 00 10\noutput:    7.0710678118654755\n\n理解起来就是个简单的计算几何题，首先用凸包算法把所有点都算一下，然后用旋转卡壳算法，计算出点到边的最短距离使用旋转卡壳的原因是在满足所有点都在内部的情况下，必然有一条边上的点数大于或等于2.那么我们可以直接遍历一下所有的凸包边，计算对点到他的距离。在找对边的时候只需要找一次，因为是旋转，所以点也只需要转一个。听起来真不难，难在代码很难写，因此直接套了凸包的模板….\n123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869707172737475767778798081828384858687888990919293949596979899100101102103104105106107108109110111112113114115116117118119120121122123124125126127128129130131132133134135136137138139140141142143144145146147148149150151152153154155156157158159160161162163164165166#include &lt;bits/stdc++.h&gt;using namespace std;const double eps = 1e-16;int sgn(double x)&#123;    if(fabs(x) &lt; eps)return 0;    if(x &lt; 0)return -1;    else return 1;&#125;struct point&#123;    double x,y;    point(int _x = 0,int _y = 0)    &#123;        x = _x;        y = _y;    &#125;    point operator -(const point &amp;b)const    &#123;        return point(x - b.x, y - b.y);    &#125;    double operator ^(const point &amp;b)const    &#123;        return x*b.y - y*b.x;    &#125;    double operator *(const point &amp;b)const    &#123;        return x*b.x + y*b.y;    &#125;    void sc()    &#123;        scanf(\"%lf%lf\",&amp;x,&amp;y);    &#125;&#125;;struct Line&#123;    point s,e;    Line() &#123;&#125;    Line(point _s,point _e)    &#123;        s = _s;        e = _e;    &#125;    pair&lt;int,point&gt; operator &amp;(const Line &amp;b)const    &#123;        point res = s;        if(sgn((s-e)^(b.s-b.e)) == 0)        &#123;            if(sgn((s-b.e)^(b.s-b.e)) == 0)                return make_pair(0,res);            else return make_pair(1,res);        &#125;        double t = ((s-b.s)^(b.s-b.e))/((s-e)^(b.s-b.e));        res.x += (e.x-s.x)*t;        res.y += (e.y-s.y)*t;        return make_pair(2,res);    &#125;&#125;;double dist(point a,point b)&#123;    return (double)sqrt((a.x-b.x)*(a.x-b.x)+(a.y-b.y)*(a.y-b.y));&#125;point NearestpointToLineSeg(point P,Line L)&#123;    point result;    double t = ((P-L.s)*(L.e-L.s))/((L.e-L.s)*(L.e-L.s));    if(t &gt;= 0.000 &amp;&amp; t &lt;= 1.0000)    &#123;        result.x = L.s.x + (L.e.x - L.s.x)*t;        result.y = L.s.y + (L.e.y - L.s.y)*t;    &#125;    else    &#123;        if(dist(P,L.s) &lt; dist(P,L.e))            result = L.s;        else result = L.e;    &#125;    return result;&#125;double emmm(point P,Line L)&#123;    point zz=NearestpointToLineSeg(P,L);    return dist(zz,P);&#125;const int MAXN = 2e5+7;point List[MAXN];int Stack[MAXN],top;bool _cmp(point p1,point p2)&#123;    double tmp = (p1-List[0])^(p2-List[0]);    if(tmp &gt; 0)return true;    else if(tmp == 0 &amp;&amp; dist(p1,List[0]) &lt;= dist(p2,List[0]))        return true;    else return false;&#125;void Graham(int n)&#123;    point p0;    int k = 0;    p0 = List[0];    for(int i = 1; i &lt; n; i++)&#123;        if(p0.y &gt; List[i].y || (p0.y == List[i].y &amp;&amp; p0.x &gt; List[i].x))        &#123;            p0 = List[i];            k = i;        &#125;    &#125;    swap(List[k],List[0]);    sort(List+1,List+n,_cmp);    if(n == 1)    &#123;        top = 1;        Stack[0] = 0;        return;    &#125;    if(n == 2)    &#123;        top = 2;        Stack[0] = 0;        Stack[1] = 1;        return;    &#125;    Stack[0] = 0;    Stack[1] = 1;    top = 2;    for(int i = 2; i &lt; n; i++)    &#123;        while(top &gt; 1 &amp;&amp;        ((List[Stack[top-1]]-List[Stack[top-2]])^(List[i]-List[Stack[top-2]])) &lt;= 0)            top--;        Stack[top++] = i;    &#125;&#125;double rotating_calipers(point p[],int n)&#123;    double ans = 999999999999999999999.0;    point v;    int cur = 1;    for(int i = 0; i &lt; n; i++)    &#123;        v = p[i]-p[(i+1)%n];        while((v^(p[(cur+1)%n]-p[cur])) &lt; 0)&#123;            cur = (cur+1)%n;        &#125;        Line qw=Line(p[(i)%n],p[(i+1)%n]);//        point zz=NearestpointToLineSeg(p[cur],qw);        double as=emmm(p[cur],qw);        //as=max(as,zx);        ans=min(ans,as);//        ans=min(ans,max(dist(p[i],p[cur]),dist(p[(i+1)%n],p[(cur+1)%n])));    &#125;    return ans;&#125;point p[MAXN];int main()&#123;    int n,r;    while(~scanf(\"%d%d\",&amp;n,&amp;r))    &#123;        for(int i = 0; i &lt; n; i++)List[i].sc();        Graham(n);        for(int i = 0; i &lt; top; i++)p[i] = List[Stack[i]];        printf(\"%.16f\\n\",rotating_calipers(p,top));    &#125;    return 0;&#125;\n","dateCreated":"2018-04-30T23:13:45+08:00","dateModified":"2018-12-01T21:40:05+08:00","datePublished":"2018-04-30T23:13:45+08:00","description":"","headline":"SWERC2017新一轮训练赛","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://www.jelech.top/posts/18091/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"http://www.jelech.top/posts/18091/","keywords":"刷题, 组队"}</script>
     <meta name="keywords" content="刷题,组队">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="SWERC2017新一轮训练赛">
-<meta property="og:url" content="http://www.jelech.cn/posts/18091/index.html">
+<meta property="og:url" content="http://www.jelech.top/posts/18091/index.html">
 <meta property="og:site_name" content="Jelech的博客">
 <meta property="og:locale" content="zh-cn">
 <meta property="og:updated_time" content="2018-12-01T13:40:05.843Z">
@@ -34,7 +34,7 @@
         
     
     
-        <meta property="og:image" content="http://www.jelech.cn/assets/images/avatar.jpg"/>
+        <meta property="og:image" content="http://www.jelech.top/assets/images/avatar.jpg"/>
     
     
     
@@ -295,7 +295,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/18091/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.top/posts/18091/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -303,7 +303,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/18091/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.top/posts/18091/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -311,7 +311,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/18091/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.top/posts/18091/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -386,7 +386,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/18091/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.top/posts/18091/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -394,7 +394,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/18091/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.top/posts/18091/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -402,7 +402,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/18091/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.top/posts/18091/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -429,7 +429,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/18091/">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.top/posts/18091/">
                     <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
                 </a>
             </li>
@@ -437,7 +437,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/18091/">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.top/posts/18091/">
                     <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
                 </a>
             </li>
@@ -445,7 +445,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/18091/">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://www.jelech.top/posts/18091/">
                     <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
                 </a>
             </li>

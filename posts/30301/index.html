@@ -9,20 +9,20 @@
     <title>短到超乎想象！！！ - Jelech的博客</title>
     <meta name="author" content="Jelech">
     
-        <meta name="keywords" content="博客,算法,javascript,游戏,">
+        <meta name="keywords" content="博客,算法,HTML/CSS/JS,游戏服务器,游戏,">
     
     
-        <link rel="icon" href="http://www.jelech.cn/assets/images/favicon.ico">
+        <link rel="icon" href="http://www.jelech.top/assets/images/favicon.ico">
         <link rel="Shortcut Icon" type="image/x-icon" href="assets/images/favicon.ico">
     
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n快排短到了15行123456789101112void quickSort(vector&lt;int&gt; &amp;nums, int l, int r)&#123;    if(l &gt;= r) return;    int curPos = l, tempVal = nums[l]; // curPos代表前面的数都是小于nums[l]的    for (int i = l + 1; i &lt;= r; ++ i) &#123;        if(nums[i] &lt; tempVal)            swap(nums[i], nums[++curPos]);    &#125;    swap(nums[l], nums[curPos]);    quickSort(nums, l, curPos - 1);    quickSort(nums, curPos + 1, r);&#125;\n大数乘法短到了22行12345678910111213141516171819202122string ans(\"\");void multiBigIntegerDFS(int i, int num, const string &amp;a, const string &amp;b)&#123;    int j = 0, k = i, tempa, tempb;    for (int k = i, j = 0; k &gt; 0; k--, j++) &#123; // 把所有个数位长度相等的加一起，得到这一位的答案        tempa = tempb = 0;        if(k &lt;= b.size()) tempb = b[k - 1] - '0';        if(j &lt; a.size()) tempa = a[j] - '0';        num += tempa * tempb;    &#125;    if(i) multiBigIntegerDFS(i - 1, num / 10, a, b);    ans += num % 10 + '0';&#125;void multiBigInteger(string &amp;a, string &amp;b)&#123;    short flag = 1;    if(*a.begin() == '-') flag *= -1, a.erase(a.begin());// 处理正负号    if(*b.begin() == '-') flag *= -1, b.erase(b.begin());    multiBigIntegerDFS(a.size() + b.size() - 1, 0, a, b);    while(*ans.begin() == '0') ans.erase(ans.begin()); // 处理前导0    if(flag == -1) ans.insert(ans.begin(), '-');&#125;\n","dateCreated":"2019-05-25T21:09:57+08:00","dateModified":"2019-05-26T10:51:51+08:00","datePublished":"2019-05-25T21:09:57+08:00","description":"","headline":"短到超乎想象！！！","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://www.jelech.cn/posts/30301/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"http://www.jelech.cn/posts/30301/","keywords":"笔记, 算法"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n快排短到了15行123456789101112void quickSort(vector&lt;int&gt; &amp;nums, int l, int r)&#123;    if(l &gt;= r) return;    int curPos = l, tempVal = nums[l]; // curPos代表前面的数都是小于nums[l]的    for (int i = l + 1; i &lt;= r; ++ i) &#123;        if(nums[i] &lt; tempVal)            swap(nums[i], nums[++curPos]);    &#125;    swap(nums[l], nums[curPos]);    quickSort(nums, l, curPos - 1);    quickSort(nums, curPos + 1, r);&#125;\n大数乘法短到了22行12345678910111213141516171819202122string ans(\"\");void multiBigIntegerDFS(int i, int num, const string &amp;a, const string &amp;b)&#123;    int j = 0, k = i, tempa, tempb;    for (int k = i, j = 0; k &gt; 0; k--, j++) &#123; // 把所有个数位长度相等的加一起，得到这一位的答案        tempa = tempb = 0;        if(k &lt;= b.size()) tempb = b[k - 1] - '0';        if(j &lt; a.size()) tempa = a[j] - '0';        num += tempa * tempb;    &#125;    if(i) multiBigIntegerDFS(i - 1, num / 10, a, b);    ans += num % 10 + '0';&#125;void multiBigInteger(string &amp;a, string &amp;b)&#123;    short flag = 1;    if(*a.begin() == '-') flag *= -1, a.erase(a.begin());// 处理正负号    if(*b.begin() == '-') flag *= -1, b.erase(b.begin());    multiBigIntegerDFS(a.size() + b.size() - 1, 0, a, b);    while(*ans.begin() == '0') ans.erase(ans.begin()); // 处理前导0    if(flag == -1) ans.insert(ans.begin(), '-');&#125;\n","dateCreated":"2019-05-25T21:09:57+08:00","dateModified":"2019-05-26T10:51:51+08:00","datePublished":"2019-05-25T21:09:57+08:00","description":"","headline":"短到超乎想象！！！","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://www.jelech.top/posts/30301/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"http://www.jelech.top/posts/30301/","keywords":"笔记, 算法"}</script>
     <meta name="keywords" content="笔记,算法">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="短到超乎想象！！！">
-<meta property="og:url" content="http://www.jelech.cn/posts/30301/index.html">
+<meta property="og:url" content="http://www.jelech.top/posts/30301/index.html">
 <meta property="og:site_name" content="Jelech的博客">
 <meta property="og:locale" content="zh-cn">
 <meta property="og:updated_time" content="2019-05-26T02:51:51.936Z">
@@ -34,7 +34,7 @@
         
     
     
-        <meta property="og:image" content="http://www.jelech.cn/assets/images/avatar.jpg"/>
+        <meta property="og:image" content="http://www.jelech.top/assets/images/avatar.jpg"/>
     
     
     
@@ -278,7 +278,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/30301/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.top/posts/30301/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -286,7 +286,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/30301/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.top/posts/30301/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -294,7 +294,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/30301/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.top/posts/30301/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -368,7 +368,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/30301/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.top/posts/30301/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -376,7 +376,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/30301/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.top/posts/30301/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -384,7 +384,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/30301/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.top/posts/30301/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -411,7 +411,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.cn/posts/30301/">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.top/posts/30301/">
                     <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
                 </a>
             </li>
@@ -419,7 +419,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.cn/posts/30301/">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.top/posts/30301/">
                     <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
                 </a>
             </li>
@@ -427,7 +427,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://www.jelech.cn/posts/30301/">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://www.jelech.top/posts/30301/">
                     <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
                 </a>
             </li>
