@@ -12,17 +12,17 @@
         <meta name="keywords" content="博客,算法,HTML/CSS/JS,游戏服务器,游戏,">
     
     
-        <link rel="icon" href="http://www.jelech.top/assets/images/favicon.ico">
+        <link rel="icon" href="https://www.jelech.top/assets/images/favicon.ico">
         <link rel="Shortcut Icon" type="image/x-icon" href="assets/images/favicon.ico">
     
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\nm染色问题板子\n常规用法：求无向图种，m种颜色可以染成几种可使用二分查找不同m，每次dfs(return if ans &gt; 0)来查找最小m使得图可以被染色成功。\n\n1234567891011121314151617181920212223242526272829303132333435363738394041424344int n,k,m,x,y,i,ans=0;int a[1001][1001],f[1001][1001]; void dfs(int dep)&#123;\tint i,j;\tif(ans &gt; 0) return ; // ans is bigger than 0 meaning it can be colored\tif (dep==n+1)&#123;\t\tans++;\t\treturn;\t&#125;    rep(i,1,m+1) if (!f[dep][i])&#123;            rep(j,1,n+1) if (a[dep][j])&#123;                f[j][i]++;            &#125;            dfs(dep+1);            rep(j,1,n+1) if (a[dep][j])&#123;                f[j][i]--;            &#125;        &#125;    return;&#125;  int main()&#123;    int T;    for(cin &gt;&gt; T; T; T--)&#123;        memset(a,0,sizeof(a));        memset(f,0,sizeof(f));        ans = 0;        scanf(\"%d%d\",&amp;n,&amp;k);        m = 3;// m colors        rep(i,1,k+1)&#123;            scanf(\"%d%d\",&amp;x,&amp;y);            x++,y++;            a[x][y]=1;            a[y][x]=1;        &#125;        dfs(1);        if(ans==0) cout &lt;&lt; \"N\" &lt;&lt; endl;        else cout &lt;&lt; \"Y\" &lt;&lt; endl;    &#125;\treturn 0;&#125;\nnmk硬币问题\n从n种硬币中选m个投k次，问最终向上的硬币数的期望计算\n//dp 计算的是概率，代表了投第i次增加了向上硬币数可以有上次较少的成功得到，也可以由同样的数失败得到。\n\n1234567891011121314151617181920212223242526272829303132double d[200][200],p[200],c[200][200];int main()&#123;    c[0][0]=1;    for(int i=1;i&lt;=100;i++)&#123;        c[i][0]=1;        for(int j=1;j&lt;=i;j++)c[i][j]=c[i-1][j-1]+c[i-1][j];    &#125;    p[0]=1;    for(int i=1;i&lt;=100;i++)p[i]=p[i-1]/2;    int T;cin&gt;&gt;T;    while(T--)    &#123;        int n,m,t;        scanf(\"%d%d%d\",&amp;n,&amp;m,&amp;t);        memset(d,0,sizeof d);        d[0][0]=1;        for(int i=0;i&lt;m;i++)&#123;            for(int j=0;j&lt;=n;j++)&#123;                if(d[i][j]==0)continue;                for(int k=0;k&lt;=t;k++)&#123;                    if(n-j&gt;=t)d[i+1][j+k]+=d[i][j]*c[t][k]*p[t];                    else d[i+1][j-(t-(n-j))+k]+=d[i][j]*c[t][k]*p[t];                &#125;            &#125;        &#125;        double ans=0;        for(int i=1;i&lt;=n;i++)ans+=d[m][i]*i;        printf(\"%.3lf\\n\",ans);    &#125;    return 0;&#125;\n哈密尔顿回路问题\n只经过所有点一次，能否走完并回到起点，以及最佳路径\n\n12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273const int V = 200;int n,m;bool c[V][V];//edgeint x[V];bool flag[V];bool vis[V];void hamilton()&#123;    rep(i,0,n)&#123;        x[i] = -1,vis[i] = false;    &#125;    int k = 1;    vis[0] = true;    x[0] = 0;    while(k &gt;= 0)&#123;        x[k]++;        while(x[k] &lt; n)&#123;            if(!vis[x[k]] &amp;&amp; c[x[k - 1]][x[k]])                break;            else                x[k]++;        &#125;        if((x[k] &lt; n) &amp;&amp; (k != n - 1))&#123;            vis[x[k]] = true;            k++;        &#125;        else if((x[k] &lt; n) &amp;&amp; k == n - 1 &amp;&amp; c[x[k]][x[0]])&#123;            break;        &#125;        else&#123;            x[k] = -1;            k--;            vis[x[k]] = false;        &#125;    &#125;&#125;int main()&#123;    //freopen(\"in.txt\",\"r\",stdin);    //freopen(\"out.txt\",\"w\",stdout);    while(cin &gt;&gt; n &gt;&gt; m)&#123;        // init        memset(c,0,sizeof(c));        memset(flag,0,sizeof(flag));        rep(i,0,m)&#123;            int a,b;            cin &gt;&gt; a &gt;&gt; b;            a--,b--;            c[a][b]=true;            c[b][a]=true;        &#125;        hamilton();        bool f = false;        rep(i,0,n)&#123;            flag[x[i]]=1;        &#125;        rep(i,0,n)&#123;            if(!flag[i]) f=1;        &#125;        if(f) cout &lt;&lt;\"no solution\" &lt;&lt;endl;        else&#123;            rep(i,0,n)&#123;                if(i==n-1) cout &lt;&lt; x[i]+1 &lt;&lt;endl;                else cout &lt;&lt; x[i]+1 &lt;&lt;\" \";            &#125;        &#125;    &#125;    return 0;&#125;\n","dateCreated":"2018-08-28T22:26:40+08:00","dateModified":"2018-12-01T21:37:09+08:00","datePublished":"2018-08-28T22:26:40+08:00","description":"","headline":"更新一波新模板","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://www.jelech.top/posts/33987/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"http://www.jelech.top/posts/33987/","keywords":"刷题, acm"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\nm染色问题板子\n常规用法：求无向图种，m种颜色可以染成几种可使用二分查找不同m，每次dfs(return if ans &gt; 0)来查找最小m使得图可以被染色成功。\n\n1234567891011121314151617181920212223242526272829303132333435363738394041424344int n,k,m,x,y,i,ans=0;int a[1001][1001],f[1001][1001]; void dfs(int dep)&#123;\tint i,j;\tif(ans &gt; 0) return ; // ans is bigger than 0 meaning it can be colored\tif (dep==n+1)&#123;\t\tans++;\t\treturn;\t&#125;    rep(i,1,m+1) if (!f[dep][i])&#123;            rep(j,1,n+1) if (a[dep][j])&#123;                f[j][i]++;            &#125;            dfs(dep+1);            rep(j,1,n+1) if (a[dep][j])&#123;                f[j][i]--;            &#125;        &#125;    return;&#125;  int main()&#123;    int T;    for(cin &gt;&gt; T; T; T--)&#123;        memset(a,0,sizeof(a));        memset(f,0,sizeof(f));        ans = 0;        scanf(\"%d%d\",&amp;n,&amp;k);        m = 3;// m colors        rep(i,1,k+1)&#123;            scanf(\"%d%d\",&amp;x,&amp;y);            x++,y++;            a[x][y]=1;            a[y][x]=1;        &#125;        dfs(1);        if(ans==0) cout &lt;&lt; \"N\" &lt;&lt; endl;        else cout &lt;&lt; \"Y\" &lt;&lt; endl;    &#125;\treturn 0;&#125;\nnmk硬币问题\n从n种硬币中选m个投k次，问最终向上的硬币数的期望计算\n//dp 计算的是概率，代表了投第i次增加了向上硬币数可以有上次较少的成功得到，也可以由同样的数失败得到。\n\n1234567891011121314151617181920212223242526272829303132double d[200][200],p[200],c[200][200];int main()&#123;    c[0][0]=1;    for(int i=1;i&lt;=100;i++)&#123;        c[i][0]=1;        for(int j=1;j&lt;=i;j++)c[i][j]=c[i-1][j-1]+c[i-1][j];    &#125;    p[0]=1;    for(int i=1;i&lt;=100;i++)p[i]=p[i-1]/2;    int T;cin&gt;&gt;T;    while(T--)    &#123;        int n,m,t;        scanf(\"%d%d%d\",&amp;n,&amp;m,&amp;t);        memset(d,0,sizeof d);        d[0][0]=1;        for(int i=0;i&lt;m;i++)&#123;            for(int j=0;j&lt;=n;j++)&#123;                if(d[i][j]==0)continue;                for(int k=0;k&lt;=t;k++)&#123;                    if(n-j&gt;=t)d[i+1][j+k]+=d[i][j]*c[t][k]*p[t];                    else d[i+1][j-(t-(n-j))+k]+=d[i][j]*c[t][k]*p[t];                &#125;            &#125;        &#125;        double ans=0;        for(int i=1;i&lt;=n;i++)ans+=d[m][i]*i;        printf(\"%.3lf\\n\",ans);    &#125;    return 0;&#125;\n哈密尔顿回路问题\n只经过所有点一次，能否走完并回到起点，以及最佳路径\n\n12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273const int V = 200;int n,m;bool c[V][V];//edgeint x[V];bool flag[V];bool vis[V];void hamilton()&#123;    rep(i,0,n)&#123;        x[i] = -1,vis[i] = false;    &#125;    int k = 1;    vis[0] = true;    x[0] = 0;    while(k &gt;= 0)&#123;        x[k]++;        while(x[k] &lt; n)&#123;            if(!vis[x[k]] &amp;&amp; c[x[k - 1]][x[k]])                break;            else                x[k]++;        &#125;        if((x[k] &lt; n) &amp;&amp; (k != n - 1))&#123;            vis[x[k]] = true;            k++;        &#125;        else if((x[k] &lt; n) &amp;&amp; k == n - 1 &amp;&amp; c[x[k]][x[0]])&#123;            break;        &#125;        else&#123;            x[k] = -1;            k--;            vis[x[k]] = false;        &#125;    &#125;&#125;int main()&#123;    //freopen(\"in.txt\",\"r\",stdin);    //freopen(\"out.txt\",\"w\",stdout);    while(cin &gt;&gt; n &gt;&gt; m)&#123;        // init        memset(c,0,sizeof(c));        memset(flag,0,sizeof(flag));        rep(i,0,m)&#123;            int a,b;            cin &gt;&gt; a &gt;&gt; b;            a--,b--;            c[a][b]=true;            c[b][a]=true;        &#125;        hamilton();        bool f = false;        rep(i,0,n)&#123;            flag[x[i]]=1;        &#125;        rep(i,0,n)&#123;            if(!flag[i]) f=1;        &#125;        if(f) cout &lt;&lt;\"no solution\" &lt;&lt;endl;        else&#123;            rep(i,0,n)&#123;                if(i==n-1) cout &lt;&lt; x[i]+1 &lt;&lt;endl;                else cout &lt;&lt; x[i]+1 &lt;&lt;\" \";            &#125;        &#125;    &#125;    return 0;&#125;\n","dateCreated":"2018-08-28T22:26:40+08:00","dateModified":"2018-12-01T21:37:09+08:00","datePublished":"2018-08-28T22:26:40+08:00","description":"","headline":"更新一波新模板","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://www.jelech.top/posts/33987/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://www.jelech.top/posts/33987/","keywords":"刷题, acm"}</script>
     <meta name="keywords" content="刷题,acm">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="更新一波新模板">
-<meta property="og:url" content="http://www.jelech.top/posts/33987/index.html">
+<meta property="og:url" content="https://www.jelech.top/posts/33987/index.html">
 <meta property="og:site_name" content="Jelech的博客">
 <meta property="og:locale" content="zh-cn">
 <meta property="og:updated_time" content="2018-12-01T13:37:09.287Z">
@@ -34,7 +34,7 @@
         
     
     
-        <meta property="og:image" content="http://www.jelech.top/assets/images/avatar.jpg"/>
+        <meta property="og:image" content="https://www.jelech.top/assets/images/avatar.jpg"/>
     
     
     
@@ -290,7 +290,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.top/posts/33987/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://www.jelech.top/posts/33987/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -298,7 +298,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.top/posts/33987/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://www.jelech.top/posts/33987/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -306,7 +306,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.top/posts/33987/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://www.jelech.top/posts/33987/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -381,7 +381,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.top/posts/33987/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://www.jelech.top/posts/33987/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -389,7 +389,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.top/posts/33987/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://www.jelech.top/posts/33987/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -397,7 +397,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.top/posts/33987/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://www.jelech.top/posts/33987/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -424,7 +424,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.top/posts/33987/">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://www.jelech.top/posts/33987/">
                     <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
                 </a>
             </li>
@@ -432,7 +432,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.top/posts/33987/">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://www.jelech.top/posts/33987/">
                     <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
                 </a>
             </li>
@@ -440,7 +440,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://www.jelech.top/posts/33987/">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://www.jelech.top/posts/33987/">
                     <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
                 </a>
             </li>

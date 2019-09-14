@@ -12,17 +12,17 @@
         <meta name="keywords" content="博客,算法,HTML/CSS/JS,游戏服务器,游戏,">
     
     
-        <link rel="icon" href="http://www.jelech.top/assets/images/favicon.ico">
+        <link rel="icon" href="https://www.jelech.top/assets/images/favicon.ico">
         <link rel="Shortcut Icon" type="image/x-icon" href="assets/images/favicon.ico">
     
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n又开坑啦！！！ 准备短时间内把洛谷的普及组都刷了，不过看了一眼题。。好像很难啊。。全部代码地址    \n\n这里只更新一些比较复杂的题，普及组刚开始水题还是挺多的。。。\n\n\nP1086 花生采摘一个图，不同点有不同的值，要求从上边界进入，上边界处。给定k步内求能拿到的最大值。\n跳动的要求是从大到小选取。并且步长不能超过k。\n\n\n12345678910111213141516171819202122232425262728293031323334353637383940414243#include &lt;bits/stdc++.h&gt;using namespace std;#define rd(x) scanf(\"%d\",&amp;x)#define rdd(x,y) scanf(\"%d%d\",&amp;x,&amp;y)#define rddd(x,y,k) scanf(\"%d%d%d\",&amp;x,&amp;y,&amp;k)#define ll long long intstruct node&#123;\tint x,y,val;&#125;emt[405];int n,m,k;bool cmp(node a,node b)&#123;return a.val&gt;b.val;&#125;int main(int argc, char const *argv[])&#123;\twhile(~rddd(n,m,k))&#123;\t\tint top=0;\t\tfor (int i = 0; i &lt; n; ++i)&#123;\t\t\tfor (int j = 0; j &lt; m; ++j)&#123;\t\t\t\tint cnt;\t\t\t\trd(cnt);\t\t\t\tif(cnt!=0)&#123;\t\t\t\t\temt[top].x = j;\t\t\t\t\temt[top].y = i;\t\t\t\t\temt[top++].val = cnt;\t\t\t\t&#125;\t\t\t&#125;\t\t&#125;\t\tsort(emt,emt+top,cmp);\t\tint sumbf[400]=&#123;0&#125;;\t\tsumbf[0]=1;\t\tfor (int i = 1; i &lt; top; ++i)&#123;\t\t\tsumbf[i] = 1 + sumbf[i-1] + abs(emt[i].x-emt[i-1].x) + abs(emt[i].y-emt[i-1].y); \t\t&#125;\t\tint ans=0;\t\tk = k-emt[0].y;\t\tint i;\t\tfor (i = 0; sumbf[i] + emt[i].y+1 &lt; k; ++i)&#123;\t\t\tans+=emt[i].val;\t\t&#125;\t\tprintf(\"%d\\n\", ans);\t&#125;\treturn 0;&#125;\n\n等待难题中…\n\n","dateCreated":"2018-04-28T23:48:06+08:00","dateModified":"2018-12-01T21:40:24+08:00","datePublished":"2018-04-28T23:48:06+08:00","description":"","headline":"洛谷天梯A组","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"http://www.jelech.top/posts/14339/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"http://www.jelech.top/posts/14339/","keywords":"刷题, 天梯"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n又开坑啦！！！ 准备短时间内把洛谷的普及组都刷了，不过看了一眼题。。好像很难啊。。全部代码地址    \n\n这里只更新一些比较复杂的题，普及组刚开始水题还是挺多的。。。\n\n\nP1086 花生采摘一个图，不同点有不同的值，要求从上边界进入，上边界处。给定k步内求能拿到的最大值。\n跳动的要求是从大到小选取。并且步长不能超过k。\n\n\n12345678910111213141516171819202122232425262728293031323334353637383940414243#include &lt;bits/stdc++.h&gt;using namespace std;#define rd(x) scanf(\"%d\",&amp;x)#define rdd(x,y) scanf(\"%d%d\",&amp;x,&amp;y)#define rddd(x,y,k) scanf(\"%d%d%d\",&amp;x,&amp;y,&amp;k)#define ll long long intstruct node&#123;\tint x,y,val;&#125;emt[405];int n,m,k;bool cmp(node a,node b)&#123;return a.val&gt;b.val;&#125;int main(int argc, char const *argv[])&#123;\twhile(~rddd(n,m,k))&#123;\t\tint top=0;\t\tfor (int i = 0; i &lt; n; ++i)&#123;\t\t\tfor (int j = 0; j &lt; m; ++j)&#123;\t\t\t\tint cnt;\t\t\t\trd(cnt);\t\t\t\tif(cnt!=0)&#123;\t\t\t\t\temt[top].x = j;\t\t\t\t\temt[top].y = i;\t\t\t\t\temt[top++].val = cnt;\t\t\t\t&#125;\t\t\t&#125;\t\t&#125;\t\tsort(emt,emt+top,cmp);\t\tint sumbf[400]=&#123;0&#125;;\t\tsumbf[0]=1;\t\tfor (int i = 1; i &lt; top; ++i)&#123;\t\t\tsumbf[i] = 1 + sumbf[i-1] + abs(emt[i].x-emt[i-1].x) + abs(emt[i].y-emt[i-1].y); \t\t&#125;\t\tint ans=0;\t\tk = k-emt[0].y;\t\tint i;\t\tfor (i = 0; sumbf[i] + emt[i].y+1 &lt; k; ++i)&#123;\t\t\tans+=emt[i].val;\t\t&#125;\t\tprintf(\"%d\\n\", ans);\t&#125;\treturn 0;&#125;\n\n等待难题中…\n\n","dateCreated":"2018-04-28T23:48:06+08:00","dateModified":"2018-12-01T21:40:24+08:00","datePublished":"2018-04-28T23:48:06+08:00","description":"","headline":"洛谷天梯A组","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://www.jelech.top/posts/14339/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://www.jelech.top/posts/14339/","keywords":"刷题, 天梯"}</script>
     <meta name="keywords" content="刷题,天梯">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="洛谷天梯A组">
-<meta property="og:url" content="http://www.jelech.top/posts/14339/index.html">
+<meta property="og:url" content="https://www.jelech.top/posts/14339/index.html">
 <meta property="og:site_name" content="Jelech的博客">
 <meta property="og:locale" content="zh-cn">
 <meta property="og:image" content="https://cdn.luogu.org/upload/pic/1182.png">
@@ -36,7 +36,7 @@
         
     
     
-        <meta property="og:image" content="http://www.jelech.top/assets/images/avatar.jpg"/>
+        <meta property="og:image" content="https://www.jelech.top/assets/images/avatar.jpg"/>
     
     
     
@@ -292,7 +292,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.top/posts/14339/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://www.jelech.top/posts/14339/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -300,7 +300,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.top/posts/14339/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://www.jelech.top/posts/14339/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -308,7 +308,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.top/posts/14339/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://www.jelech.top/posts/14339/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -383,7 +383,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.top/posts/14339/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://www.jelech.top/posts/14339/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -391,7 +391,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.top/posts/14339/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://www.jelech.top/posts/14339/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -399,7 +399,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=http://www.jelech.top/posts/14339/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://www.jelech.top/posts/14339/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -426,7 +426,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=http://www.jelech.top/posts/14339/">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://www.jelech.top/posts/14339/">
                     <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
                 </a>
             </li>
@@ -434,7 +434,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=http://www.jelech.top/posts/14339/">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://www.jelech.top/posts/14339/">
                     <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
                 </a>
             </li>
@@ -442,7 +442,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=http://www.jelech.top/posts/14339/">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://www.jelech.top/posts/14339/">
                     <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
                 </a>
             </li>
