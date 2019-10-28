@@ -1,0 +1,560 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Jelech的博客">
+    <title>状态机与行为树 - Jelech的博客</title>
+    <meta name="author" content="Jelech">
+    
+        <meta name="keywords" content="博客,算法,HTML/CSS/JS,游戏服务器,游戏,">
+    
+    
+        <link rel="icon" href="https://www.jelech.top/assets/images/favicon.ico">
+        <link rel="Shortcut Icon" type="image/x-icon" href="assets/images/favicon.ico">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n前言游戏开发中, 玩家操作的每次都可以理解为一个行为, 每次行为的结果会让玩家到某个状态。为了加快开发效率、让整个流程逻辑更清晰，出现了有限自动机。状态树的方法也能应用到这里。《linux高性能服务器》书中也介绍过有限自动机的概念。\n我学习过后，准备在这里对一些内容进行一些总结。\n有限自动机\nDFA 确定的有限状态自动机。FSM有限状态自动机，对于一个流程，有开始状态与终止状态，每个操作、事件对应一个行为，行为过后会转换到另一个状态。\n\n……其实上面部分比较熟悉，需要花点事件自己说明白，待补充\n行为树\nBT(Beahvior Tree) 是有行为节点组成的树状结构。节点是有层次的，子节点由其父节点进行控制。节点分为多种，每次会对子节点进行操作。如果满足某种条件则递归式的继续运行子节点的行为。执行返回有Success、Failure、Runing。\n\n节点分类\n序列(Sequence)节点：按照序列的形式执行所有节点，如果某个节点失败则返回失败\n循环(Loop)节点：循环的执行所有子节点一定的次数，可以设置为无限循环\n条件(Condition)节点：如果满足某个条件则返回成功或者失败\n动作(Action)节点：根据动作的结果返回成功、失败和运行\n等待(Wait)节点：等待一定时间过去后返回成功\n\n运行(Runing)状态\n行为节点返回成功和失败都会通知父节点做相应的动作。\n\n如果是返回的行状态，则父节点会继续运行这个动作，直到返回为成功，才继续运行之后的节点。我们称之为(#`O′)伪阻塞。这是因为每次运行的时候都是跳出了子节点，再进入子节点的，只是返回的是运行的时候，每一帧的下一步操作都是进入这个节点。\n假设现在有流程“走过去”，做“采矿”再做“返回”，一颗行为树就可以表达完毕，每件事情都是持续的，如果没有RUNNING，那其实就更像一颗“决策树”而非“行为树”。\n解决伪阻塞使用前置\n每个节点都可以添加一个前置附件或者后置附件\n\n添加前置附件，设置执行时机为Update或Both。name每次执行节点之前都会先执行配置里的条件。\n使用parallel节点该节点作用为“一遍检查条件、一遍执行动作”。该节点后的节点运行的时候回进行一次判断。\n有限状态机和行为树对于一系列事件，有限状态机更多表现出来的形式是一种有向图的形式，而行为树则是因为逻辑更像一个树形结构。\n","dateCreated":"2019-07-21T19:44:47+08:00","dateModified":"2019-10-28T21:30:11+08:00","datePublished":"2019-07-21T19:44:47+08:00","description":"","headline":"状态机与行为树","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://www.jelech.top/posts/65065/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://www.jelech.top/posts/65065/","keywords":"服务器"}</script>
+    <meta name="keywords" content="服务器">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="状态机与行为树">
+<meta property="og:url" content="https://www.jelech.top/posts/65065/index.html">
+<meta property="og:site_name" content="Jelech的博客">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2019-10-28T13:30:11.122Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="状态机与行为树">
+<meta name="twitter:creator" content="@twitter">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://www.jelech.top/assets/images/avatar.jpg"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
+    <!--STYLES END-->
+    
+
+    
+    <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?fc576447bb0c014aee82fbe7d96b4401";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">Jelech的博客</a>
+    </div>
+    
+        
+            <a class="header-right-picture " href="#about">
+        
+        
+            <img class="header-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+                </a>
+                <h4 class="sidebar-profile-name">Jelech</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>putty本无树,MinGW亦非台</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/ " title="首页">
+                    
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-categories" title="分类">
+                    
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">分类</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-tags" title="标签">
+                    
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-archives" title="归档">
+                    
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/game" title="游戏">
+                    
+                        <i class="sidebar-button-icon fas fa-gamepad" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">游戏</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="#about" title="关于">
+                    
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="https://github.com/jelech" target="_blank" rel="noopener" title="GitHub">
+                    
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/mailto" title="邮箱">
+                    
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">邮箱</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            状态机与行为树
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2019-07-21T19:44:47+08:00">
+	
+		    7月 21, 2019
+    	
+    </time>
+    
+        <span>发布在 </span>
+        
+    <a class="category-link" href="/categories/技术探析/">技术探析</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            
+            <h1 id="table-of-contents">目录</h1><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#前言"><span class="toc-text">前言</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#有限自动机"><span class="toc-text">有限自动机</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#行为树"><span class="toc-text">行为树</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#节点分类"><span class="toc-text">节点分类</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#运行-Runing-状态"><span class="toc-text">运行(Runing)状态</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#解决伪阻塞"><span class="toc-text">解决伪阻塞</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#使用前置"><span class="toc-text">使用前置</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#使用parallel节点"><span class="toc-text">使用parallel节点</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#有限状态机和行为树"><span class="toc-text">有限状态机和行为树</span></a></li></ol>
+<a id="more"></a>
+<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>游戏开发中, 玩家操作的每次都可以理解为一个行为, 每次行为的结果会让玩家到某个状态。为了加快开发效率、让整个流程逻辑更清晰，出现了有限自动机。状态树的方法也能应用到这里。《linux高性能服务器》书中也介绍过有限自动机的概念。</p>
+<p>我学习过后，准备在这里对一些内容进行一些总结。</p>
+<h2 id="有限自动机"><a href="#有限自动机" class="headerlink" title="有限自动机"></a>有限自动机</h2><blockquote>
+<p>DFA 确定的有限状态自动机。FSM有限状态自动机，对于一个流程，有开始状态与终止状态，每个操作、事件对应一个行为，行为过后会转换到另一个状态。</p>
+</blockquote>
+<p>……其实上面部分比较熟悉，需要花点事件自己说明白，待补充</p>
+<h2 id="行为树"><a href="#行为树" class="headerlink" title="行为树"></a>行为树</h2><blockquote>
+<p>BT(Beahvior Tree) 是有行为节点组成的树状结构。节点是有层次的，子节点由其父节点进行控制。节点分为多种，每次会对子节点进行操作。如果满足某种条件则递归式的继续运行子节点的行为。执行返回有Success、Failure、Runing。</p>
+</blockquote>
+<h3 id="节点分类"><a href="#节点分类" class="headerlink" title="节点分类"></a>节点分类</h3><ul>
+<li>序列(Sequence)节点：按照序列的形式执行所有节点，如果某个节点失败则返回失败</li>
+<li>循环(Loop)节点：循环的执行所有子节点一定的次数，可以设置为无限循环</li>
+<li>条件(Condition)节点：如果满足某个条件则返回成功或者失败</li>
+<li>动作(Action)节点：根据动作的结果返回成功、失败和运行</li>
+<li>等待(Wait)节点：等待一定时间过去后返回成功</li>
+</ul>
+<h3 id="运行-Runing-状态"><a href="#运行-Runing-状态" class="headerlink" title="运行(Runing)状态"></a>运行(Runing)状态</h3><blockquote>
+<p>行为节点返回成功和失败都会通知父节点做相应的动作。</p>
+</blockquote>
+<p>如果是返回的行状态，则父节点会继续运行这个动作，直到返回为成功，才继续运行之后的节点。<br>我们称之为(#`O′)伪阻塞。这是因为每次运行的时候都是跳出了子节点，再进入子节点的，只是返回的是运行的时候，每一帧的下一步操作都是进入这个节点。</p>
+<p>假设现在有流程“走过去”，做“采矿”再做“返回”，一颗行为树就可以表达完毕，每件事情都是持续的，如果没有RUNNING，那其实就更像一颗“决策树”而非“行为树”。</p>
+<h3 id="解决伪阻塞"><a href="#解决伪阻塞" class="headerlink" title="解决伪阻塞"></a>解决伪阻塞</h3><h4 id="使用前置"><a href="#使用前置" class="headerlink" title="使用前置"></a>使用前置</h4><blockquote>
+<p>每个节点都可以添加一个<strong>前置</strong>附件或者<strong>后置</strong>附件</p>
+</blockquote>
+<p>添加前置附件，设置执行时机为Update或Both。name每次执行节点之前都会先执行配置里的条件。</p>
+<h4 id="使用parallel节点"><a href="#使用parallel节点" class="headerlink" title="使用parallel节点"></a>使用parallel节点</h4><p>该节点作用为“一遍检查条件、一遍执行动作”。该节点后的节点运行的时候回进行一次判断。</p>
+<h2 id="有限状态机和行为树"><a href="#有限状态机和行为树" class="headerlink" title="有限状态机和行为树"></a>有限状态机和行为树</h2><p>对于一系列事件，有限状态机更多表现出来的形式是一种<strong>有向图</strong>的形式，而行为树则是因为逻辑更像一个<strong>树形</strong>结构。</p>
+
+            
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">标签</span><br>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/服务器/">服务器</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/23842/" data-tooltip="游戏服务器" aria-label="上一篇: 游戏服务器">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/30301/" data-tooltip="短到超乎想象！！！" aria-label="下一篇: 短到超乎想象！！！">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="分享">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://www.jelech.top/posts/65065/" title="分享到 Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://www.jelech.top/posts/65065/" title="分享到 Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://www.jelech.top/posts/65065/" title="分享到 Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <style media="screen">.v .vwrap{overflow: inherit;}</style>
+                <div id="vcomment"></div>
+                <a href="posts/65065/#vcomment" class="disqus-comment-count"></a>
+                <span class="valine-comment-count" data-xid="posts/65065/"></span>
+                <span> Comment</span>
+            
+        
+    </div>
+</article>
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2019 Jelech. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/23842/" data-tooltip="游戏服务器" aria-label="上一篇: 游戏服务器">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/30301/" data-tooltip="短到超乎想象！！！" aria-label="下一篇: 短到超乎想象！！！">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="分享">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://www.jelech.top/posts/65065/" title="分享到 Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://www.jelech.top/posts/65065/" title="分享到 Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://www.jelech.top/posts/65065/" title="分享到 Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+    <i id="btn-close-shareoptions" class="fa fa-times"></i>
+    <ul class="share-options">
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://www.jelech.top/posts/65065/">
+                    <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://www.jelech.top/posts/65065/">
+                    <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://www.jelech.top/posts/65065/">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+        
+            <h4 id="about-card-name">Jelech</h4>
+        
+            <div id="about-card-bio"><p>putty本无树,MinGW亦非台</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br>
+                <p>在校大学生一枚</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br>
+                CHINA.HRB.STU
+            </div>
+        
+
+        
+            <div id="about-card-job">
+                <i class="fa fa-envelope"></i>
+                <br>
+                jelech@hotmail.com
+            </div>
+        
+
+        
+            <div id="about-card-job">
+                <i class="fa fa-phone-square"></i>
+                <br>
+                18.......6
+            </div>
+        
+
+
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js" charset="utf-8"></script>
+        <script src="//unpkg.com/valine@latest/dist/Valine.min.js" charset="utf-8"></script>
+        <script>
+            var notify = 'false' == true ? true : false;
+            var verify = 'false' == true ? true : false;
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1;
+            });
+
+            guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+            window.valine = new Valine({
+                el:'#vcomment',
+                notify:notify,
+                verify:verify,
+                appId:'rwwVeUe3kpfbc0OkoxmgnTKM-gzGzoHsz',
+                appKey:'FcDDW6bpbs5QmH3A1B2Aqmae',
+                placeholder:'Just so so',
+                avatar:'mm',
+                guest_info:guest_info,
+                pageSize:'10'
+            });
+        </script>
+    
+
+
+
+    </body>
+</html>
