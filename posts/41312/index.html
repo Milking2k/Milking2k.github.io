@@ -1,0 +1,682 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Jelech的博客">
+    <title>一起学GO(一) - Jelech的博客</title>
+    <meta name="author" content="Jelech">
+    
+        <meta name="keywords" content="博客,算法,HTML/CSS/JS,游戏服务器,游戏,">
+    
+    
+        <link rel="icon" href="https://www.jelech.top/assets/images/favicon.ico">
+        <link rel="Shortcut Icon" type="image/x-icon" href="assets/images/favicon.ico">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n开始前准备一下安装下载下载连接\nwindows 版本安装到一个比较好找的目录,比如 F:/Go\n配置Go PATH添加环境变量GOPATH，写入一个路径，这里是你写代码的地方，用户变量下也有GOPATH【有默认值】，需要更新一下\n新建 bin, pkg, src.\nbin路径加入PATH\n添加GOROOT 并设置为GO安装的目录（这里是自己出了问题才加上的）\n\n使用 go env 检查环境配置是否正确\n\n目录结构\nbin 存放编译后的二进制文件\npkg存放编译后的库文件\nsrc是放源代码的地方\n\n再src下以网站的形式构建文件夹：比如创建 jelech.top 名字的文件夹。 这里实际上是写的仓库连接名，所以可以写入github的连接地址\n在jelech.top下创建作者名，比如jelech\n在作者名下创建项目名\nIDE，用VSCODE，不多说了\n安装中文插件\n安装GO插件\n在写go时候，vscode会提示安装各种插件。而由于墙的原因会下载失败。需手动下载安装\n从release下载src包\n再额外从lint直接拉取 git clone https://github.com/golang/lint.git\n到src的根目录，也就是GOPATH上运行 go install golang.org/x/lint\n重新运行的时候安装就能成功。还是不行就手动复制到cmd中\n\n\n\n编译go build 编译到当前目录 -o 重新定义名字，默认名为项目名【文件夹】\ngo run path 可以直接编译完成后直接运行，但没有保存\ngo install 编译完成后放到GOPATH/bin路径下\n交叉编译交叉编译代表在一个平台编译其他平台的代码，需要设置一些东西：123SET CGO_ENABLED=0   # 禁用CGOSET GOOS=linux      # 目标平台SET GOARCH=amd64    # 目标处理架构为amd64\nGO辅助命令go doc builtin.delete 查看内置的go文档\nGO基础package main 当前包名\nimport &quot;name&quot; 导入其他包\n只可以可设置全局变量、函数。和python不一样, 他是和c++一样，main函数等。\n变量与常量\n标识符和其他语言一样\n\n关键字大部分和其他语言差不多，有一些特殊的，比如select, defer, func, chan...\n变量声明再使用go语言中变量声明后必须使用\nvar name string 声明一个保存字符串类型的变量，名字为name\n1234567891011121314// 批量声明var (    name string    age int    man bool)// 声明自动赋值【这里等号前的类型可以省略】var s1 = \"hi\"var i1 = 12// **函数内**使用简短变量声明s3 := \"hahah\"i2 := 15s1, s2 := 1, 2\n匿名变量一个下划线, 他不会占用空间，不会分配内存，所以不存在重复声明\n常量 const就是普通的常量，和c++类似性质如果某一行没有写值，则表示和上面是一样的。这个只有在const的批量声明时可用\niota常量计数器也就是可用代表为从0开始的enum, 一般使用在const批量声明中，每新增的一行时候，iota会自动+1来用列子检测学习一下：\n123456789const (    b1 = iota //0    b2 = iota //1    _    b3        // 3    b4 = 100  // 100    b5        // 100  记住和上面一样    b6 = iota // 6    记住iota是const每新增一行就+1)\n数据类型整型\nint8\nint16\nint32\nint64\n以上对应无符号uint**\nuintptr 存放指针\n\n进制无法直接定义二进制，八进制前为0，16进制前为0x\n浮点32长度和64长度，默认为float64。不能直接赋值，需要强转函数\nf1 := 123.123\n复数complex64 / complex128\n布尔值Go中不能将整形转为布尔类型，不能参与数值运算\n字符串UTF-8编码，天然自动支持中文，只能用双引号包括，单引号包括是字符\n\n\\ 为转义字符\n&quot;`&quot; esc下面的字符用于表示多行字符串和整个转义, 注意这个前缀会加入\n\n+ 进行字符串拼接\n\nstring.Split(string, str) 按照str进行分割\nstring.Contains(string, str) 包含\nstring.HasPrefix\nstring.HasSuffix\nstring.Index(str, c) 某个字符的位置，从前往后第一个\nstring.LastIndex(str, c) 从后往前第一个\nstring.Join(ret[], c) 字符串数组用c进行拼接起来\nstring 不可修改，必须强转为 []byte 或 []rune 类型后再做修改\n单引号存的是int32的整数（中文字符）  1fmt.Printf(\"%T %T\\n\", 'c', '测') // int32 int32\n\n\n打印打印的时候对应 %b:2 %d:10 %o:8 %x:16 %T:类型 %v:打印值(任何类型)1234import \"fmt\"fmt.Printf(\"name:%s\", name) //可以格式化println(\"name:\", name) // 只能序列打印s1 := fmt.Sprintf() // 格式化后返回为字符串\n判断语句是python和c++的结合体，没有小括号，但有大括号1234567891011if 1 &gt; 0 &#123;    println(\"Hello! Let's Go0!\")&#125; else if 2 &gt; 1 &#123;    println(\"Hello! Let's Go1!\")&#125; else &#123;    println(\"Hello! Let's Go2!\")&#125;if age := 19; age &gt; 18 &#123;    // 临时的age进行判断， 作用域只在if中&#125;\n循环循环语句只有for语句，但是有很多的变种。break, continue正常使用123456789101112for i := 0; i &lt; 10; i++ &#123; // go中没有++i&#125;for i &lt; 10 &#123;&#125;for &#123; // 无限循环&#125;s := \"123hihi\"for k, v := range s &#123; // 遍历数组&#125;\nswitch语句1234567891011121314151617switch variable:=3;variable &#123; // 赋值特性和上面的if所说的类似    case 1:        println(\"1\")    case 2:        println(\"2\")    default:        println(\"default\")&#125;switch &#123;    case age &lt; 25:        println(25)    case age &gt; 60:        println(60)&#125;fallthrough // 兼容c语言中的case穿透，意思是执行多个case\ngoto\n不鼓励使用\n\n设置一个标志位进行跳转\n运算符+ - * / % 基本运算符\n++, -- 是语句，不能放到=右侧\n== != &gt; &gt;= &lt; &lt;= 返回布尔值\n&amp;&amp; || ! 基本逻辑运算\n&amp; | ^ &lt;&lt; &gt;&gt; 位运算符\n= += -= *= /= %= &lt;&lt;= &gt;&gt;= &amp;= |= ^= 基本赋值运算符\n复合数据类型数组数组是值类型，赋值时会赋值一个新的过去\nlen() 求长度\n123456789101112var a [3]int // 存放大小为10，类型为int的数组// 初始化a = [3]int&#123;1, 2, 3&#125; //末尾补0b := [...]int&#123;1, 2, 3, 4&#125; // 根据初始值自动推断c := [5]int &#123;0:1, 4:2&#125; // 1,0,0,0,2 用【位置：值】赋值x := [...]int&#123;0: 1, 5: 2&#125; // 中间自动添0// 多维数组d := [1][2]int&#123;    [2]int&#123;1, 2&#125;&#125; // 3*2 的数组， 3行2列\n切片\n数组上做的一层封装，是一个可变长度的序列\n\n\n切片本质就是框住了一块连续的内存，所以在对切片的任何修改时，会影响到整个内存映射的数组上\n切片不能直接比较\n声明没初始化才是nil，len()和cap()为0时候并不一定是nil\n注意 切片是一个引用类型，都指向了底层的一个数组\n\n1234567// 基本和数组一样，但是中括号中没有任何东西var s []int // s默认值为nil//基本初始化和数组一样， 可以由数组来初始化s1 := [...]int&#123;1,2,3,4&#125;//不可超过原来的大小，类似python，可省略s2 := s1[1:3] //左闭右开\n切片长度用len()， 可扩充容量为cap()12fmt.Println(len(s2)) // 2 len为长度 取当前切片的长度fmt.Println(cap(s2)) // 3 cap为容量 取当前切片的第一个到切片源最后\n切片再切片1s3 := s2[2:] // 一个元素，3\nmake函数构造切片1s1 := make([]int, 5, 10) // int类型，长度5，容量5的切片\n切片的append() 与 copy()\ns = append(s, 1) 用于切片元素的添加，必须有接收变量\ns = append(s, s1...) 将s1切片拆开添加到s中\n切片的赋值=是引用赋值, 而copy是深拷贝 copy(des, src)\n没有删除函数, 需要自定义\na1 = append(a1[:1], a1[2:]...) 删除第一个\nsort函数对切片进行排序\ncap如果不够了会自动增倍.策略为:\n\n切片item不同类型的处理方式不一样\n新申请容量大于原来 2*old.cap, 最终容量就是新申请的\n如果旧的小于1024则新的翻倍\n如大于1024,则一直增加旧的1/4,直到大于需要的\n如果最终容量计算溢出,则最终容量就是新申请的\n\n指针&amp; 取地址\n* 根据地址取值\nnew, make区别\n两者都是申请内存的\nnew很少用,用于对基本数据int, string声明\nmake只用于slice, map, channel的初始化\n\nmapmap[keyType]valueType\nmap需要初始化后才能使用 mapname = make(map[keyType]valueType, len) 。尽量再开始就估算好容量，避免在之后进行动态的扩容\n返回值是value值与ok是否能查到值 v, ok := mapNmae[key]， 取不到会返回0值\nfor k,v := range mapName 遍历key值与value值\n删除不存在的key值时会直接跳过\n函数12func funName(参数)(返回值) &#123;&#125;\n如果返回值有值，则一定要写return，返回值代表在函数中提前声明了一个遍历，如果是命名了的返回值，则return后可以不写。\n参数简写：如果多个参数的类型一致，可以把前面的进行省略12func f(x,y,z int, a,b string) &#123;&#125;\n可变长参数：func f(a int, b ...string) 可以传多个同类型的。b的类型是切片。必须放在最后\n函数不可重载，意思是必须名字不一样\n函数中不嫩声明函数\ndefer语句把后面的跟着的函数延迟到函数即将返回的时候再执行\n比如说可以先用defer关闭一个文件、关闭数据库等操作。他会自动再推出函数的时候自动运行\n执行的顺序是逆序的，也就是说多个defer之间，先声明的defer会后执行\n机制：return语句不是原子操作，他会先返回值赋值，再RET指令，而defer语句就发生在这里两个操作之间。\n这里需要提醒一点，在返回值是在函数名后声明的，那么返回值是这个变量，而如果在defer语句对这个变量操作，会影响到返回值！而如果没有声明名字，是匿名的返回值，或者是在函数内声明的变量进行返回，这样返回值是赋值在其他地方的，defer并不会影响到返回值。12345678910func f1() (x int) &#123;    defer func(x int) &#123;x++&#125; // 会修改    return 1&#125;func f2() int &#123;    x := 1    defer func(x int) &#123;x++&#125; // 不会修改    return x&#125;\n函数类型与变量函数作为参数传入,也可以作为返回值：12345func f(ft func()int) &#123;&#125;func f(x func()int) (func(int, int) int) &#123;    return x&#125;\n有匿名函数，用法是直接省略函数名的声明，这样可以在函数内部声明一个函数。如果是直调用一次的函数，还可以简写成立即执行函数\n闭包一个函数包含了他外部作用域的其他变量的引用\n12345678910func adder(x int) func(int)int&#123;    return func(y int) int &#123;        x += y        return x    &#125;&#125;ret := adder(100)ret2 := ret(200) // 300ret3 := ret(3) // 303// 注意这里x是封装到了函数内部，这个函数就能带有一定的记忆性了\n… 会继续更新的\n","dateCreated":"2019-11-03T18:09:33+08:00","dateModified":"2019-11-09T20:36:27+08:00","datePublished":"2019-11-03T18:09:33+08:00","description":"","headline":"一起学GO(一)","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://www.jelech.top/posts/41312/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://www.jelech.top/posts/41312/","keywords":"笔记, GO"}</script>
+    <meta name="keywords" content="笔记,GO">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="一起学GO(一)">
+<meta property="og:url" content="https://www.jelech.top/posts/41312/index.html">
+<meta property="og:site_name" content="Jelech的博客">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:updated_time" content="2019-11-09T12:36:27.116Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一起学GO(一)">
+<meta name="twitter:creator" content="@twitter">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://www.jelech.top/assets/images/avatar.jpg"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
+    <!--STYLES END-->
+    
+
+    
+    <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?fc576447bb0c014aee82fbe7d96b4401";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">Jelech的博客</a>
+    </div>
+    
+        
+            <a class="header-right-picture " href="#about">
+        
+        
+            <img class="header-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+                </a>
+                <h4 class="sidebar-profile-name">Jelech</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>putty本无树,MinGW亦非台</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/ " title="首页">
+                    
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-categories" title="分类">
+                    
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">分类</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-tags" title="标签">
+                    
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-archives" title="归档">
+                    
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/game" title="游戏">
+                    
+                        <i class="sidebar-button-icon fas fa-gamepad" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">游戏</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="#about" title="关于">
+                    
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="https://github.com/jelech" target="_blank" rel="noopener" title="GitHub">
+                    
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/mailto" title="邮箱">
+                    
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">邮箱</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            一起学GO(一)
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2019-11-03T18:09:33+08:00">
+	
+		    11月 03, 2019
+    	
+    </time>
+    
+        <span>发布在 </span>
+        
+    <a class="category-link" href="/categories/学习笔记/">学习笔记</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            
+            <h1 id="table-of-contents">目录</h1><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#开始前准备一下"><span class="toc-text">开始前准备一下</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#安装"><span class="toc-text">安装</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#下载"><span class="toc-text">下载</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#配置Go-PATH"><span class="toc-text">配置Go PATH</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#目录结构"><span class="toc-text">目录结构</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#IDE，用VSCODE，不多说了"><span class="toc-text">IDE，用VSCODE，不多说了</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#编译"><span class="toc-text">编译</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#交叉编译"><span class="toc-text">交叉编译</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#GO辅助命令"><span class="toc-text">GO辅助命令</span></a></li></ol></li><li class="toc-item toc-level-1"><a class="toc-link" href="#GO基础"><span class="toc-text">GO基础</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#变量与常量"><span class="toc-text">变量与常量</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#关键字"><span class="toc-text">关键字</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#变量声明再使用"><span class="toc-text">变量声明再使用</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#匿名变量"><span class="toc-text">匿名变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#常量-const"><span class="toc-text">常量 const</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#iota常量计数器"><span class="toc-text">iota常量计数器</span></a></li></ol></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#数据类型"><span class="toc-text">数据类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#整型"><span class="toc-text">整型</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#进制"><span class="toc-text">进制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#浮点"><span class="toc-text">浮点</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#复数"><span class="toc-text">复数</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#布尔值"><span class="toc-text">布尔值</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#字符串"><span class="toc-text">字符串</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#打印"><span class="toc-text">打印</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#判断"><span class="toc-text">判断</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#循环"><span class="toc-text">循环</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#switch语句"><span class="toc-text">switch语句</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#goto"><span class="toc-text">goto</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#运算符"><span class="toc-text">运算符</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#复合数据类型"><span class="toc-text">复合数据类型</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#数组"><span class="toc-text">数组</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#切片"><span class="toc-text">切片</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#指针"><span class="toc-text">指针</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#new-make区别"><span class="toc-text">new, make区别</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#map"><span class="toc-text">map</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#函数"><span class="toc-text">函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#defer语句"><span class="toc-text">defer语句</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#机制："><span class="toc-text">机制：</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#函数类型与变量"><span class="toc-text">函数类型与变量</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#闭包"><span class="toc-text">闭包</span></a></li></ol></li></ol></li></ol>
+<a id="more"></a>
+<h1 id="开始前准备一下"><a href="#开始前准备一下" class="headerlink" title="开始前准备一下"></a>开始前准备一下</h1><h2 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h2><h3 id="下载"><a href="#下载" class="headerlink" title="下载"></a>下载</h3><p><a href="https://golang.google.cn/dl/" target="_blank" rel="noopener">下载连接</a></p>
+<p>windows 版本安装到一个比较好找的目录,比如 F:/Go</p>
+<h3 id="配置Go-PATH"><a href="#配置Go-PATH" class="headerlink" title="配置Go PATH"></a>配置Go PATH</h3><p>添加环境变量GOPATH，写入一个路径，这里是你写代码的地方，用户变量下也有GOPATH【有默认值】，需要更新一下</p>
+<p>新建 bin, pkg, src.</p>
+<p>bin路径加入PATH</p>
+<p>添加GOROOT 并设置为GO安装的目录（这里是自己出了问题才加上的）</p>
+<blockquote>
+<p>使用 <code>go env</code> 检查环境配置是否正确</p>
+</blockquote>
+<h2 id="目录结构"><a href="#目录结构" class="headerlink" title="目录结构"></a>目录结构</h2><ul>
+<li>bin 存放编译后的二进制文件</li>
+<li>pkg存放编译后的库文件</li>
+<li>src是放源代码的地方</li>
+</ul>
+<p>再src下以网站的形式构建文件夹：<br>比如创建 jelech.top 名字的文件夹。 这里实际上是写的仓库连接名，所以可以写入github的连接地址</p>
+<p>在jelech.top下创建作者名，比如jelech</p>
+<p>在作者名下创建项目名</p>
+<h2 id="IDE，用VSCODE，不多说了"><a href="#IDE，用VSCODE，不多说了" class="headerlink" title="IDE，用VSCODE，不多说了"></a>IDE，用VSCODE，不多说了</h2><ul>
+<li>安装中文插件</li>
+<li>安装GO插件<ul>
+<li>在写go时候，vscode会提示安装各种插件。而由于墙的原因会下载失败。需手动下载安装</li>
+<li><a href="https://github.com/golang/tools/releases" target="_blank" rel="noopener">从release下载src包</a></li>
+<li>再额外从lint直接拉取 <code>git clone https://github.com/golang/lint.git</code></li>
+<li>到src的根目录，也就是GOPATH上运行 <code>go install golang.org/x/lint</code></li>
+<li>重新运行的时候安装就能成功。还是不行就手动复制到cmd中</li>
+</ul>
+</li>
+</ul>
+<h2 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h2><p><code>go build</code> 编译到当前目录 -o 重新定义名字，默认名为项目名【文件夹】</p>
+<p><code>go run path</code> 可以直接编译完成后直接运行，但没有保存</p>
+<p><code>go install</code> 编译完成后放到GOPATH/bin路径下</p>
+<h3 id="交叉编译"><a href="#交叉编译" class="headerlink" title="交叉编译"></a>交叉编译</h3><p>交叉编译代表在一个平台编译其他平台的代码，需要设置一些东西：<br><figure class="highlight cmd"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">SET</span> CGO_ENABLED=<span class="number">0</span>   # 禁用CGO</span><br><span class="line"><span class="built_in">SET</span> GOOS=linux      # 目标平台</span><br><span class="line"><span class="built_in">SET</span> GOARCH=amd64    # 目标处理架构为amd64</span><br></pre></td></tr></table></figure></p>
+<h2 id="GO辅助命令"><a href="#GO辅助命令" class="headerlink" title="GO辅助命令"></a>GO辅助命令</h2><p><code>go doc builtin.delete</code> 查看内置的go文档</p>
+<h1 id="GO基础"><a href="#GO基础" class="headerlink" title="GO基础"></a>GO基础</h1><p><code>package main</code> 当前包名</p>
+<p><code>import &quot;name&quot;</code> 导入其他包</p>
+<p>只可以可设置全局变量、函数。和python<strong>不一样</strong>, 他是和c++一样，main函数等。</p>
+<h2 id="变量与常量"><a href="#变量与常量" class="headerlink" title="变量与常量"></a>变量与常量</h2><blockquote>
+<p>标识符和其他语言一样</p>
+</blockquote>
+<h3 id="关键字"><a href="#关键字" class="headerlink" title="关键字"></a>关键字</h3><p>大部分和其他语言差不多，有一些特殊的，比如<code>select, defer, func, chan...</code></p>
+<h3 id="变量声明再使用"><a href="#变量声明再使用" class="headerlink" title="变量声明再使用"></a>变量声明再使用</h3><p>go语言中变量声明后<strong>必须使用</strong></p>
+<p><code>var name string</code> 声明一个保存字符串类型的变量，名字为name</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 批量声明</span></span><br><span class="line"><span class="keyword">var</span> (</span><br><span class="line">    name <span class="keyword">string</span></span><br><span class="line">    age <span class="keyword">int</span></span><br><span class="line">    man <span class="keyword">bool</span></span><br><span class="line">)</span><br><span class="line"><span class="comment">// 声明自动赋值【这里等号前的类型可以省略】</span></span><br><span class="line"><span class="keyword">var</span> s1 = <span class="string">"hi"</span></span><br><span class="line"><span class="keyword">var</span> i1 = <span class="number">12</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// **函数内**使用简短变量声明</span></span><br><span class="line">s3 := <span class="string">"hahah"</span></span><br><span class="line">i2 := <span class="number">15</span></span><br><span class="line">s1, s2 := <span class="number">1</span>, <span class="number">2</span></span><br></pre></td></tr></table></figure>
+<h3 id="匿名变量"><a href="#匿名变量" class="headerlink" title="匿名变量"></a>匿名变量</h3><p>一个下划线, 他不会占用空间，不会分配内存，所以不存在重复声明</p>
+<h3 id="常量-const"><a href="#常量-const" class="headerlink" title="常量 const"></a>常量 const</h3><p>就是普通的常量，和c++类似性质<br>如果某一行没有写值，则表示和上面是一样的。这个只有在const的批量声明时可用</p>
+<h4 id="iota常量计数器"><a href="#iota常量计数器" class="headerlink" title="iota常量计数器"></a>iota常量计数器</h4><p>也就是可用代表为从0开始的enum, 一般使用在const批量声明中，每新增的一行时候，iota会自动+1<br>来用列子检测学习一下：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> (</span><br><span class="line">    b1 = <span class="literal">iota</span> <span class="comment">//0</span></span><br><span class="line">    b2 = <span class="literal">iota</span> <span class="comment">//1</span></span><br><span class="line">    _</span><br><span class="line">    b3        <span class="comment">// 3</span></span><br><span class="line">    b4 = <span class="number">100</span>  <span class="comment">// 100</span></span><br><span class="line">    b5        <span class="comment">// 100  记住和上面一样</span></span><br><span class="line">    b6 = <span class="literal">iota</span> <span class="comment">// 6    记住iota是const每新增一行就+1</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<h2 id="数据类型"><a href="#数据类型" class="headerlink" title="数据类型"></a>数据类型</h2><h3 id="整型"><a href="#整型" class="headerlink" title="整型"></a>整型</h3><ul>
+<li>int8</li>
+<li>int16</li>
+<li>int32</li>
+<li>int64</li>
+<li>以上对应无符号uint**</li>
+<li>uintptr 存放指针</li>
+</ul>
+<h3 id="进制"><a href="#进制" class="headerlink" title="进制"></a>进制</h3><p>无法直接定义二进制，八进制前为0，16进制前为0x</p>
+<h3 id="浮点"><a href="#浮点" class="headerlink" title="浮点"></a>浮点</h3><p>32长度和64长度，默认为float64。不能直接赋值，需要强转函数</p>
+<p><code>f1 := 123.123</code></p>
+<h3 id="复数"><a href="#复数" class="headerlink" title="复数"></a>复数</h3><p>complex64 / complex128</p>
+<h3 id="布尔值"><a href="#布尔值" class="headerlink" title="布尔值"></a>布尔值</h3><p>Go中不能将整形转为布尔类型，不能参与数值运算</p>
+<h3 id="字符串"><a href="#字符串" class="headerlink" title="字符串"></a>字符串</h3><p>UTF-8编码，天然自动支持中文，<strong>只能用双引号</strong>包括，单引号包括是字符</p>
+<ul>
+<li><code>\</code> 为转义字符</li>
+<li><p><code>&quot;`&quot;</code> esc下面的字符用于表示多行字符串和整个转义, 注意这个前缀会加入</p>
+</li>
+<li><p><code>+</code> 进行字符串拼接</p>
+</li>
+<li><code>string.Split(string, str)</code> 按照str进行分割</li>
+<li><code>string.Contains(string, str)</code> 包含</li>
+<li><code>string.HasPrefix</code></li>
+<li><code>string.HasSuffix</code></li>
+<li><code>string.Index(str, c)</code> 某个字符的位置，从前往后第一个</li>
+<li><code>string.LastIndex(str, c)</code> 从后往前第一个</li>
+<li><code>string.Join(ret[], c)</code> 字符串数组用c进行拼接起来</li>
+<li>string 不可修改，必须强转为 <code>[]byte 或 []rune</code> 类型后再做修改</li>
+<li>单引号存的是int32的整数（中文字符）  <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">fmt.Printf(<span class="string">"%T %T\n"</span>, <span class="string">'c'</span>, <span class="string">'测'</span>) <span class="comment">// int32 int32</span></span><br></pre></td></tr></table></figure>
+</li>
+</ul>
+<h3 id="打印"><a href="#打印" class="headerlink" title="打印"></a>打印</h3><p>打印的时候对应 %b:2 %d:10 %o:8 %x:16 %T:类型 %v:打印值(任何类型)<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">"fmt"</span></span><br><span class="line">fmt.Printf(<span class="string">"name:%s"</span>, name) <span class="comment">//可以格式化</span></span><br><span class="line"><span class="built_in">println</span>(<span class="string">"name:"</span>, name) <span class="comment">// 只能序列打印</span></span><br><span class="line">s1 := fmt.Sprintf() <span class="comment">// 格式化后返回为字符串</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="判断"><a href="#判断" class="headerlink" title="判断"></a>判断</h2><p>语句是python和c++的结合体，没有小括号，但有大括号<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> <span class="number">1</span> &gt; <span class="number">0</span> &#123;</span><br><span class="line">    <span class="built_in">println</span>(<span class="string">"Hello! Let's Go0!"</span>)</span><br><span class="line">&#125; <span class="keyword">else</span> <span class="keyword">if</span> <span class="number">2</span> &gt; <span class="number">1</span> &#123;</span><br><span class="line">    <span class="built_in">println</span>(<span class="string">"Hello! Let's Go1!"</span>)</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="built_in">println</span>(<span class="string">"Hello! Let's Go2!"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> age := <span class="number">19</span>; age &gt; <span class="number">18</span> &#123;</span><br><span class="line">    <span class="comment">// 临时的age进行判断， 作用域只在if中</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="循环"><a href="#循环" class="headerlink" title="循环"></a>循环</h2><p>循环语句只有for语句，但是有很多的变种。break, continue正常使用<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">10</span>; i++ &#123; <span class="comment">// go中没有++i</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i &lt; <span class="number">10</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> &#123; <span class="comment">// 无限循环</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">s := <span class="string">"123hihi"</span></span><br><span class="line"><span class="keyword">for</span> k, v := <span class="keyword">range</span> s &#123; <span class="comment">// 遍历数组</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="switch语句"><a href="#switch语句" class="headerlink" title="switch语句"></a>switch语句</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">switch</span> variable:=<span class="number">3</span>;variable &#123; <span class="comment">// 赋值特性和上面的if所说的类似</span></span><br><span class="line">    <span class="keyword">case</span> <span class="number">1</span>:</span><br><span class="line">        <span class="built_in">println</span>(<span class="string">"1"</span>)</span><br><span class="line">    <span class="keyword">case</span> <span class="number">2</span>:</span><br><span class="line">        <span class="built_in">println</span>(<span class="string">"2"</span>)</span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        <span class="built_in">println</span>(<span class="string">"default"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">switch</span> &#123;</span><br><span class="line">    <span class="keyword">case</span> age &lt; <span class="number">25</span>:</span><br><span class="line">        <span class="built_in">println</span>(<span class="number">25</span>)</span><br><span class="line">    <span class="keyword">case</span> age &gt; <span class="number">60</span>:</span><br><span class="line">        <span class="built_in">println</span>(<span class="number">60</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">fallthrough</span> <span class="comment">// 兼容c语言中的case穿透，意思是执行多个case</span></span><br></pre></td></tr></table></figure>
+<h3 id="goto"><a href="#goto" class="headerlink" title="goto"></a>goto</h3><blockquote>
+<p>不鼓励使用</p>
+</blockquote>
+<p>设置一个标志位进行跳转</p>
+<h2 id="运算符"><a href="#运算符" class="headerlink" title="运算符"></a>运算符</h2><p><code>+ - * / %</code> 基本运算符</p>
+<p><code>++, --</code> 是语句，不能放到=右侧</p>
+<p><code>== != &gt; &gt;= &lt; &lt;=</code> 返回布尔值</p>
+<p><code>&amp;&amp; || !</code> 基本逻辑运算</p>
+<p><code>&amp; | ^ &lt;&lt; &gt;&gt;</code> 位运算符</p>
+<p><code>= += -= *= /= %= &lt;&lt;= &gt;&gt;= &amp;= |= ^=</code> 基本赋值运算符</p>
+<h2 id="复合数据类型"><a href="#复合数据类型" class="headerlink" title="复合数据类型"></a>复合数据类型</h2><h3 id="数组"><a href="#数组" class="headerlink" title="数组"></a>数组</h3><p>数组是值类型，赋值时会赋值一个新的过去</p>
+<p><code>len()</code> 求长度</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> a [<span class="number">3</span>]<span class="keyword">int</span> <span class="comment">// 存放大小为10，类型为int的数组</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 初始化</span></span><br><span class="line">a = [<span class="number">3</span>]<span class="keyword">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>&#125; <span class="comment">//末尾补0</span></span><br><span class="line">b := [...]<span class="keyword">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>, <span class="number">4</span>&#125; <span class="comment">// 根据初始值自动推断</span></span><br><span class="line">c := [<span class="number">5</span>]<span class="keyword">int</span> &#123;<span class="number">0</span>:<span class="number">1</span>, <span class="number">4</span>:<span class="number">2</span>&#125; <span class="comment">// 1,0,0,0,2 用【位置：值】赋值</span></span><br><span class="line">x := [...]<span class="keyword">int</span>&#123;<span class="number">0</span>: <span class="number">1</span>, <span class="number">5</span>: <span class="number">2</span>&#125; <span class="comment">// 中间自动添0</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 多维数组</span></span><br><span class="line">d := [<span class="number">1</span>][<span class="number">2</span>]<span class="keyword">int</span>&#123;</span><br><span class="line">    [<span class="number">2</span>]<span class="keyword">int</span>&#123;<span class="number">1</span>, <span class="number">2</span>&#125;</span><br><span class="line">&#125; <span class="comment">// 3*2 的数组， 3行2列</span></span><br></pre></td></tr></table></figure>
+<h3 id="切片"><a href="#切片" class="headerlink" title="切片"></a>切片</h3><blockquote>
+<p>数组上做的一层封装，是一个可变长度的序列</p>
+</blockquote>
+<ul>
+<li>切片本质就是框住了一块<strong>连续</strong>的内存，所以在对切片的任何修改时，会影响到整个内存映射的数组上</li>
+<li>切片不能直接比较</li>
+<li>声明没初始化才是nil，len()和cap()为0时候并不一定是nil</li>
+<li><strong>注意</strong> 切片是一个<strong>引用</strong>类型，都指向了底层的一个数组</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 基本和数组一样，但是中括号中没有任何东西</span></span><br><span class="line"><span class="keyword">var</span> s []<span class="keyword">int</span> <span class="comment">// s默认值为nil</span></span><br><span class="line"></span><br><span class="line"><span class="comment">//基本初始化和数组一样， 可以由数组来初始化</span></span><br><span class="line">s1 := [...]<span class="keyword">int</span>&#123;<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>&#125;</span><br><span class="line"><span class="comment">//不可超过原来的大小，类似python，可省略</span></span><br><span class="line">s2 := s1[<span class="number">1</span>:<span class="number">3</span>] <span class="comment">//左闭右开</span></span><br></pre></td></tr></table></figure>
+<p>切片长度用len()， 可扩充容量为cap()<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">fmt.Println(<span class="built_in">len</span>(s2)) <span class="comment">// 2 len为长度 取当前切片的长度</span></span><br><span class="line">fmt.Println(<span class="built_in">cap</span>(s2)) <span class="comment">// 3 cap为容量 取当前切片的第一个到切片源最后</span></span><br></pre></td></tr></table></figure></p>
+<p>切片再切片<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">s3 := s2[<span class="number">2</span>:] <span class="comment">// 一个元素，3</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>make函数构造切片</strong><br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">s1 := <span class="built_in">make</span>([]<span class="keyword">int</span>, <span class="number">5</span>, <span class="number">10</span>) <span class="comment">// int类型，长度5，容量5的切片</span></span><br></pre></td></tr></table></figure></p>
+<p><strong>切片的append() 与 copy()</strong></p>
+<p><code>s = append(s, 1)</code> 用于切片元素的添加，必须有接收变量</p>
+<p><code>s = append(s, s1...)</code> 将s1切片拆开添加到s中</p>
+<p>切片的赋值<code>=</code>是引用赋值, 而copy是深拷贝 <code>copy(des, src)</code></p>
+<p><strong>没有删除函数, 需要自定义</strong></p>
+<p><code>a1 = append(a1[:1], a1[2:]...)</code> 删除第一个</p>
+<p><strong>sort函数对切片进行排序</strong></p>
+<p><strong>cap如果不够了会自动增倍.策略为:</strong></p>
+<ul>
+<li>切片item不同类型的处理方式不一样</li>
+<li>新申请容量大于原来 2*old.cap, 最终容量就是新申请的</li>
+<li>如果旧的小于1024则新的翻倍</li>
+<li>如大于1024,则一直增加旧的1/4,直到大于需要的</li>
+<li>如果最终容量计算溢出,则最终容量就是新申请的</li>
+</ul>
+<h3 id="指针"><a href="#指针" class="headerlink" title="指针"></a>指针</h3><p><code>&amp;</code> 取地址</p>
+<p><code>*</code> 根据地址取值</p>
+<h4 id="new-make区别"><a href="#new-make区别" class="headerlink" title="new, make区别"></a>new, make区别</h4><ol>
+<li>两者都是申请内存的</li>
+<li>new很少用,用于对基本数据<code>int, string</code>声明</li>
+<li>make只用于slice, map, channel的初始化</li>
+</ol>
+<h3 id="map"><a href="#map" class="headerlink" title="map"></a>map</h3><p><code>map[keyType]valueType</code></p>
+<p>map需要初始化后才能使用 <code>mapname = make(map[keyType]valueType, len)</code> 。尽量再开始就估算好容量，避免在之后进行动态的扩容</p>
+<p>返回值是value值与ok是否能查到值 <code>v, ok := mapNmae[key]</code>， 取不到会返回0值</p>
+<p><code>for k,v := range mapName</code> 遍历key值与value值</p>
+<p>删除不存在的key值时会直接跳过</p>
+<h2 id="函数"><a href="#函数" class="headerlink" title="函数"></a>函数</h2><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">funName</span><span class="params">(参数)</span><span class="params">(返回值)</span></span> &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>如果返回值有值，则一定要写return，返回值代表在函数中提前声明了一个遍历，如果是命名了的返回值，则return后可以不写。</p>
+<p>参数简写：如果多个参数的类型一致，可以把前面的进行省略<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">f</span><span class="params">(x,y,z <span class="keyword">int</span>, a,b <span class="keyword">string</span>)</span></span> &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p>可变长参数：<code>func f(a int, b ...string)</code> 可以传多个同类型的。<strong>b的类型是切片</strong>。必须放在最后</p>
+<p>函数不可重载，意思是必须名字不一样</p>
+<p>函数中不嫩声明函数</p>
+<h3 id="defer语句"><a href="#defer语句" class="headerlink" title="defer语句"></a>defer语句</h3><p>把后面的跟着的函数延迟到函数即将返回的时候再执行</p>
+<p>比如说可以先用defer关闭一个文件、关闭数据库等操作。他会自动再推出函数的时候自动运行</p>
+<p>执行的顺序是逆序的，也就是说多个defer之间，先声明的defer会后执行</p>
+<h4 id="机制："><a href="#机制：" class="headerlink" title="机制："></a>机制：</h4><p>return语句不是原子操作，他会先返回值赋值，再RET指令，<strong>而defer语句就发生在这里两个操作之间</strong>。</p>
+<p><strong>这里需要提醒一点</strong>，在返回值是在函数名后声明的，那么返回值是这个变量，而如果在defer语句对这个变量操作，会影响到返回值！而如果没有声明名字，是匿名的返回值，或者是在函数内声明的变量进行返回，这样返回值是赋值在其他地方的，defer并不会影响到返回值。<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">f1</span><span class="params">()</span> <span class="params">(x <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">    <span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">(x <span class="keyword">int</span>)</span></span> &#123;x++&#125; <span class="comment">// 会修改</span></span><br><span class="line">    <span class="keyword">return</span> <span class="number">1</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">f2</span><span class="params">()</span> <span class="title">int</span></span> &#123;</span><br><span class="line">    x := <span class="number">1</span></span><br><span class="line">    <span class="keyword">defer</span> <span class="function"><span class="keyword">func</span><span class="params">(x <span class="keyword">int</span>)</span></span> &#123;x++&#125; <span class="comment">// 不会修改</span></span><br><span class="line">    <span class="keyword">return</span> x</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h3 id="函数类型与变量"><a href="#函数类型与变量" class="headerlink" title="函数类型与变量"></a>函数类型与变量</h3><p>函数作为参数传入,也可以作为返回值：<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">f</span><span class="params">(ft <span class="keyword">func</span>()</span><span class="title">int</span>)</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">f</span><span class="params">(x <span class="keyword">func</span>()</span><span class="title">int</span>) <span class="params">(<span class="keyword">func</span>(<span class="keyword">int</span>, <span class="keyword">int</span>)</span> <span class="title">int</span>)</span> &#123;</span><br><span class="line">    <span class="keyword">return</span> x</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<p><strong>有匿名函数</strong>，用法是直接省略函数名的声明，这样可以在函数内部声明一个函数。如果是直调用一次的函数，还可以简写成立即执行函数</p>
+<h3 id="闭包"><a href="#闭包" class="headerlink" title="闭包"></a>闭包</h3><p>一个函数包含了他外部作用域的其他变量的引用</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">adder</span><span class="params">(x <span class="keyword">int</span>)</span> <span class="title">func</span><span class="params">(<span class="keyword">int</span>)</span><span class="title">int</span></span>&#123;</span><br><span class="line">    <span class="keyword">return</span> <span class="function"><span class="keyword">func</span><span class="params">(y <span class="keyword">int</span>)</span> <span class="title">int</span></span> &#123;</span><br><span class="line">        x += y</span><br><span class="line">        <span class="keyword">return</span> x</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br><span class="line">ret := adder(<span class="number">100</span>)</span><br><span class="line">ret2 := ret(<span class="number">200</span>) <span class="comment">// 300</span></span><br><span class="line">ret3 := ret(<span class="number">3</span>) <span class="comment">// 303</span></span><br><span class="line"><span class="comment">// 注意这里x是封装到了函数内部，这个函数就能带有一定的记忆性了</span></span><br></pre></td></tr></table></figure>
+<p>… 会继续更新的</p>
+
+            
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">标签</span><br>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/GO/">GO</a> <a class="tag tag--primary tag--small t-link" href="/tags/笔记/">笔记</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/2954/" data-tooltip="一种高性能的消息传递机制" aria-label="下一篇: 一种高性能的消息传递机制">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="分享">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://www.jelech.top/posts/41312/" title="分享到 Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://www.jelech.top/posts/41312/" title="分享到 Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://www.jelech.top/posts/41312/" title="分享到 Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <style media="screen">.v .vwrap{overflow: inherit;}</style>
+                <div id="vcomment"></div>
+                <a href="posts/41312/#vcomment" class="disqus-comment-count"></a>
+                <span class="valine-comment-count" data-xid="posts/41312/"></span>
+                <span> Comment</span>
+            
+        
+    </div>
+</article>
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2019 Jelech. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/2954/" data-tooltip="一种高性能的消息传递机制" aria-label="下一篇: 一种高性能的消息传递机制">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="分享">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://www.jelech.top/posts/41312/" title="分享到 Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://www.jelech.top/posts/41312/" title="分享到 Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://www.jelech.top/posts/41312/" title="分享到 Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+    <i id="btn-close-shareoptions" class="fa fa-times"></i>
+    <ul class="share-options">
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://www.jelech.top/posts/41312/">
+                    <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://www.jelech.top/posts/41312/">
+                    <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://www.jelech.top/posts/41312/">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+        
+            <h4 id="about-card-name">Jelech</h4>
+        
+            <div id="about-card-bio"><p>putty本无树,MinGW亦非台</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br>
+                <p>在校大学生一枚</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br>
+                CHINA.HRB.STU
+            </div>
+        
+
+        
+            <div id="about-card-job">
+                <i class="fa fa-envelope"></i>
+                <br>
+                jelech@hotmail.com
+            </div>
+        
+
+        
+            <div id="about-card-job">
+                <i class="fa fa-phone-square"></i>
+                <br>
+                18.......6
+            </div>
+        
+
+
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js" charset="utf-8"></script>
+        <script src="//unpkg.com/valine@latest/dist/Valine.min.js" charset="utf-8"></script>
+        <script>
+            var notify = 'false' == true ? true : false;
+            var verify = 'false' == true ? true : false;
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1;
+            });
+
+            guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+            window.valine = new Valine({
+                el:'#vcomment',
+                notify:notify,
+                verify:verify,
+                appId:'rwwVeUe3kpfbc0OkoxmgnTKM-gzGzoHsz',
+                appKey:'FcDDW6bpbs5QmH3A1B2Aqmae',
+                placeholder:'Just so so',
+                avatar:'mm',
+                guest_info:guest_info,
+                pageSize:'10'
+            });
+        </script>
+    
+
+
+
+    </body>
+</html>
