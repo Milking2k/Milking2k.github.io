@@ -1,0 +1,666 @@
+
+<!DOCTYPE html>
+<html lang="zh-cn">
+    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Jelech的博客">
+    <title>一起学GO(二) - Jelech的博客</title>
+    <meta name="author" content="Jelech">
+    
+        <meta name="keywords" content="博客,算法,HTML/CSS/JS,游戏服务器,游戏,">
+    
+    
+        <link rel="icon" href="https://www.jelech.top/assets/images/favicon.ico">
+        <link rel="Shortcut Icon" type="image/x-icon" href="assets/images/favicon.ico">
+    
+    
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+    
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n基础一些内置函数\nclose 主要用来关闭channel\nlen 求长度\nnew 用于分配基础类型的内存\nmake 用于分配引用类型的内存：chan, map, slice\nappend 用于追加元素到slice中\npanic, recover 用于做错误处理\n\npanic 像raise一样会主动拉出错误，可以用defer 语句处理，用 err := recover() 可以获取错误，并且recover了，则会恢复现场，但是这个现场是跳出了panic的函数的\nstrconv包把字符串转换为相应类型。比如strconv.Atoi(s)\n返回实体类型，与err编号\n结构体类型别名1type newName oldName\n结构体和C++中的struct类似，相较于class类来说：\n\n结构体中的变量值在内存中的位置和C++类似，会有内存对齐\n一般定义为大写开始的变量为共有，小写开始的为私有\n\n12345type Person struct&#123;    Name string    Age int    hight int&#125;\n\nstruct可以添加函数\n\n1234func (p *Person) SayHI() (ret int) &#123;    println(\"hi\")    return 0&#125;\n\n构造函数约定new开头，返回结构体指针\n\n123456func newPerson(name string, age int) *Person&#123; // 注意返回一个指针    return &amp;Person&#123;        Name:name,        Age:age, // 最后需要加上逗号    &#125;&#125;\n结构体匿名字段字段类型作为了名字, 但是一般都不会定义int,string这类的匿名，而是一个新的类型，这样有利于提取出公共部分可理解， 而外部访问的时候又可以更直观：\n12345678910type address struct&#123;    city string&#125;type person struct&#123;    name string    address // 嵌套后&#125;p := new(person)p.city // 从address中自动找到了city\n继承机制嵌套其他struct的时候同时也会把函数也嵌套过来，当然，如果函数名重复的话会忽略，自己声明的优先级更高\n12345678910111213141516type animal struct&#123;&#125;func (a *anival) move() &#123;    println(\"move\")&#125;type cat struct&#123;    animal // cat中嵌套了animal&#125;func (c *cat) say() &#123;    println(\"say\")&#125;// 使用c := new(cat)c.say()c.move() // 会从嵌套类中找到move()\n结构体与json1234567import \"encoding/json\"p = newPerson(\"je\", 12)s, err := json.Marshal(p) //转为jsonjson.Unmarshal([]byte(s), &amp;p) // 记住传指针\n但是json访问的时候需要p为首字母大写，但有的json需要小写。\n此时就要就需要在struct后加反引号，在包解析的时候会自动转换123type Person struct&#123;    Name string `json:\"name\", db:\"name\", ini:\"name` // 在json的名字，db中的名字，init.conf中的名字等。&#125;\n接口用于抽象化一些类型的共有部分。比如猫狗都能叫，可以抽象出一个类型speak函数，那么在之后调用的时候能直接使用speak，而传入参数能的多种类型的\n而其他的struct只要实现了interface中的方法，那么就能传入后调用出来。\n12345678910111213141516type animal interface&#123;    speak()&#125;type cat struct&#123;&#125;type dog struct&#123;&#125;func (c *cat) speak() &#123;&#125;func (d *dog) speak() &#123;&#125;func do(a *animal) &#123;    a.speak()&#125;// use ... 这样就能动态的使用相应的speak函数了do(new(cat))do(new(dog))\n空接口空接口是所有类型的父接口，这样做是为了传入一种类型，比如在map中存动态的类型，一个函数接收所有的类型。\n注意有一个大括号 interface{}\n123456789m1 := make(map[string]interface&#123;&#125;, 10)m1[\"name\"] = \"je\"m1[\"age\"] = 13func show(a interface&#123;&#125;) &#123;&#125;// useshow(bool)show(\"hi\")\n类型断言\nx: 表示为interface{}的变量\nT: 表示断言x可能的类型\n\n1isTrue, err := x.(T)\npackage包包内的变量/函数需要首字母大写才能在外部调用\n1234package 包名import (    别名 jelech.top/PackName)\n这里说明一下，一个go包在运行的时候会进行：\n\n全局声明\n运行init()函数。init函数是内置的，和main类似\n运行main()函数\n\n在 A import B，B import C时，会先运行initC，再initB和initA。\n文件操作import &quot;os&quot;\n\nos.Open()返回一个*File，对这个指针进行操作\nlen, err = os.Read([]byte) 读取一个文件，返回长度和错误标识\n\nimport &quot;bufio&quot;\n\nline, err := reader.ReadString(&#39;\\n&#39;)一直读取直到遇到某个字符\n\nimport &quot;ioutil&quot;\n\nret, err := ioutil.ReadFile(path) 直接打开文件全部读取到ret中\n\n\n… 有待补充\n\ntime包\nntime := time.Now() 获取当前时间\nntime.Year(), ntime.Month()... 获取时间的详细部分\n\n时间戳\nntime.Unix() 获取时间戳\nntime.Unix(time int64) 将时间戳转换为标准格式时间\nntime.UnixNano() 纳秒时间戳\n\n时间操作时间间隔在go中已经用常量定义，类型为Duration，纳秒为最小单位1(time.Nanosecond)\nAdd(d Duration) 时间加上一个间隔\nSub(u Time) 返回距离u时间多久。结果为 t-u\nEqual(u Time) 判断时间是否相同，会有时区的影响\nBefore(u Time), After(u Time) 判断是否在u之前、之后。\ntime.Tick(d Duration) 设置一个定时器，本质上是一个通道\nntime.Format(%s) 时间格式化，但是格式化的形式是GO诞生时间…[2006/01/02 15:04:05]\n反射程序在运行期间对程序本身进行访问和修改的能力。Go语言使用reflect包提供程序的反射信息。\n现有的使用场景可以举个例子：加载ini文件时，需要动态判断某个字符是什么类型的，这个定义是再代码中的。\n需要注意的是反射性能并不高，需要尽量少用\nreflect每一个对象都又Type,Value两个属性。分别对应reflect.Type 和 reflect.Value。\n也可以使用 TypeOf() 和 ValueOf()两个函数进行对对象的属性获取\n而类型又可以分为：类型Name, 种类Kind类型。比如一个结构体的Name是我们取的名字，而kind是struct类型\nt := reflect.Type; t.Name, t.Kind()\nElem() 在函数中通过反射的方法修改变量的值，可以使用这个函数来获取对应的指针\nIsNil(), IsValid() 判断v持有的值是否为nil，比如指针是否为空。valid判断v是否持有一个值，这个值是否有效\n\n…这里需要再加强学习一下\n\n结构体反射Field(i int) 用于获取第i个字段的信息，当然也包括.Name, .Index, .Type, .Tag tag是结构体内变量的附加信息，参考json\nNumField() 获取结构体中的变量个数\n并发\nGo天生支持并发，这一章对于Go非常重要，我之后会单独起一篇来记录一下他的原理，这里简要说明一下\n\ngoroutine类似与线程，属于用户态的线程。当你需要让某个任务并发执行的时候，只需要把这个任务包装为一个函数，开启goroutine去执行这个函数就可以了。使用方法是在函数前加一个 go 就可以了\nGo语言提供了channel在多个goroutine之间进行通信。\n注意闭包的情况，在go并发的时候，内部的匿名函数如果使用了外部的变量，那么在真正调用的时候会使得结果并不是我们想要的结果。详细参考一下闭包\n结束等待waitsync.WaitGroup 是一个线程结束标记，类似一个channel，在新建一个线程时候将其加1，每个线程结束都defer一个wg.Done() 这样做直到线程全部结束时，wg.wait()就能通过了\n1234567891011var wg sync.WaitGroupfor i := 0; i &lt; 100; i++ &#123;    wg.Add(1)    go func(i int) &#123;        defer wg.Done()        println(i)    &#125;(i)&#125;wg.Wait()println(\"done\")\nGMP调度OS线程一般都固定的栈内存为2MB，而goroutine的栈一开始设置为2KB，但是并不是固定的，之后可以增大和缩小。\n\nG 存放goroutine的信息，以及和P的绑定等信息\nM 是Go运行时对操作系统内核线程的虚拟，M和内核线程一般是1to1的\np 管理一组goroutine队列，其中存放当前goroutine运行的上下文环境，并且自带又自己的队列调度机制。P与M一般也是一一对应的。\n\n会把m个goroutine分配给n个操作系统线程来执行\nruntime.GOMAXPROCS() 可以限制当前进程可以使用的线程个数。默认的是CPU的逻辑核心数，会默认跑满整个CPU\n更加详细的可以参考其他博客 \nchannelGo的并发模型是CSP，提倡通过通信共享内存，而不是通过同共享内存来进行通信\n通道像一个传送带或者队列。FIFO的顺序，每个通道需要一个具体的类型指定传输的元素类型\nchannel是一个引用类型，需要先初始化才能使用，所以是使用make来进行初始化\n123456789var ch chan intch = make(chan int) // 不带缓冲的ch = make(chan int, 10) // 带缓冲的// 把10发送到ch中ch &lt;- 10// 从ch中拿出到cur中cur := &lt;- ch\n缓冲区如果channel没有设置缓冲区，那么在发送的时候会一直等待，直到有人接收。\nclose(ch) 关闭一个通道，只有在通知方goroutine所有的数据发送完毕了才需要关闭通道，他是可以被GC回收的，因此关闭通道这个操作并不是必须的。\n- 对关闭了的通道进行读会返回0\nfor range range支持了从通道中取值\n单向通道\nfunc f1(ch1 chan&lt;- int) 声明一个单向通道，这里是声明了只能进行写入\nfunc f1(ch1 &lt;-chan int) 声明一个单向通道，这里是声明了只能进行读出\n\n多路复用select从多个通道里进行取值。\n123456789// 基本语法select&#123;    case &lt;-ch1:        //...    case data := &lt;-ch2:        //...    default:        //...&#125;\n正则表达式go使用包regexp包进行正则表达式的使用。\n这里有正则的常用规则：\n\n","dateCreated":"2019-11-07T17:01:02+08:00","dateModified":"2019-11-21T18:24:46+08:00","datePublished":"2019-11-07T17:01:02+08:00","description":"","headline":"一起学GO(二)","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://www.jelech.top/posts/25028/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://www.jelech.top/posts/25028/","keywords":"笔记, GO"}</script>
+    <meta name="keywords" content="笔记,GO">
+<meta property="og:type" content="blog">
+<meta property="og:title" content="一起学GO(二)">
+<meta property="og:url" content="https://www.jelech.top/posts/25028/index.html">
+<meta property="og:site_name" content="Jelech的博客">
+<meta property="og:locale" content="zh-cn">
+<meta property="og:image" content="https://www.jelech.top/assets/golangREGEX.jpg">
+<meta property="og:updated_time" content="2019-11-21T10:24:46.486Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="一起学GO(二)">
+<meta name="twitter:image" content="https://www.jelech.top/assets/golangREGEX.jpg">
+<meta name="twitter:creator" content="@twitter">
+    
+    
+        
+    
+    
+        <meta property="og:image" content="https://www.jelech.top/assets/images/avatar.jpg"/>
+    
+    
+    
+    
+    <!--STYLES-->
+    <link rel="stylesheet" href="/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
+    <!--STYLES END-->
+    
+
+    
+    <script type="text/javascript">
+    var _hmt = _hmt || [];
+    (function() {
+      var hm = document.createElement("script");
+      hm.src = "//hm.baidu.com/hm.js?fc576447bb0c014aee82fbe7d96b4401";
+      var s = document.getElementsByTagName("script")[0];
+      s.parentNode.insertBefore(hm, s);
+    })();
+    </script>
+
+</head>
+
+    <body>
+        <div id="blog">
+            <!-- Define author's picture -->
+
+
+    
+        
+            
+        
+    
+
+<header id="header" data-behavior="4">
+    <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
+    <div class="header-title">
+        <a class="header-title-link" href="/ ">Jelech的博客</a>
+    </div>
+    
+        
+            <a class="header-right-picture " href="#about">
+        
+        
+            <img class="header-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+        
+        </a>
+    
+</header>
+
+            <!-- Define author's picture -->
+
+
+
+        
+    
+
+<nav id="sidebar" data-behavior="4">
+    <div class="sidebar-container">
+        
+            <div class="sidebar-profile">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+                </a>
+                <h4 class="sidebar-profile-name">Jelech</h4>
+                
+                    <h5 class="sidebar-profile-bio"><p>putty本无树,MinGW亦非台</p>
+</h5>
+                
+            </div>
+        
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/ " title="首页">
+                    
+                        <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">首页</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-categories" title="分类">
+                    
+                        <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">分类</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-tags" title="标签">
+                    
+                        <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">标签</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/all-archives" title="归档">
+                    
+                        <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">归档</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/game" title="游戏">
+                    
+                        <i class="sidebar-button-icon fas fa-gamepad" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">游戏</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="#about" title="关于">
+                    
+                        <i class="sidebar-button-icon fa fa-question" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">关于</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+            <ul class="sidebar-buttons">
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="https://github.com/jelech" target="_blank" rel="noopener" title="GitHub">
+                    
+                        <i class="sidebar-button-icon fab fa-github" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">GitHub</span>
+                    </a>
+            </li>
+            
+                <li class="sidebar-button">
+                    
+                        <a class="sidebar-button-link " href="/mailto" title="邮箱">
+                    
+                        <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
+                        <span class="sidebar-button-desc">邮箱</span>
+                    </a>
+            </li>
+            
+        </ul>
+        
+    </div>
+</nav>
+
+            
+            <div id="main" data-behavior="4"
+                 class="
+                        hasCoverMetaIn
+                        ">
+                
+<article class="post">
+    
+    
+        <div class="post-header main-content-wrap text-left">
+    
+        <h1 class="post-title">
+            一起学GO(二)
+        </h1>
+    
+    
+        <div class="post-meta">
+    <time datetime="2019-11-07T17:01:02+08:00">
+	
+		    11月 07, 2019
+    	
+    </time>
+    
+        <span>发布在 </span>
+        
+    <a class="category-link" href="/categories/学习笔记/">学习笔记</a>
+
+
+    
+</div>
+
+    
+</div>
+
+    
+    <div class="post-content markdown">
+        <div class="main-content-wrap">
+            
+            <h1 id="table-of-contents">目录</h1><ol class="toc"><li class="toc-item toc-level-1"><a class="toc-link" href="#基础"><span class="toc-text">基础</span></a><ol class="toc-child"><li class="toc-item toc-level-2"><a class="toc-link" href="#一些内置函数"><span class="toc-text">一些内置函数</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#strconv包"><span class="toc-text">strconv包</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#结构体"><span class="toc-text">结构体</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#类型别名"><span class="toc-text">类型别名</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#结构体-1"><span class="toc-text">结构体</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#结构体匿名字段"><span class="toc-text">结构体匿名字段</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#继承机制"><span class="toc-text">继承机制</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#结构体与json"><span class="toc-text">结构体与json</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#接口"><span class="toc-text">接口</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#空接口"><span class="toc-text">空接口</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#类型断言"><span class="toc-text">类型断言</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#package包"><span class="toc-text">package包</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#文件操作"><span class="toc-text">文件操作</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#time包"><span class="toc-text">time包</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#时间戳"><span class="toc-text">时间戳</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#时间操作"><span class="toc-text">时间操作</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#反射"><span class="toc-text">反射</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#reflect"><span class="toc-text">reflect</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#结构体反射"><span class="toc-text">结构体反射</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#并发"><span class="toc-text">并发</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#结束等待wait"><span class="toc-text">结束等待wait</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#GMP调度"><span class="toc-text">GMP调度</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#channel"><span class="toc-text">channel</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#缓冲区"><span class="toc-text">缓冲区</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#单向通道"><span class="toc-text">单向通道</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#多路复用select"><span class="toc-text">多路复用select</span></a></li><li class="toc-item toc-level-2"><a class="toc-link" href="#正则表达式"><span class="toc-text">正则表达式</span></a></li></ol></li></ol>
+<a id="more"></a>
+<h1 id="基础"><a href="#基础" class="headerlink" title="基础"></a>基础</h1><h2 id="一些内置函数"><a href="#一些内置函数" class="headerlink" title="一些内置函数"></a>一些内置函数</h2><ul>
+<li><code>close</code> 主要用来关闭channel</li>
+<li><code>len</code> 求长度</li>
+<li><code>new</code> 用于分配基础类型的内存</li>
+<li><code>make</code> 用于分配引用类型的内存：<code>chan, map, slice</code></li>
+<li><code>append</code> 用于追加元素到slice中</li>
+<li><code>panic, recover</code> 用于做错误处理</li>
+</ul>
+<p><code>panic</code> 像raise一样会主动拉出错误，可以用<code>defer</code> 语句处理，用 <code>err := recover()</code> 可以获取错误，并且recover了，则会恢复现场，但是这个现场是跳出了panic的函数的</p>
+<h3 id="strconv包"><a href="#strconv包" class="headerlink" title="strconv包"></a>strconv包</h3><p>把字符串转换为相应类型。比如strconv.Atoi(s)</p>
+<p>返回实体类型，与err编号</p>
+<h2 id="结构体"><a href="#结构体" class="headerlink" title="结构体"></a>结构体</h2><h3 id="类型别名"><a href="#类型别名" class="headerlink" title="类型别名"></a>类型别名</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> newName oldName</span><br></pre></td></tr></table></figure>
+<h3 id="结构体-1"><a href="#结构体-1" class="headerlink" title="结构体"></a>结构体</h3><p>和C++中的struct类似，相较于class类来说：</p>
+<ul>
+<li>结构体中的变量值在内存中的位置和C++类似，会有内存对齐</li>
+<li>一般定义为大写开始的变量为共有，小写开始的为私有</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Person <span class="keyword">struct</span>&#123;</span><br><span class="line">    Name <span class="keyword">string</span></span><br><span class="line">    Age <span class="keyword">int</span></span><br><span class="line">    hight <span class="keyword">int</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>struct可以添加函数</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(p *Person)</span> <span class="title">SayHI</span><span class="params">()</span> <span class="params">(ret <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">    <span class="built_in">println</span>(<span class="string">"hi"</span>)</span><br><span class="line">    <span class="keyword">return</span> <span class="number">0</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>构造函数约定new开头，返回结构体指针</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">newPerson</span><span class="params">(name <span class="keyword">string</span>, age <span class="keyword">int</span>)</span> *<span class="title">Person</span></span>&#123; <span class="comment">// 注意返回一个指针</span></span><br><span class="line">    <span class="keyword">return</span> &amp;Person&#123;</span><br><span class="line">        Name:name,</span><br><span class="line">        Age:age, <span class="comment">// 最后需要加上逗号</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h3 id="结构体匿名字段"><a href="#结构体匿名字段" class="headerlink" title="结构体匿名字段"></a>结构体匿名字段</h3><p>字段类型作为了名字, 但是一般都不会定义<code>int,string</code>这类的匿名，而是一个新的类型，这样有利于提取出公共部分可理解， 而外部访问的时候又可以更直观：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> address <span class="keyword">struct</span>&#123;</span><br><span class="line">    city <span class="keyword">string</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">type</span> person <span class="keyword">struct</span>&#123;</span><br><span class="line">    name <span class="keyword">string</span></span><br><span class="line">    address <span class="comment">// 嵌套后</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">p := <span class="built_in">new</span>(person)</span><br><span class="line">p.city <span class="comment">// 从address中自动找到了city</span></span><br></pre></td></tr></table></figure>
+<h3 id="继承机制"><a href="#继承机制" class="headerlink" title="继承机制"></a>继承机制</h3><p>嵌套其他struct的时候同时也会把函数也嵌套过来，当然，如果函数名重复的话会忽略，自己声明的优先级更高</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> animal <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(a *anival)</span> <span class="title">move</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="built_in">println</span>(<span class="string">"move"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> cat <span class="keyword">struct</span>&#123;</span><br><span class="line">    animal <span class="comment">// cat中嵌套了animal</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *cat)</span> <span class="title">say</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="built_in">println</span>(<span class="string">"say"</span>)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用</span></span><br><span class="line">c := <span class="built_in">new</span>(cat)</span><br><span class="line">c.say()</span><br><span class="line">c.move() <span class="comment">// 会从嵌套类中找到move()</span></span><br></pre></td></tr></table></figure>
+<h3 id="结构体与json"><a href="#结构体与json" class="headerlink" title="结构体与json"></a>结构体与json</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> <span class="string">"encoding/json"</span></span><br><span class="line"></span><br><span class="line">p = newPerson(<span class="string">"je"</span>, <span class="number">12</span>)</span><br><span class="line"></span><br><span class="line">s, err := json.Marshal(p) <span class="comment">//转为json</span></span><br><span class="line"></span><br><span class="line">json.Unmarshal([]<span class="keyword">byte</span>(s), &amp;p) <span class="comment">// 记住传指针</span></span><br></pre></td></tr></table></figure>
+<p>但是json访问的时候需要p为首字母大写，但有的json需要小写。</p>
+<p>此时就要就需要在struct后加反引号，在包解析的时候会自动转换<br><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> Person <span class="keyword">struct</span>&#123;</span><br><span class="line">    Name <span class="keyword">string</span> <span class="string">`json:"name", db:"name", ini:"name`</span> <span class="comment">// 在json的名字，db中的名字，init.conf中的名字等。</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></p>
+<h2 id="接口"><a href="#接口" class="headerlink" title="接口"></a>接口</h2><p>用于抽象化一些类型的共有部分。比如猫狗都能叫，可以抽象出一个类型speak函数，那么在之后调用的时候能直接使用speak，而传入参数能的多种类型的</p>
+<p>而其他的struct只要实现了interface中的方法，那么就能传入后调用出来。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">type</span> animal <span class="keyword">interface</span>&#123;</span><br><span class="line">    speak()</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">type</span> cat <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line"><span class="keyword">type</span> dog <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *cat)</span> <span class="title">speak</span><span class="params">()</span></span> &#123;&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(d *dog)</span> <span class="title">speak</span><span class="params">()</span></span> &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">do</span><span class="params">(a *animal)</span></span> &#123;</span><br><span class="line">    a.speak()</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// use ... 这样就能动态的使用相应的speak函数了</span></span><br><span class="line">do(<span class="built_in">new</span>(cat))</span><br><span class="line">do(<span class="built_in">new</span>(dog))</span><br></pre></td></tr></table></figure>
+<h3 id="空接口"><a href="#空接口" class="headerlink" title="空接口"></a>空接口</h3><p>空接口是所有类型的父接口，这样做是为了传入一种类型，比如在map中存动态的类型，一个函数接收所有的类型。</p>
+<p>注意有一个大括号 <code>interface{}</code></p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">m1 := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;, <span class="number">10</span>)</span><br><span class="line">m1[<span class="string">"name"</span>] = <span class="string">"je"</span></span><br><span class="line">m1[<span class="string">"age"</span>] = <span class="number">13</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">show</span><span class="params">(a <span class="keyword">interface</span>&#123;&#125;)</span></span> &#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// use</span></span><br><span class="line">show(<span class="keyword">bool</span>)</span><br><span class="line">show(<span class="string">"hi"</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="类型断言"><a href="#类型断言" class="headerlink" title="类型断言"></a>类型断言</h3><ul>
+<li>x: 表示为interface{}的变量</li>
+<li>T: 表示断言x可能的类型</li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">isTrue, err := x.(T)</span><br></pre></td></tr></table></figure>
+<h2 id="package包"><a href="#package包" class="headerlink" title="package包"></a>package包</h2><p>包内的变量/函数需要首字母大写才能在外部调用</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> 包名</span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    别名 jelech.top/PackName</span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+<p>这里说明一下，一个go包在运行的时候会进行：</p>
+<ul>
+<li>全局声明</li>
+<li>运行init()函数。init函数是内置的，和main类似</li>
+<li>运行main()函数</li>
+</ul>
+<p>在 A import B，B import C时，会先运行initC，再initB和initA。</p>
+<h2 id="文件操作"><a href="#文件操作" class="headerlink" title="文件操作"></a>文件操作</h2><p><code>import &quot;os&quot;</code></p>
+<ul>
+<li><code>os.Open()</code>返回一个*File，对这个指针进行操作</li>
+<li><code>len, err = os.Read([]byte)</code> 读取一个文件，返回长度和错误标识</li>
+</ul>
+<p><code>import &quot;bufio&quot;</code></p>
+<ul>
+<li><code>line, err := reader.ReadString(&#39;\n&#39;)</code>一直读取直到遇到某个字符</li>
+</ul>
+<p><code>import &quot;ioutil&quot;</code></p>
+<ul>
+<li><code>ret, err := ioutil.ReadFile(path)</code> 直接打开文件全部读取到ret中</li>
+</ul>
+<blockquote>
+<p>… 有待补充</p>
+</blockquote>
+<h2 id="time包"><a href="#time包" class="headerlink" title="time包"></a>time包</h2><ul>
+<li><code>ntime := time.Now()</code> 获取当前时间</li>
+<li><code>ntime.Year(), ntime.Month()...</code> 获取时间的详细部分</li>
+</ul>
+<h3 id="时间戳"><a href="#时间戳" class="headerlink" title="时间戳"></a>时间戳</h3><ul>
+<li><code>ntime.Unix()</code> 获取时间戳</li>
+<li><code>ntime.Unix(time int64)</code> 将时间戳转换为标准格式时间</li>
+<li><code>ntime.UnixNano()</code> 纳秒时间戳</li>
+</ul>
+<h3 id="时间操作"><a href="#时间操作" class="headerlink" title="时间操作"></a>时间操作</h3><p>时间间隔在go中已经用常量定义，类型为Duration，纳秒为最小单位1(time.Nanosecond)</p>
+<p><code>Add(d Duration)</code> 时间加上一个间隔</p>
+<p><code>Sub(u Time)</code> 返回距离u时间多久。结果为 <code>t-u</code></p>
+<p><code>Equal(u Time)</code> 判断时间是否相同，会有时区的影响</p>
+<p><code>Before(u Time), After(u Time)</code> 判断是否在u之前、之后。</p>
+<p><code>time.Tick(d Duration)</code> 设置一个定时器，本质上是一个通道</p>
+<p><code>ntime.Format(%s)</code> 时间格式化，但是格式化的形式是GO诞生时间…[2006/01/02 15:04:05]</p>
+<h2 id="反射"><a href="#反射" class="headerlink" title="反射"></a>反射</h2><p>程序在运行期间对程序本身进行访问和修改的能力。Go语言使用reflect包提供程序的反射信息。</p>
+<p>现有的使用场景可以举个例子：加载ini文件时，需要动态判断某个字符是什么类型的，这个定义是再代码中的。</p>
+<p><strong>需要注意的是</strong>反射性能并不高，需要尽量少用</p>
+<h3 id="reflect"><a href="#reflect" class="headerlink" title="reflect"></a>reflect</h3><p>每一个对象都又Type,Value两个属性。分别对应reflect.Type 和 reflect.Value。</p>
+<p>也可以使用 <code>TypeOf()</code> 和 <code>ValueOf()</code>两个函数进行对对象的属性获取</p>
+<p>而类型又可以分为：类型Name, 种类Kind类型。比如一个结构体的Name是我们取的名字，而kind是struct类型</p>
+<p><code>t := reflect.Type; t.Name, t.Kind()</code></p>
+<p><code>Elem()</code> 在函数中通过反射的方法修改变量的值，可以使用这个函数来获取对应的指针</p>
+<p><code>IsNil(), IsValid()</code> 判断v持有的值是否为nil，比如指针是否为空。valid判断v是否持有一个值，这个值是否有效</p>
+<blockquote>
+<p>…这里需要再加强学习一下</p>
+</blockquote>
+<h3 id="结构体反射"><a href="#结构体反射" class="headerlink" title="结构体反射"></a>结构体反射</h3><p><code>Field(i int)</code> 用于获取第i个字段的信息，当然也包括<code>.Name</code>, <code>.Index</code>, <code>.Type</code>, <code>.Tag</code> tag是结构体内变量的附加信息，参考json</p>
+<p><code>NumField()</code> 获取结构体中的变量个数</p>
+<h2 id="并发"><a href="#并发" class="headerlink" title="并发"></a>并发</h2><blockquote>
+<p>Go天生支持并发，这一章对于Go非常重要，我之后会单独起一篇来记录一下他的原理，这里简要说明一下</p>
+</blockquote>
+<p>goroutine类似与线程，属于用户态的线程。当你需要让某个任务并发执行的时候，只需要把这个任务包装为一个函数，开启<code>goroutine</code>去执行这个函数就可以了。使用方法是在函数前加一个 <code>go</code> 就可以了</p>
+<p>Go语言提供了channel在多个goroutine之间进行通信。</p>
+<p><strong>注意闭包的情况</strong>，在go并发的时候，内部的匿名函数如果使用了外部的变量，那么在真正调用的时候会使得结果并不是我们想要的结果。详细参考一下闭包</p>
+<h3 id="结束等待wait"><a href="#结束等待wait" class="headerlink" title="结束等待wait"></a>结束等待wait</h3><p><code>sync.WaitGroup</code> 是一个线程结束标记，类似一个channel，在新建一个线程时候将其加1，每个线程结束都defer一个<code>wg.Done()</code> 这样做直到线程全部结束时，<code>wg.wait()</code>就能通过了</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> wg sync.WaitGroup</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i := <span class="number">0</span>; i &lt; <span class="number">100</span>; i++ &#123;</span><br><span class="line">    wg.Add(<span class="number">1</span>)</span><br><span class="line">    <span class="keyword">go</span> <span class="function"><span class="keyword">func</span><span class="params">(i <span class="keyword">int</span>)</span></span> &#123;</span><br><span class="line">        <span class="keyword">defer</span> wg.Done()</span><br><span class="line">        <span class="built_in">println</span>(i)</span><br><span class="line">    &#125;(i)</span><br><span class="line">&#125;</span><br><span class="line">wg.Wait()</span><br><span class="line"><span class="built_in">println</span>(<span class="string">"done"</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="GMP调度"><a href="#GMP调度" class="headerlink" title="GMP调度"></a>GMP调度</h3><p>OS线程一般都固定的栈内存为2MB，而goroutine的栈一开始设置为2KB，但是并不是固定的，之后可以增大和缩小。</p>
+<ul>
+<li><code>G</code> 存放goroutine的信息，以及和P的绑定等信息</li>
+<li><code>M</code> 是Go运行时对操作系统内核线程的虚拟，M和内核线程一般是1to1的</li>
+<li><code>p</code> 管理一组goroutine队列，其中存放当前goroutine运行的上下文环境，并且自带又自己的队列调度机制。P与M一般也是一一对应的。</li>
+</ul>
+<p>会把m个goroutine分配给n个操作系统线程来执行</p>
+<p><code>runtime.GOMAXPROCS()</code> 可以限制当前进程可以使用的线程个数。默认的是CPU的逻辑核心数，会默认跑满整个CPU</p>
+<p>更加详细的可以参考其他博客 <a href=""></a></p>
+<h2 id="channel"><a href="#channel" class="headerlink" title="channel"></a>channel</h2><p>Go的并发模型是CSP，提倡通过通信共享内存，而不是通过同共享内存来进行通信</p>
+<p>通道像一个传送带或者队列。FIFO的顺序，每个通道需要一个具体的类型指定传输的元素类型</p>
+<p>channel是一个引用类型，需要先初始化才能使用，所以是使用make来进行初始化</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> ch <span class="keyword">chan</span> <span class="keyword">int</span></span><br><span class="line">ch = <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>) <span class="comment">// 不带缓冲的</span></span><br><span class="line">ch = <span class="built_in">make</span>(<span class="keyword">chan</span> <span class="keyword">int</span>, <span class="number">10</span>) <span class="comment">// 带缓冲的</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 把10发送到ch中</span></span><br><span class="line">ch &lt;- <span class="number">10</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 从ch中拿出到cur中</span></span><br><span class="line">cur := &lt;- ch</span><br></pre></td></tr></table></figure>
+<h3 id="缓冲区"><a href="#缓冲区" class="headerlink" title="缓冲区"></a>缓冲区</h3><p>如果channel没有设置缓冲区，那么在发送的时候会一直等待，直到有人接收。</p>
+<p><code>close(ch)</code> 关闭一个通道，只有在通知方goroutine所有的数据发送完毕了才需要关闭通道，他是可以被GC回收的，因此关闭通道这个操作并不是必须的。</p>
+<pre><code>- 对关闭了的通道进行读会返回0
+</code></pre><p><code>for range</code> range支持了从通道中取值</p>
+<h3 id="单向通道"><a href="#单向通道" class="headerlink" title="单向通道"></a>单向通道</h3><ul>
+<li><code>func f1(ch1 chan&lt;- int)</code> 声明一个单向通道，这里是声明了只能进行<strong>写入</strong></li>
+<li><code>func f1(ch1 &lt;-chan int)</code> 声明一个单向通道，这里是声明了只能进行<strong>读出</strong></li>
+</ul>
+<h2 id="多路复用select"><a href="#多路复用select" class="headerlink" title="多路复用select"></a>多路复用select</h2><p>从多个通道里进行取值。</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 基本语法</span></span><br><span class="line"><span class="keyword">select</span>&#123;</span><br><span class="line">    <span class="keyword">case</span> &lt;-ch1:</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    <span class="keyword">case</span> data := &lt;-ch2:</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">    <span class="keyword">default</span>:</span><br><span class="line">        <span class="comment">//...</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="正则表达式"><a href="#正则表达式" class="headerlink" title="正则表达式"></a>正则表达式</h2><p>go使用包<code>regexp</code>包进行正则表达式的使用。</p>
+<p>这里有正则的常用规则：</p>
+<p><img src="../../assets/golangREGEX.jpg" alt="golangREGEX"></p>
+
+            
+
+        </div>
+    </div>
+    <div id="post-footer" class="post-footer main-content-wrap">
+        
+            <div class="post-footer-tags">
+                <span class="text-color-light text-small">标签</span><br>
+                
+    <a class="tag tag--primary tag--small t-link" href="/tags/GO/">GO</a> <a class="tag tag--primary tag--small t-link" href="/tags/笔记/">笔记</a>
+
+            </div>
+        
+        
+            <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/41312/" data-tooltip="一起学GO(一)" aria-label="下一篇: 一起学GO(一)">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="分享">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://www.jelech.top/posts/25028/" title="分享到 Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://www.jelech.top/posts/25028/" title="分享到 Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://www.jelech.top/posts/25028/" title="分享到 Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+        
+        
+            
+                <style media="screen">.v .vwrap{overflow: inherit;}</style>
+                <div id="vcomment"></div>
+                <a href="posts/25028/#vcomment" class="disqus-comment-count"></a>
+                <span class="valine-comment-count" data-xid="posts/25028/"></span>
+                <span> Comment</span>
+            
+        
+    </div>
+</article>
+
+
+                <footer id="footer" class="main-content-wrap">
+    <span class="copyrights">
+        Copyrights &copy; 2019 Jelech. All Rights Reserved.
+    </span>
+</footer>
+
+            </div>
+            
+                <div id="bottom-bar" class="post-bottom-bar" data-behavior="4">
+                    <div class="post-actions-wrap">
+    <nav>
+        <ul class="post-actions post-action-nav">
+            <li class="post-action">
+                
+                    <a class="post-action-btn btn btn--disabled">
+                
+                    <i class="fa fa-angle-left" aria-hidden="true"></i>
+                    <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
+                </a>
+            </li>
+            <li class="post-action">
+                
+                    
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/41312/" data-tooltip="一起学GO(一)" aria-label="下一篇: 一起学GO(一)">
+                
+                    <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
+                    <i class="fa fa-angle-right" aria-hidden="true"></i>
+                </a>
+            </li>
+        </ul>
+    </nav>
+    <ul class="post-actions post-action-share">
+        <li class="post-action hide-lg hide-md hide-sm">
+            <a class="post-action-btn btn btn--default btn-open-shareoptions" href="#btn-open-shareoptions" aria-label="分享">
+                <i class="fa fa-share-alt" aria-hidden="true"></i>
+            </a>
+        </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://www.jelech.top/posts/25028/" title="分享到 Facebook">
+                    <i class="fab fa-facebook" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://www.jelech.top/posts/25028/" title="分享到 Twitter">
+                    <i class="fab fa-twitter" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+            
+            
+            <li class="post-action hide-xs">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://www.jelech.top/posts/25028/" title="分享到 Google+">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i>
+                </a>
+            </li>
+        
+        
+            
+        
+        <li class="post-action">
+            
+                <a class="post-action-btn btn btn--default" href="#table-of-contents" aria-label="目录">
+            
+                <i class="fa fa-list" aria-hidden="true"></i>
+            </a>
+        </li>
+    </ul>
+</div>
+
+
+                </div>
+                <div id="share-options-bar" class="share-options-bar" data-behavior="4">
+    <i id="btn-close-shareoptions" class="fa fa-times"></i>
+    <ul class="share-options">
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://www.jelech.top/posts/25028/">
+                    <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://www.jelech.top/posts/25028/">
+                    <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
+                </a>
+            </li>
+        
+            
+            
+            <li class="share-option">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://www.jelech.top/posts/25028/">
+                    <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
+                </a>
+            </li>
+        
+    </ul>
+</div>
+
+            
+        </div>
+        
+
+
+    
+        
+    
+
+<div id="about">
+    <div id="about-card">
+        <div id="about-btn-close">
+            <i class="fa fa-times"></i>
+        </div>
+        
+            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+        
+            <h4 id="about-card-name">Jelech</h4>
+        
+            <div id="about-card-bio"><p>putty本无树,MinGW亦非台</p>
+</div>
+        
+        
+            <div id="about-card-job">
+                <i class="fa fa-briefcase"></i>
+                <br>
+                <p>在校大学生一枚</p>
+
+            </div>
+        
+        
+            <div id="about-card-location">
+                <i class="fa fa-map-marker-alt"></i>
+                <br>
+                CHINA.HRB.STU
+            </div>
+        
+
+        
+            <div id="about-card-job">
+                <i class="fa fa-envelope"></i>
+                <br>
+                jelech@hotmail.com
+            </div>
+        
+
+        
+            <div id="about-card-job">
+                <i class="fa fa-phone-square"></i>
+                <br>
+                18.......6
+            </div>
+        
+
+
+    </div>
+</div>
+
+        
+        
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+        <!--SCRIPTS-->
+<script src="/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
+<!--SCRIPTS END-->
+
+    
+        
+        <script src="//cdn1.lncld.net/static/js/3.0.4/av-min.js" charset="utf-8"></script>
+        <script src="//unpkg.com/valine@latest/dist/Valine.min.js" charset="utf-8"></script>
+        <script>
+            var notify = 'false' == true ? true : false;
+            var verify = 'false' == true ? true : false;
+            var GUEST_INFO = ['nick','mail','link'];
+            var guest_info = 'nick,mail,link'.split(',').filter(function(item){
+                return GUEST_INFO.indexOf(item) > -1;
+            });
+
+            guest_info = guest_info.length == 0 ? GUEST_INFO :guest_info;
+            window.valine = new Valine({
+                el:'#vcomment',
+                notify:notify,
+                verify:verify,
+                appId:'rwwVeUe3kpfbc0OkoxmgnTKM-gzGzoHsz',
+                appKey:'FcDDW6bpbs5QmH3A1B2Aqmae',
+                placeholder:'Just so so',
+                avatar:'mm',
+                guest_info:guest_info,
+                pageSize:'10'
+            });
+        </script>
+    
+
+
+
+    </body>
+</html>
