@@ -12,17 +12,17 @@
         <meta name="keywords" content="博客,算法,HTML/CSS/JS,游戏服务器,游戏,">
     
     
-        <link rel="icon" href="https://jelech.gitee.io/blog/assets/images/favicon.ico">
+        <link rel="icon" href="https://jelech.gitee.io/assets/images/favicon.ico">
         <link rel="Shortcut Icon" type="image/x-icon" href="assets/images/favicon.ico">
     
     
-        <link rel="alternate" type="application/atom+xml" title="RSS" href="/blog/atom.xml">
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n标题\n好像山东省赛没原题链接了\n\n题意\na题：给你两个字符串，长度相同。每个字母可以加一定长度到另一个字母（比如a到c有2个长度）只能向前加，z到b是2个单位。求字符串一到字符串二的任意序列的最短步长。（字母种类，数量相同即可）b题一个矩阵中每个位置有不同权值，在每列、每行都只选一个的情况下（0表示没有），保证选择个数最多的情况下（0表示没有），求所得集合中和最大时，集合中的最小值为多少c题….忘了…后补把e题首先，’good’数指，前面存在一个数比他小。求一个序列去掉一个数后，’good’数的数量最多。f题：给你四个区间，要求每个区间选一个数组成一个四元组（x1,x2,x3,x4x1,x2,x3,x4）,要求x1≠x2,x2≠x3,x3≠x4,x4≠x1g题nimm博弈，Bob在比赛前可以任意去掉n堆中的不超过d的某些堆（d&gt;n可以全部去掉)，Alice先手，求保证Bob必赢情况下有多少种去除方式。h题一种12的方块铺在N\\M的大方块里，里面有个空的1*1的格子，方块可以移动，求有多少种移动后的情况（每个块都有标号，所以同形状可以是不同情况）….以及一些忘了题目的题，网上题目都找不到…官方竟然还删了…有机会继续补吧\n\n感悟\n还是太划水了…h题被它的mod1e9吓到，以为搜索肯定会超时，一直没上手写，最后关头准备拼一波，莫名的错误，连样例都过不去。想一想，每次比赛都没法真正ac一道题，心里太惭愧了。少年不要忘记初心，继续加油啊！\n\n题解\n各题ac代码如下：\n\nA题123456789101112131415161718192021222324252627282930#include &lt;bits/stdc++.h&gt;using namespace std; char aa[55],bb[55];char a[55],b[55];int vis[55]; int main()&#123;    while(~scanf(\"%s %s\",a,b))&#123;        int len=strlen(a);        int ans=0;        memset(vis,false,sizeof(vis));        for(int i=0;i&lt;len;i++)&#123;            int minn=99,k;            for(int j=0;j&lt;len;j++)&#123;                if(vis[j])continue;                int as=b[j]-a[i];                if(as&lt;0)as+=26;                if(minn&gt;as)&#123;                    minn=as,k=j;                &#125;            &#125;            vis[k]=true;            ans+=minn;        &#125;        printf(\"%d\\n\",ans);    &#125;    return 0;&#125;\nB题12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667#include &lt;bits/stdc++.h&gt;#define maxn  505using namespace std; struct edge &#123;    int v,w,val;&#125;emt[maxn*maxn];int val;int ans,base,res;int head[maxn];int cnt,n;int vis[maxn];int ansmatch[maxn]; void addedge(int u,int v,int w) &#123;    cnt++;    emt[cnt].v = v;    emt[cnt].w = w;    emt[cnt].val = head[u];    head[u] = cnt;&#125; bool dfs(int u,int tolow) &#123;    for(int i=head[u]; i; i=emt[i].val) &#123;        int v = emt[i].v;        if(emt[i].w&gt;=tolow&amp;&amp;!vis[v]) &#123;            vis[v] = 1;            if(!ansmatch[v]||dfs(ansmatch[v],tolow)) &#123;                ansmatch[v] = u;                return true;            &#125;        &#125;    &#125;    return false;&#125; int max_flow(int tolow) &#123;    int cnt = 0;    memset(ansmatch,0,sizeof ansmatch);    for(int i=1; i&lt;=n; i++) &#123;        memset(vis,0,sizeof(vis));        if(dfs(i,tolow))            cnt++;    &#125;    return cnt;&#125; int main() &#123;    scanf(\"%d\",&amp;n);    for(int i=1; i&lt;=n; i++) &#123;        for(int j=1; j&lt;=n; j++) &#123;            scanf(\"%d\",&amp;val);            addedge(i,j,val);        &#125;    &#125;    base = 1&lt;&lt;30;    res = 0;    ans = max_flow(1);     while(base&gt;=1) &#123;        if(max_flow(res+base) == ans)            res += base;        else base &gt;&gt;= 1;    &#125;    printf(\"%d\\n\",max(1,res));    return 0;&#125;\nC题12345678910111213141516171819202122#include &lt;bits/stdc++.h&gt;using namespace std;typedef long long LL;const int maxn=1e5+9;int a[maxn];int main()&#123;    int T;    scanf(\"%d\",&amp;T);    while(T--) &#123;        int n;        scanf(\"%d\",&amp;n);        for(int i=1;i&lt;=n;i++) scanf(\"%d\",&amp;a[i]);        sort(a+1,a+1+n);        LL ans=0;        for(int i=2;i&lt;=n;i++) &#123;            ans+=a[i]+a[1];        &#125;        printf(\"%lld\\n\",ans);    &#125;    return 0;&#125;\nE题123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263#include&lt;bits/stdc++.h&gt;using namespace std;typedef long long LL;  int a[1000006];int val[1000006];int n;int read()&#123;    int x=0,f=1;char ch=getchar();    while(ch&lt;'0'||ch&gt;'9')&#123;if(ch=='-')f=-1;ch=getchar();&#125;    while(ch&gt;='0'&amp;&amp;ch&lt;='9')&#123;x=x*10+ch-'0';ch=getchar();&#125;    return x*f;&#125;inline int  Min(int &amp;a,int &amp;b)&#123;    if(a&gt;=b)        return b;    return a;&#125; int main()&#123;    int t;t=read();    while (t--)    &#123;        n=read();        for (int i=0; i&lt;n; ++i) &#123;            a[i]=read();            val[i+1]=0;        &#125;        int M1,M2;        M1=M2=n+2;        for (int i=0; i&lt;n; ++i) &#123;            if(a[i]&gt;M1&amp;&amp;a[i]&gt;M2) &#123;                val[a[i]]++;            &#125;            else if (a[i]&gt;M1)&#123;                val[a[i]]++;                val[M1]++;            &#125;            if(a[i]&lt;M1) &#123;                M2=M1;                M1=a[i];            &#125;            else if (a[i]&lt;M2) &#123;                M2=a[i];            &#125;        &#125;        int ans=n+1;        int num=n+1;        for (int i=1; i&lt;=n; ++i) &#123;            if(val[i]&lt;num) &#123;                ans=i;                num=val[i];            &#125;            else if (val[i]==num) &#123;                ans=Min(ans,i);            &#125;        &#125;        printf(\"%d\\n\",ans);    &#125;    return 0;&#125;\nF题123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869#include&lt;bits/stdc++.h&gt;#define pb push_backusing namespace std;typedef long long LL;const LL mod = 1e9+7;struct Node&#123;    LL l,r;    LL len;&#125;;Node And(Node a,Node b)&#123;    Node tmp;    tmp.l=max(a.l,b.l);    tmp.r=min(a.r,b.r);    tmp.len=(tmp.r-tmp.l+1);    return tmp;&#125;Node fir[4];Node sec[4];int main()&#123;    int t;scanf(\"%d\",&amp;t);    while(t--) &#123;        LL ans = 1;        for (int i=0; i&lt;4; ++i) &#123;            scanf(\"%lld%lld\",&amp;fir[i].l,&amp;fir[i].r);            fir[i].len=(fir[i].r-fir[i].l+1);            ans = (ans*fir[i].len)%mod;        &#125;        for (int i=0; i&lt;4; ++i) &#123;            sec[i]=And(fir[i],fir[(i+1)%4]);            if(sec[i].len&gt;0) &#123;                LL tmp=sec[i].len;                tmp = tmp*fir[(i+2)%4].len%mod;                tmp = tmp*fir[(i+3)%4].len%mod;//                printf(\"%d %d : %lld\\n\",i,i+1,tmp);                ans = (ans-tmp+mod)%mod;            &#125;        &#125;        for (int i=0; i&lt;4; ++i) &#123;            if(sec[i].len&lt;=0) continue;            for (int j=i+1; j&lt;4; ++j) &#123;                if(sec[j].len&lt;=0) continue;                LL tmp=0;                if(j==i+1||(i==0&amp;&amp;j==3)) &#123;                    Node tmpseg = And(sec[i],sec[j]);                    if(tmpseg.len&gt;0) &#123;                        tmp=tmpseg.len;                        if(i==0&amp;&amp;j==3) &#123;                            tmp = (tmp*fir[(i+2)%4].len)%mod;                        &#125;                        else &#123;                            tmp = (tmp*fir[(i+3)%4].len)%mod;                        &#125;                    &#125;                &#125;                else &#123;                    tmp = sec[i].len*sec[j].len%mod;                &#125;//                printf(\"%d %d %d %d:%lld\\n\",i+1,(i+1)%4+1,j+1,(j+1)%4+1,tmp);                ans = (ans+tmp%mod)%mod;            &#125;        &#125;        Node tmpseg=And(And(fir[1],fir[0]),And(fir[2],fir[3]));        if(tmpseg.len&gt;0)            ans = (ans-tmpseg.len*3%mod+mod)%mod;        printf(\"%lld\\n\",ans);    &#125;\nH题12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182#include&lt;bits/stdc++.h&gt;using namespace std;int n,m,k;int emt[17][10007];int vis[17][10007];int dir[4][2]=&#123;&#123;0,1&#125;,&#123;0,-1&#125;,&#123;1,0&#125;,&#123;-1,0&#125;&#125;;struct node&#123;    int x,y;&#125;;int ans;queue&lt;node&gt; que;void dfs(int x,int y)&#123;    ans=0;    memset(vis,0,sizeof(vis));    vis[x][y]=1;    node stnode = (node)&#123;x,y&#125;;    que.push(stnode);    while(!que.empty())    &#123;        node cntnode = que.front();        que.pop();        int cntx = cntnode.x;        int cnty = cntnode.y;//        printf(\"cnt: %d %d\\n\",cntx,cnty);        if(emt[cntx+1][cnty]==2 &amp;&amp; !vis[cntx+2][cnty])        &#123;//            printf(\"in 1\\n\");            ans++;            que.push((node)&#123;cntx+2,cnty&#125;);            vis[cntx+2][cnty]=1;        &#125;        if(emt[cntx-1][cnty]==2 &amp;&amp; !vis[cntx-2][cnty])        &#123;//            printf(\"in 2\\n\");            ans++;            que.push((node)&#123;cntx-2,cnty&#125;);            vis[cntx-2][cnty]=1;        &#125;        if(emt[cntx][cnty+1]==1 &amp;&amp; !vis[cntx][cnty+2])        &#123;//            printf(\"in 3\\n\");            ans++;            que.push((node)&#123;cntx,cnty+2&#125;);            vis[cntx][cnty+2]=1;        &#125;        if(emt[cntx][cnty-1]==1 &amp;&amp; !vis[cntx][cnty-2])        &#123;//            printf(\"in 4\\n\");            ans++;            que.push((node)&#123;cntx,cnty-2&#125;);            vis[cntx][cnty-2]=1;        &#125;    &#125;    printf(\"%d\\n\",ans);&#125; int main()&#123;    while(~scanf(\"%d%d%d\",&amp;n,&amp;m,&amp;k))    &#123;        memset(emt,0,sizeof(emt));        for(int i=0;i&lt;k;i++)        &#123;            int t1,t2,t3,t4;            scanf(\"%d%d%d%d\",&amp;t1,&amp;t2,&amp;t3,&amp;t4);            if(t1==t3)                emt[t1][t2] = 1,emt[t3][t4] = 1;            else                emt[t1][t2] = 2,emt[t3][t4] = 2;        &#125;//        for(int i=0;i&lt;=n+1;i++,printf(\"\\n\"))//            for(int j=0;j&lt;=m+1;j++)//                printf(\"%d\",emt[i][j]);        bool flag = true;        for(int i=1;i&lt;=n &amp;&amp; flag;i++)            for(int j=1;j&lt;=m &amp;&amp; flag;j++)                if(emt[i][j]==0) dfs(i,j),flag=false;    &#125;    return 0;&#125;\nG题123456789101112131415161718192021222324252627282930313233343536373839404142434445#include &lt;bits/stdc++.h&gt;using namespace std;const int mod=1e9+7;int dp[1003][12][1040],a[1234];int main()&#123;  int t,sum,ans,n,d;  scanf(\"%d\",&amp;t);  while(t--)  &#123;    scanf(\"%d %d\",&amp;n,&amp;d);    ans=0;    sum=0;    for(int i=1; i&lt;=n; i++)    &#123;      scanf(\"%d\",&amp;a[i]);      sum^=a[i];    &#125;    dp[0][0][0]=1;    for(int i=1; i&lt;=n; i++)    &#123;      dp[i][0][0]=1;      for(int j=1; j&lt;=d ; j++)      &#123;        for(int k=0; k&lt;=1204; k++)        &#123;          dp[i][j][k]=dp[i-1][j][k]+dp[i-1][j-1][k^a[i]];          if(dp[i][j][k]&gt;=mod)          &#123;            dp[i][j][k]-=mod;          &#125;        &#125;        if(i==n)        &#123;          ans+=dp[n][j][sum];          if(ans&gt;=mod)            ans-=mod;        &#125;      &#125;    &#125;    ans=(ans+dp[n][0][sum]);    printf(\"%d\\n\",ans);  &#125;  return 0;&#125;\n","dateCreated":"2018-05-13T22:59:56+08:00","dateModified":"2018-12-01T21:40:16+08:00","datePublished":"2018-05-13T22:59:56+08:00","description":"","headline":"2018第九届山东ACM省赛","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://jelech.gitee.io/blog/posts/64946/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://jelech.gitee.io/blog/posts/64946/","keywords":"刷题, acm, 题解"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n标题\n好像山东省赛没原题链接了\n\n题意\na题：给你两个字符串，长度相同。每个字母可以加一定长度到另一个字母（比如a到c有2个长度）只能向前加，z到b是2个单位。求字符串一到字符串二的任意序列的最短步长。（字母种类，数量相同即可）b题一个矩阵中每个位置有不同权值，在每列、每行都只选一个的情况下（0表示没有），保证选择个数最多的情况下（0表示没有），求所得集合中和最大时，集合中的最小值为多少c题….忘了…后补把e题首先，’good’数指，前面存在一个数比他小。求一个序列去掉一个数后，’good’数的数量最多。f题：给你四个区间，要求每个区间选一个数组成一个四元组（x1,x2,x3,x4x1,x2,x3,x4）,要求x1≠x2,x2≠x3,x3≠x4,x4≠x1g题nimm博弈，Bob在比赛前可以任意去掉n堆中的不超过d的某些堆（d&gt;n可以全部去掉)，Alice先手，求保证Bob必赢情况下有多少种去除方式。h题一种12的方块铺在N\\M的大方块里，里面有个空的1*1的格子，方块可以移动，求有多少种移动后的情况（每个块都有标号，所以同形状可以是不同情况）….以及一些忘了题目的题，网上题目都找不到…官方竟然还删了…有机会继续补吧\n\n感悟\n还是太划水了…h题被它的mod1e9吓到，以为搜索肯定会超时，一直没上手写，最后关头准备拼一波，莫名的错误，连样例都过不去。想一想，每次比赛都没法真正ac一道题，心里太惭愧了。少年不要忘记初心，继续加油啊！\n\n题解\n各题ac代码如下：\n\nA题123456789101112131415161718192021222324252627282930#include &lt;bits/stdc++.h&gt;using namespace std; char aa[55],bb[55];char a[55],b[55];int vis[55]; int main()&#123;    while(~scanf(\"%s %s\",a,b))&#123;        int len=strlen(a);        int ans=0;        memset(vis,false,sizeof(vis));        for(int i=0;i&lt;len;i++)&#123;            int minn=99,k;            for(int j=0;j&lt;len;j++)&#123;                if(vis[j])continue;                int as=b[j]-a[i];                if(as&lt;0)as+=26;                if(minn&gt;as)&#123;                    minn=as,k=j;                &#125;            &#125;            vis[k]=true;            ans+=minn;        &#125;        printf(\"%d\\n\",ans);    &#125;    return 0;&#125;\nB题12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667#include &lt;bits/stdc++.h&gt;#define maxn  505using namespace std; struct edge &#123;    int v,w,val;&#125;emt[maxn*maxn];int val;int ans,base,res;int head[maxn];int cnt,n;int vis[maxn];int ansmatch[maxn]; void addedge(int u,int v,int w) &#123;    cnt++;    emt[cnt].v = v;    emt[cnt].w = w;    emt[cnt].val = head[u];    head[u] = cnt;&#125; bool dfs(int u,int tolow) &#123;    for(int i=head[u]; i; i=emt[i].val) &#123;        int v = emt[i].v;        if(emt[i].w&gt;=tolow&amp;&amp;!vis[v]) &#123;            vis[v] = 1;            if(!ansmatch[v]||dfs(ansmatch[v],tolow)) &#123;                ansmatch[v] = u;                return true;            &#125;        &#125;    &#125;    return false;&#125; int max_flow(int tolow) &#123;    int cnt = 0;    memset(ansmatch,0,sizeof ansmatch);    for(int i=1; i&lt;=n; i++) &#123;        memset(vis,0,sizeof(vis));        if(dfs(i,tolow))            cnt++;    &#125;    return cnt;&#125; int main() &#123;    scanf(\"%d\",&amp;n);    for(int i=1; i&lt;=n; i++) &#123;        for(int j=1; j&lt;=n; j++) &#123;            scanf(\"%d\",&amp;val);            addedge(i,j,val);        &#125;    &#125;    base = 1&lt;&lt;30;    res = 0;    ans = max_flow(1);     while(base&gt;=1) &#123;        if(max_flow(res+base) == ans)            res += base;        else base &gt;&gt;= 1;    &#125;    printf(\"%d\\n\",max(1,res));    return 0;&#125;\nC题12345678910111213141516171819202122#include &lt;bits/stdc++.h&gt;using namespace std;typedef long long LL;const int maxn=1e5+9;int a[maxn];int main()&#123;    int T;    scanf(\"%d\",&amp;T);    while(T--) &#123;        int n;        scanf(\"%d\",&amp;n);        for(int i=1;i&lt;=n;i++) scanf(\"%d\",&amp;a[i]);        sort(a+1,a+1+n);        LL ans=0;        for(int i=2;i&lt;=n;i++) &#123;            ans+=a[i]+a[1];        &#125;        printf(\"%lld\\n\",ans);    &#125;    return 0;&#125;\nE题123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263#include&lt;bits/stdc++.h&gt;using namespace std;typedef long long LL;  int a[1000006];int val[1000006];int n;int read()&#123;    int x=0,f=1;char ch=getchar();    while(ch&lt;'0'||ch&gt;'9')&#123;if(ch=='-')f=-1;ch=getchar();&#125;    while(ch&gt;='0'&amp;&amp;ch&lt;='9')&#123;x=x*10+ch-'0';ch=getchar();&#125;    return x*f;&#125;inline int  Min(int &amp;a,int &amp;b)&#123;    if(a&gt;=b)        return b;    return a;&#125; int main()&#123;    int t;t=read();    while (t--)    &#123;        n=read();        for (int i=0; i&lt;n; ++i) &#123;            a[i]=read();            val[i+1]=0;        &#125;        int M1,M2;        M1=M2=n+2;        for (int i=0; i&lt;n; ++i) &#123;            if(a[i]&gt;M1&amp;&amp;a[i]&gt;M2) &#123;                val[a[i]]++;            &#125;            else if (a[i]&gt;M1)&#123;                val[a[i]]++;                val[M1]++;            &#125;            if(a[i]&lt;M1) &#123;                M2=M1;                M1=a[i];            &#125;            else if (a[i]&lt;M2) &#123;                M2=a[i];            &#125;        &#125;        int ans=n+1;        int num=n+1;        for (int i=1; i&lt;=n; ++i) &#123;            if(val[i]&lt;num) &#123;                ans=i;                num=val[i];            &#125;            else if (val[i]==num) &#123;                ans=Min(ans,i);            &#125;        &#125;        printf(\"%d\\n\",ans);    &#125;    return 0;&#125;\nF题123456789101112131415161718192021222324252627282930313233343536373839404142434445464748495051525354555657585960616263646566676869#include&lt;bits/stdc++.h&gt;#define pb push_backusing namespace std;typedef long long LL;const LL mod = 1e9+7;struct Node&#123;    LL l,r;    LL len;&#125;;Node And(Node a,Node b)&#123;    Node tmp;    tmp.l=max(a.l,b.l);    tmp.r=min(a.r,b.r);    tmp.len=(tmp.r-tmp.l+1);    return tmp;&#125;Node fir[4];Node sec[4];int main()&#123;    int t;scanf(\"%d\",&amp;t);    while(t--) &#123;        LL ans = 1;        for (int i=0; i&lt;4; ++i) &#123;            scanf(\"%lld%lld\",&amp;fir[i].l,&amp;fir[i].r);            fir[i].len=(fir[i].r-fir[i].l+1);            ans = (ans*fir[i].len)%mod;        &#125;        for (int i=0; i&lt;4; ++i) &#123;            sec[i]=And(fir[i],fir[(i+1)%4]);            if(sec[i].len&gt;0) &#123;                LL tmp=sec[i].len;                tmp = tmp*fir[(i+2)%4].len%mod;                tmp = tmp*fir[(i+3)%4].len%mod;//                printf(\"%d %d : %lld\\n\",i,i+1,tmp);                ans = (ans-tmp+mod)%mod;            &#125;        &#125;        for (int i=0; i&lt;4; ++i) &#123;            if(sec[i].len&lt;=0) continue;            for (int j=i+1; j&lt;4; ++j) &#123;                if(sec[j].len&lt;=0) continue;                LL tmp=0;                if(j==i+1||(i==0&amp;&amp;j==3)) &#123;                    Node tmpseg = And(sec[i],sec[j]);                    if(tmpseg.len&gt;0) &#123;                        tmp=tmpseg.len;                        if(i==0&amp;&amp;j==3) &#123;                            tmp = (tmp*fir[(i+2)%4].len)%mod;                        &#125;                        else &#123;                            tmp = (tmp*fir[(i+3)%4].len)%mod;                        &#125;                    &#125;                &#125;                else &#123;                    tmp = sec[i].len*sec[j].len%mod;                &#125;//                printf(\"%d %d %d %d:%lld\\n\",i+1,(i+1)%4+1,j+1,(j+1)%4+1,tmp);                ans = (ans+tmp%mod)%mod;            &#125;        &#125;        Node tmpseg=And(And(fir[1],fir[0]),And(fir[2],fir[3]));        if(tmpseg.len&gt;0)            ans = (ans-tmpseg.len*3%mod+mod)%mod;        printf(\"%lld\\n\",ans);    &#125;\nH题12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273747576777879808182#include&lt;bits/stdc++.h&gt;using namespace std;int n,m,k;int emt[17][10007];int vis[17][10007];int dir[4][2]=&#123;&#123;0,1&#125;,&#123;0,-1&#125;,&#123;1,0&#125;,&#123;-1,0&#125;&#125;;struct node&#123;    int x,y;&#125;;int ans;queue&lt;node&gt; que;void dfs(int x,int y)&#123;    ans=0;    memset(vis,0,sizeof(vis));    vis[x][y]=1;    node stnode = (node)&#123;x,y&#125;;    que.push(stnode);    while(!que.empty())    &#123;        node cntnode = que.front();        que.pop();        int cntx = cntnode.x;        int cnty = cntnode.y;//        printf(\"cnt: %d %d\\n\",cntx,cnty);        if(emt[cntx+1][cnty]==2 &amp;&amp; !vis[cntx+2][cnty])        &#123;//            printf(\"in 1\\n\");            ans++;            que.push((node)&#123;cntx+2,cnty&#125;);            vis[cntx+2][cnty]=1;        &#125;        if(emt[cntx-1][cnty]==2 &amp;&amp; !vis[cntx-2][cnty])        &#123;//            printf(\"in 2\\n\");            ans++;            que.push((node)&#123;cntx-2,cnty&#125;);            vis[cntx-2][cnty]=1;        &#125;        if(emt[cntx][cnty+1]==1 &amp;&amp; !vis[cntx][cnty+2])        &#123;//            printf(\"in 3\\n\");            ans++;            que.push((node)&#123;cntx,cnty+2&#125;);            vis[cntx][cnty+2]=1;        &#125;        if(emt[cntx][cnty-1]==1 &amp;&amp; !vis[cntx][cnty-2])        &#123;//            printf(\"in 4\\n\");            ans++;            que.push((node)&#123;cntx,cnty-2&#125;);            vis[cntx][cnty-2]=1;        &#125;    &#125;    printf(\"%d\\n\",ans);&#125; int main()&#123;    while(~scanf(\"%d%d%d\",&amp;n,&amp;m,&amp;k))    &#123;        memset(emt,0,sizeof(emt));        for(int i=0;i&lt;k;i++)        &#123;            int t1,t2,t3,t4;            scanf(\"%d%d%d%d\",&amp;t1,&amp;t2,&amp;t3,&amp;t4);            if(t1==t3)                emt[t1][t2] = 1,emt[t3][t4] = 1;            else                emt[t1][t2] = 2,emt[t3][t4] = 2;        &#125;//        for(int i=0;i&lt;=n+1;i++,printf(\"\\n\"))//            for(int j=0;j&lt;=m+1;j++)//                printf(\"%d\",emt[i][j]);        bool flag = true;        for(int i=1;i&lt;=n &amp;&amp; flag;i++)            for(int j=1;j&lt;=m &amp;&amp; flag;j++)                if(emt[i][j]==0) dfs(i,j),flag=false;    &#125;    return 0;&#125;\nG题123456789101112131415161718192021222324252627282930313233343536373839404142434445#include &lt;bits/stdc++.h&gt;using namespace std;const int mod=1e9+7;int dp[1003][12][1040],a[1234];int main()&#123;  int t,sum,ans,n,d;  scanf(\"%d\",&amp;t);  while(t--)  &#123;    scanf(\"%d %d\",&amp;n,&amp;d);    ans=0;    sum=0;    for(int i=1; i&lt;=n; i++)    &#123;      scanf(\"%d\",&amp;a[i]);      sum^=a[i];    &#125;    dp[0][0][0]=1;    for(int i=1; i&lt;=n; i++)    &#123;      dp[i][0][0]=1;      for(int j=1; j&lt;=d ; j++)      &#123;        for(int k=0; k&lt;=1204; k++)        &#123;          dp[i][j][k]=dp[i-1][j][k]+dp[i-1][j-1][k^a[i]];          if(dp[i][j][k]&gt;=mod)          &#123;            dp[i][j][k]-=mod;          &#125;        &#125;        if(i==n)        &#123;          ans+=dp[n][j][sum];          if(ans&gt;=mod)            ans-=mod;        &#125;      &#125;    &#125;    ans=(ans+dp[n][0][sum]);    printf(\"%d\\n\",ans);  &#125;  return 0;&#125;\n","dateCreated":"2018-05-13T22:59:56+08:00","dateModified":"2018-12-01T21:40:16+08:00","datePublished":"2018-05-13T22:59:56+08:00","description":"","headline":"2018第九届山东ACM省赛","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://jelech.gitee.io/posts/64946/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://jelech.gitee.io/posts/64946/","keywords":"刷题, acm, 题解"}</script>
     <meta name="keywords" content="刷题,acm,题解">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="2018第九届山东ACM省赛">
-<meta property="og:url" content="https://jelech.gitee.io/blog/posts/64946/index.html">
+<meta property="og:url" content="https://jelech.gitee.io/posts/64946/index.html">
 <meta property="og:site_name" content="Jelech的博客">
 <meta property="og:locale" content="zh-cn">
 <meta property="og:updated_time" content="2018-12-01T13:40:16.181Z">
@@ -34,13 +34,13 @@
         
     
     
-        <meta property="og:image" content="https://jelech.gitee.io/blog/assets/images/avatar.jpg"/>
+        <meta property="og:image" content="https://jelech.gitee.io/assets/images/avatar.jpg"/>
     
     
     
     
     <!--STYLES-->
-    <link rel="stylesheet" href="/blog/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
+    <link rel="stylesheet" href="/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
     <!--STYLES END-->
     
 
@@ -71,14 +71,14 @@
 <header id="header" data-behavior="4">
     <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
     <div class="header-title">
-        <a class="header-title-link" href="/blog/ ">Jelech的博客</a>
+        <a class="header-title-link" href="/ ">Jelech的博客</a>
     </div>
     
         
             <a class="header-right-picture " href="#about">
         
         
-            <img class="header-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
+            <img class="header-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
         
         </a>
     
@@ -95,8 +95,8 @@
     <div class="sidebar-container">
         
             <div class="sidebar-profile">
-                <a href="/blog/#about">
-                    <img class="sidebar-profile-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
                 </a>
                 <h4 class="sidebar-profile-name">Jelech</h4>
                 
@@ -110,7 +110,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/ " title="首页">
+                        <a class="sidebar-button-link " href="/ " title="首页">
                     
                         <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">首页</span>
@@ -119,7 +119,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/all-categories" title="分类">
+                        <a class="sidebar-button-link " href="/all-categories" title="分类">
                     
                         <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">分类</span>
@@ -128,7 +128,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/all-tags" title="标签">
+                        <a class="sidebar-button-link " href="/all-tags" title="标签">
                     
                         <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">标签</span>
@@ -137,7 +137,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/all-archives" title="归档">
+                        <a class="sidebar-button-link " href="/all-archives" title="归档">
                     
                         <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">归档</span>
@@ -146,7 +146,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/game" title="游戏">
+                        <a class="sidebar-button-link " href="/game" title="游戏">
                     
                         <i class="sidebar-button-icon fas fa-gamepad" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">游戏</span>
@@ -177,7 +177,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/mailto" title="邮箱">
+                        <a class="sidebar-button-link " href="/mailto" title="邮箱">
                     
                         <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">邮箱</span>
@@ -214,7 +214,7 @@
     
         <span>发布在 </span>
         
-    <a class="category-link" href="/blog/categories/ACM竞赛/">ACM竞赛</a>
+    <a class="category-link" href="/categories/ACM竞赛/">ACM竞赛</a>
 
 
     
@@ -258,7 +258,7 @@
             <div class="post-footer-tags">
                 <span class="text-color-light text-small">标签</span><br>
                 
-    <a class="tag tag--primary tag--small t-link" href="/blog/tags/acm/">acm</a> <a class="tag tag--primary tag--small t-link" href="/blog/tags/刷题/">刷题</a> <a class="tag tag--primary tag--small t-link" href="/blog/tags/题解/">题解</a>
+    <a class="tag tag--primary tag--small t-link" href="/tags/acm/">acm</a> <a class="tag tag--primary tag--small t-link" href="/tags/刷题/">刷题</a> <a class="tag tag--primary tag--small t-link" href="/tags/题解/">题解</a>
 
             </div>
         
@@ -269,7 +269,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/61248/" data-tooltip="VMware下的ubuntu16.04虚拟环境搭建" aria-label="上一篇: VMware下的ubuntu16.04虚拟环境搭建">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/61248/" data-tooltip="VMware下的ubuntu16.04虚拟环境搭建" aria-label="上一篇: VMware下的ubuntu16.04虚拟环境搭建">
                 
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
@@ -278,7 +278,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/30324/" data-tooltip="释放囚犯" aria-label="下一篇: 释放囚犯">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/30324/" data-tooltip="释放囚犯" aria-label="下一篇: 释放囚犯">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -296,7 +296,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/64946/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/64946/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -304,7 +304,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/64946/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/64946/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -312,7 +312,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/64946/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/64946/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -360,7 +360,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/61248/" data-tooltip="VMware下的ubuntu16.04虚拟环境搭建" aria-label="上一篇: VMware下的ubuntu16.04虚拟环境搭建">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/61248/" data-tooltip="VMware下的ubuntu16.04虚拟环境搭建" aria-label="上一篇: VMware下的ubuntu16.04虚拟环境搭建">
                 
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
@@ -369,7 +369,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/30324/" data-tooltip="释放囚犯" aria-label="下一篇: 释放囚犯">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/30324/" data-tooltip="释放囚犯" aria-label="下一篇: 释放囚犯">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -387,7 +387,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/64946/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/64946/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -395,7 +395,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/64946/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/64946/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -403,7 +403,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/64946/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/64946/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -430,7 +430,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/64946/">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/64946/">
                     <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
                 </a>
             </li>
@@ -438,7 +438,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/64946/">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/64946/">
                     <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
                 </a>
             </li>
@@ -446,7 +446,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/64946/">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/64946/">
                     <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
                 </a>
             </li>
@@ -469,7 +469,7 @@
             <i class="fa fa-times"></i>
         </div>
         
-            <img id="about-card-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
+            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
         
             <h4 id="about-card-name">Jelech</h4>
         
@@ -514,9 +514,9 @@
 
         
         
-<div id="cover" style="background-image:url('/blog/assets/images/cover.jpg');"></div>
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
         <!--SCRIPTS-->
-<script src="/blog/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
+<script src="/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
 <!--SCRIPTS END-->
 
     

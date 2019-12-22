@@ -12,17 +12,17 @@
         <meta name="keywords" content="博客,算法,HTML/CSS/JS,游戏服务器,游戏,">
     
     
-        <link rel="icon" href="https://jelech.gitee.io/blog/assets/images/favicon.ico">
+        <link rel="icon" href="https://jelech.gitee.io/assets/images/favicon.ico">
         <link rel="Shortcut Icon" type="image/x-icon" href="assets/images/favicon.ico">
     
     
-        <link rel="alternate" type="application/atom+xml" title="RSS" href="/blog/atom.xml">
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n1.简易用法1234string = &quot;china beijing 123&quot;;ret = sscanf(string, &quot;%s %s %d&quot;, buf1, buf2, &amp;digit);printf(&quot;1.string=%s\\n&quot;, string);printf(&quot;1.ret=%d, buf1=%s, buf2=%s, digit=%d\\n\\n&quot;, ret, buf1, buf2, digit);\n\n执行结果:\n1.ret=3, buf1=china, buf2=beijing, digit=123\n可以看出,sscanf的返回值是读取的参数个数\n\n2.取指定长度的字符串1234string = &quot;123456789&quot;;sscanf(string, &quot;%5s&quot;, buf1);printf(&quot;2.string=%s\\n&quot;, string);printf(&quot;2.buf1=%s\\n\\n&quot;, buf1);\n\n执行结果:\n2.buf1=12345\n\n3.取到指定字符为止的字符串1234string = &quot;123/456&quot;;sscanf(string, &quot;%[^/]&quot;, buf1);printf(&quot;3.string=%s\\n&quot;, string);printf(&quot;3.buf1=%s\\n\\n&quot;, buf1);\n\n执行结果:\n3.buf1=123\n\n4.取到指定字符集为止的字符串1234string = &quot;123abcABC&quot;;sscanf(string, &quot;%[^A-Z]&quot;, buf1);printf(&quot;4.string=%s\\n&quot;, string);printf(&quot;4.buf1=%s\\n\\n&quot;, buf1);\n\n执行结果:\n4.buf1=123abc\n\n5.取仅包含指定字符集的字符串1234string = &quot;0123abcABC&quot;;sscanf(string, &quot;%[0-9]%[a-z]%[A-Z]&quot;, buf1, buf2, buf3);printf(&quot;5.string=%s\\n&quot;, string);printf(&quot;5.buf1=%s, buf2=%s, buf3=%s\\n\\n&quot;, buf1, buf2, buf3);\n\n执行结果:\n5.buf1=123, buf2=abc, buf3=ABC\n\n6.获取指定字符中间的字符串1234string = &quot;ios&lt;android&gt;wp7&quot;;sscanf(string, &quot;%*[^&lt;]&lt;%[^&gt;]&quot;, buf1);printf(&quot;6.string=%s\\n&quot;, string);printf(&quot;6.buf1=%s\\n\\n&quot;, buf1);\n\n执行结果:\n6.buf1=android\n\n7.指定要跳过的字符串1234string = &quot;iosVSandroid&quot;;sscanf(string, &quot;%[a-z]VS%[a-z]&quot;, buf1, buf2);printf(&quot;7.string=%s\\n&quot;, string);printf(&quot;7.buf1=%s, buf2=%s\\n\\n&quot;, buf1, buf2);\n\n执行结果:\n7.buf1=ios, buf2=android\n\n8.分割以某字符隔开的字符串123456字符串取道&apos;-&apos;为止,后面还需要跟着分隔符&apos;-&apos;,起到过滤作用,有点类似于第7点string = &quot;android-iphone-wp7&quot;;sscanf(string, &quot;%[^-]-%[^-]-%[^-]&quot;, buf1, buf2, buf3);printf(&quot;8.string=%s\\n&quot;, string);printf(&quot;8.buf1=%s, buf2=%s, buf3=%s\\n\\n&quot;, buf1, buf2, buf3);\n\n执行结果:\n8.buf1=android, buf2=iphone, buf3=wp7\n\n9.提取邮箱地址1234string = &quot;Email:beijing@sina.com.cn&quot;;sscanf(string, &quot;%[^:]:%[^@]@%[^.].%s&quot;, buf1, buf2, buf3, buf4);printf(&quot;9.string=%s\\n&quot;, string);printf(&quot;9.buf1=%s, buf2=%s, buf3=%s, buf4=%s\\n\\n&quot;, buf1, buf2, buf3, buf4);\n\n执行结果:\n9.buf1=Email, buf2=beijing, buf3=sina, buf4=com.cn\n\n10.过滤掉不想截取或不需要的字符串补充在%号后面加一*号,代表过滤这个字符串,不读取\n1234string = &quot;android iphone wp7&quot;;sscanf(string, &quot;%s %*s %s&quot;, buf1, buf2);printf(&quot;10.string=%s\\n&quot;, string);printf(&quot;10.buf1=%s, buf2=%s\\n\\n&quot;, buf1, buf2);\n\n执行结果:\n10.android wp7\n\n","dateCreated":"2019-03-10T21:09:33+08:00","dateModified":"2019-03-11T10:09:40+08:00","datePublished":"2019-03-10T21:09:33+08:00","description":"","headline":"sscanf中的正则表达式","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://jelech.gitee.io/blog/posts/20161/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://jelech.gitee.io/blog/posts/20161/","keywords":"c, 后台开发"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n1.简易用法1234string = &quot;china beijing 123&quot;;ret = sscanf(string, &quot;%s %s %d&quot;, buf1, buf2, &amp;digit);printf(&quot;1.string=%s\\n&quot;, string);printf(&quot;1.ret=%d, buf1=%s, buf2=%s, digit=%d\\n\\n&quot;, ret, buf1, buf2, digit);\n\n执行结果:\n1.ret=3, buf1=china, buf2=beijing, digit=123\n可以看出,sscanf的返回值是读取的参数个数\n\n2.取指定长度的字符串1234string = &quot;123456789&quot;;sscanf(string, &quot;%5s&quot;, buf1);printf(&quot;2.string=%s\\n&quot;, string);printf(&quot;2.buf1=%s\\n\\n&quot;, buf1);\n\n执行结果:\n2.buf1=12345\n\n3.取到指定字符为止的字符串1234string = &quot;123/456&quot;;sscanf(string, &quot;%[^/]&quot;, buf1);printf(&quot;3.string=%s\\n&quot;, string);printf(&quot;3.buf1=%s\\n\\n&quot;, buf1);\n\n执行结果:\n3.buf1=123\n\n4.取到指定字符集为止的字符串1234string = &quot;123abcABC&quot;;sscanf(string, &quot;%[^A-Z]&quot;, buf1);printf(&quot;4.string=%s\\n&quot;, string);printf(&quot;4.buf1=%s\\n\\n&quot;, buf1);\n\n执行结果:\n4.buf1=123abc\n\n5.取仅包含指定字符集的字符串1234string = &quot;0123abcABC&quot;;sscanf(string, &quot;%[0-9]%[a-z]%[A-Z]&quot;, buf1, buf2, buf3);printf(&quot;5.string=%s\\n&quot;, string);printf(&quot;5.buf1=%s, buf2=%s, buf3=%s\\n\\n&quot;, buf1, buf2, buf3);\n\n执行结果:\n5.buf1=123, buf2=abc, buf3=ABC\n\n6.获取指定字符中间的字符串1234string = &quot;ios&lt;android&gt;wp7&quot;;sscanf(string, &quot;%*[^&lt;]&lt;%[^&gt;]&quot;, buf1);printf(&quot;6.string=%s\\n&quot;, string);printf(&quot;6.buf1=%s\\n\\n&quot;, buf1);\n\n执行结果:\n6.buf1=android\n\n7.指定要跳过的字符串1234string = &quot;iosVSandroid&quot;;sscanf(string, &quot;%[a-z]VS%[a-z]&quot;, buf1, buf2);printf(&quot;7.string=%s\\n&quot;, string);printf(&quot;7.buf1=%s, buf2=%s\\n\\n&quot;, buf1, buf2);\n\n执行结果:\n7.buf1=ios, buf2=android\n\n8.分割以某字符隔开的字符串123456字符串取道&apos;-&apos;为止,后面还需要跟着分隔符&apos;-&apos;,起到过滤作用,有点类似于第7点string = &quot;android-iphone-wp7&quot;;sscanf(string, &quot;%[^-]-%[^-]-%[^-]&quot;, buf1, buf2, buf3);printf(&quot;8.string=%s\\n&quot;, string);printf(&quot;8.buf1=%s, buf2=%s, buf3=%s\\n\\n&quot;, buf1, buf2, buf3);\n\n执行结果:\n8.buf1=android, buf2=iphone, buf3=wp7\n\n9.提取邮箱地址1234string = &quot;Email:beijing@sina.com.cn&quot;;sscanf(string, &quot;%[^:]:%[^@]@%[^.].%s&quot;, buf1, buf2, buf3, buf4);printf(&quot;9.string=%s\\n&quot;, string);printf(&quot;9.buf1=%s, buf2=%s, buf3=%s, buf4=%s\\n\\n&quot;, buf1, buf2, buf3, buf4);\n\n执行结果:\n9.buf1=Email, buf2=beijing, buf3=sina, buf4=com.cn\n\n10.过滤掉不想截取或不需要的字符串补充在%号后面加一*号,代表过滤这个字符串,不读取\n1234string = &quot;android iphone wp7&quot;;sscanf(string, &quot;%s %*s %s&quot;, buf1, buf2);printf(&quot;10.string=%s\\n&quot;, string);printf(&quot;10.buf1=%s, buf2=%s\\n\\n&quot;, buf1, buf2);\n\n执行结果:\n10.android wp7\n\n","dateCreated":"2019-03-10T21:09:33+08:00","dateModified":"2019-03-11T10:09:40+08:00","datePublished":"2019-03-10T21:09:33+08:00","description":"","headline":"sscanf中的正则表达式","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://jelech.gitee.io/posts/20161/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://jelech.gitee.io/posts/20161/","keywords":"c, 后台开发"}</script>
     <meta name="keywords" content="c,后台开发">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="sscanf中的正则表达式">
-<meta property="og:url" content="https://jelech.gitee.io/blog/posts/20161/index.html">
+<meta property="og:url" content="https://jelech.gitee.io/posts/20161/index.html">
 <meta property="og:site_name" content="Jelech的博客">
 <meta property="og:locale" content="zh-cn">
 <meta property="og:updated_time" content="2019-03-11T02:09:40.446Z">
@@ -34,13 +34,13 @@
         
     
     
-        <meta property="og:image" content="https://jelech.gitee.io/blog/assets/images/avatar.jpg"/>
+        <meta property="og:image" content="https://jelech.gitee.io/assets/images/avatar.jpg"/>
     
     
     
     
     <!--STYLES-->
-    <link rel="stylesheet" href="/blog/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
+    <link rel="stylesheet" href="/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
     <!--STYLES END-->
     
 
@@ -71,14 +71,14 @@
 <header id="header" data-behavior="4">
     <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
     <div class="header-title">
-        <a class="header-title-link" href="/blog/ ">Jelech的博客</a>
+        <a class="header-title-link" href="/ ">Jelech的博客</a>
     </div>
     
         
             <a class="header-right-picture " href="#about">
         
         
-            <img class="header-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
+            <img class="header-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
         
         </a>
     
@@ -95,8 +95,8 @@
     <div class="sidebar-container">
         
             <div class="sidebar-profile">
-                <a href="/blog/#about">
-                    <img class="sidebar-profile-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
                 </a>
                 <h4 class="sidebar-profile-name">Jelech</h4>
                 
@@ -110,7 +110,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/ " title="首页">
+                        <a class="sidebar-button-link " href="/ " title="首页">
                     
                         <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">首页</span>
@@ -119,7 +119,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/all-categories" title="分类">
+                        <a class="sidebar-button-link " href="/all-categories" title="分类">
                     
                         <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">分类</span>
@@ -128,7 +128,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/all-tags" title="标签">
+                        <a class="sidebar-button-link " href="/all-tags" title="标签">
                     
                         <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">标签</span>
@@ -137,7 +137,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/all-archives" title="归档">
+                        <a class="sidebar-button-link " href="/all-archives" title="归档">
                     
                         <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">归档</span>
@@ -146,7 +146,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/game" title="游戏">
+                        <a class="sidebar-button-link " href="/game" title="游戏">
                     
                         <i class="sidebar-button-icon fas fa-gamepad" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">游戏</span>
@@ -177,7 +177,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/mailto" title="邮箱">
+                        <a class="sidebar-button-link " href="/mailto" title="邮箱">
                     
                         <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">邮箱</span>
@@ -214,7 +214,7 @@
     
         <span>发布在 </span>
         
-    <a class="category-link" href="/blog/categories/学习笔记/">学习笔记</a>
+    <a class="category-link" href="/categories/学习笔记/">学习笔记</a>
 
 
     
@@ -291,7 +291,7 @@
             <div class="post-footer-tags">
                 <span class="text-color-light text-small">标签</span><br>
                 
-    <a class="tag tag--primary tag--small t-link" href="/blog/tags/c/">c</a> <a class="tag tag--primary tag--small t-link" href="/blog/tags/后台开发/">后台开发</a>
+    <a class="tag tag--primary tag--small t-link" href="/tags/c/">c</a> <a class="tag tag--primary tag--small t-link" href="/tags/后台开发/">后台开发</a>
 
             </div>
         
@@ -302,7 +302,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/51482/" data-tooltip="mysql学习笔记" aria-label="上一篇: mysql学习笔记">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/51482/" data-tooltip="mysql学习笔记" aria-label="上一篇: mysql学习笔记">
                 
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
@@ -311,7 +311,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/15789/" data-tooltip="如何自己编写MakeFile" aria-label="下一篇: 如何自己编写MakeFile">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/15789/" data-tooltip="如何自己编写MakeFile" aria-label="下一篇: 如何自己编写MakeFile">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -329,7 +329,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/20161/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/20161/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -337,7 +337,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/20161/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/20161/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -345,7 +345,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/20161/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/20161/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -393,7 +393,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/51482/" data-tooltip="mysql学习笔记" aria-label="上一篇: mysql学习笔记">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/51482/" data-tooltip="mysql学习笔记" aria-label="上一篇: mysql学习笔记">
                 
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
@@ -402,7 +402,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/15789/" data-tooltip="如何自己编写MakeFile" aria-label="下一篇: 如何自己编写MakeFile">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/15789/" data-tooltip="如何自己编写MakeFile" aria-label="下一篇: 如何自己编写MakeFile">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -420,7 +420,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/20161/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/20161/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -428,7 +428,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/20161/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/20161/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -436,7 +436,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/20161/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/20161/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -463,7 +463,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/20161/">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/20161/">
                     <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
                 </a>
             </li>
@@ -471,7 +471,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/20161/">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/20161/">
                     <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
                 </a>
             </li>
@@ -479,7 +479,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/20161/">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/20161/">
                     <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
                 </a>
             </li>
@@ -502,7 +502,7 @@
             <i class="fa fa-times"></i>
         </div>
         
-            <img id="about-card-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
+            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
         
             <h4 id="about-card-name">Jelech</h4>
         
@@ -547,9 +547,9 @@
 
         
         
-<div id="cover" style="background-image:url('/blog/assets/images/cover.jpg');"></div>
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
         <!--SCRIPTS-->
-<script src="/blog/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
+<script src="/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
 <!--SCRIPTS END-->
 
     

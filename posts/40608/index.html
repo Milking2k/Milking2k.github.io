@@ -12,17 +12,17 @@
         <meta name="keywords" content="博客,算法,HTML/CSS/JS,游戏服务器,游戏,">
     
     
-        <link rel="icon" href="https://jelech.gitee.io/blog/assets/images/favicon.ico">
+        <link rel="icon" href="https://jelech.gitee.io/assets/images/favicon.ico">
         <link rel="Shortcut Icon" type="image/x-icon" href="assets/images/favicon.ico">
     
     
-        <link rel="alternate" type="application/atom+xml" title="RSS" href="/blog/atom.xml">
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n\nHexo可以将markdown+模板文件生成静态html页面，使用它可以快速的建立一个博客。但是这个过程中难免会遇到一些bug，这些bug时常是因为一些错误的操作，或者错误的参数导致的。这篇文章中我会逐一举出我遇到的问题，当然，也希望，如果你遇到的其他的问题，在下方评论区给我留言。\n\nDeployer not fund  这种bug出现是因为hexo找不到_config中提到的deployer。就好比是向一个人指明了让他向北走，但是北方向并没有路，或者这条路被其他因素阻塞了。\n\n查看bug中提示的文件地址，会标注出出现错误的文件地址，根据这个地址找到错误的node_module，然后删除它，用npm install重装它\n查看_config中的deploy选项，查看是否有写入的参数有错\n查看node_module中的内容，看是否所有需要编译你各种文件的插件已经有了。比如我的博客基础编译需要hexo-renderer-sass hexo-renderer-pug\n\nTo Be Continue  ","dateCreated":"2018-06-17T10:45:53+08:00","dateModified":"2018-12-01T21:39:43+08:00","datePublished":"2018-06-17T10:45:53+08:00","description":"","headline":"用Hexo + GitPage建立博客遇到的bug和解决办法","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://jelech.gitee.io/blog/posts/40608/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://jelech.gitee.io/blog/posts/40608/","keywords":"刷题, acm"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n\nHexo可以将markdown+模板文件生成静态html页面，使用它可以快速的建立一个博客。但是这个过程中难免会遇到一些bug，这些bug时常是因为一些错误的操作，或者错误的参数导致的。这篇文章中我会逐一举出我遇到的问题，当然，也希望，如果你遇到的其他的问题，在下方评论区给我留言。\n\nDeployer not fund  这种bug出现是因为hexo找不到_config中提到的deployer。就好比是向一个人指明了让他向北走，但是北方向并没有路，或者这条路被其他因素阻塞了。\n\n查看bug中提示的文件地址，会标注出出现错误的文件地址，根据这个地址找到错误的node_module，然后删除它，用npm install重装它\n查看_config中的deploy选项，查看是否有写入的参数有错\n查看node_module中的内容，看是否所有需要编译你各种文件的插件已经有了。比如我的博客基础编译需要hexo-renderer-sass hexo-renderer-pug\n\nTo Be Continue  ","dateCreated":"2018-06-17T10:45:53+08:00","dateModified":"2018-12-01T21:39:43+08:00","datePublished":"2018-06-17T10:45:53+08:00","description":"","headline":"用Hexo + GitPage建立博客遇到的bug和解决办法","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://jelech.gitee.io/posts/40608/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://jelech.gitee.io/posts/40608/","keywords":"刷题, acm"}</script>
     <meta name="keywords" content="刷题,acm">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="用Hexo + GitPage建立博客遇到的bug和解决办法">
-<meta property="og:url" content="https://jelech.gitee.io/blog/posts/40608/index.html">
+<meta property="og:url" content="https://jelech.gitee.io/posts/40608/index.html">
 <meta property="og:site_name" content="Jelech的博客">
 <meta property="og:locale" content="zh-cn">
 <meta property="og:updated_time" content="2018-12-01T13:39:43.295Z">
@@ -34,13 +34,13 @@
         
     
     
-        <meta property="og:image" content="https://jelech.gitee.io/blog/assets/images/avatar.jpg"/>
+        <meta property="og:image" content="https://jelech.gitee.io/assets/images/avatar.jpg"/>
     
     
     
     
     <!--STYLES-->
-    <link rel="stylesheet" href="/blog/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
+    <link rel="stylesheet" href="/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
     <!--STYLES END-->
     
 
@@ -71,14 +71,14 @@
 <header id="header" data-behavior="4">
     <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
     <div class="header-title">
-        <a class="header-title-link" href="/blog/ ">Jelech的博客</a>
+        <a class="header-title-link" href="/ ">Jelech的博客</a>
     </div>
     
         
             <a class="header-right-picture " href="#about">
         
         
-            <img class="header-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
+            <img class="header-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
         
         </a>
     
@@ -95,8 +95,8 @@
     <div class="sidebar-container">
         
             <div class="sidebar-profile">
-                <a href="/blog/#about">
-                    <img class="sidebar-profile-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
                 </a>
                 <h4 class="sidebar-profile-name">Jelech</h4>
                 
@@ -110,7 +110,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/ " title="首页">
+                        <a class="sidebar-button-link " href="/ " title="首页">
                     
                         <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">首页</span>
@@ -119,7 +119,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/all-categories" title="分类">
+                        <a class="sidebar-button-link " href="/all-categories" title="分类">
                     
                         <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">分类</span>
@@ -128,7 +128,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/all-tags" title="标签">
+                        <a class="sidebar-button-link " href="/all-tags" title="标签">
                     
                         <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">标签</span>
@@ -137,7 +137,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/all-archives" title="归档">
+                        <a class="sidebar-button-link " href="/all-archives" title="归档">
                     
                         <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">归档</span>
@@ -146,7 +146,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/game" title="游戏">
+                        <a class="sidebar-button-link " href="/game" title="游戏">
                     
                         <i class="sidebar-button-icon fas fa-gamepad" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">游戏</span>
@@ -177,7 +177,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/mailto" title="邮箱">
+                        <a class="sidebar-button-link " href="/mailto" title="邮箱">
                     
                         <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">邮箱</span>
@@ -214,7 +214,7 @@
     
         <span>发布在 </span>
         
-    <a class="category-link" href="/blog/categories/BUG文档/">BUG文档</a>
+    <a class="category-link" href="/categories/BUG文档/">BUG文档</a>
 
 
     
@@ -255,7 +255,7 @@
             <div class="post-footer-tags">
                 <span class="text-color-light text-small">标签</span><br>
                 
-    <a class="tag tag--primary tag--small t-link" href="/blog/tags/acm/">acm</a> <a class="tag tag--primary tag--small t-link" href="/blog/tags/刷题/">刷题</a>
+    <a class="tag tag--primary tag--small t-link" href="/tags/acm/">acm</a> <a class="tag tag--primary tag--small t-link" href="/tags/刷题/">刷题</a>
 
             </div>
         
@@ -266,7 +266,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/50181/" data-tooltip="又是期末" aria-label="上一篇: 又是期末">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/50181/" data-tooltip="又是期末" aria-label="上一篇: 又是期末">
                 
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
@@ -275,7 +275,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/27676/" data-tooltip="操作系统中的算法" aria-label="下一篇: 操作系统中的算法">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/27676/" data-tooltip="操作系统中的算法" aria-label="下一篇: 操作系统中的算法">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -293,7 +293,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/40608/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/40608/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -301,7 +301,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/40608/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/40608/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -309,7 +309,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/40608/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/40608/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -357,7 +357,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/50181/" data-tooltip="又是期末" aria-label="上一篇: 又是期末">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/50181/" data-tooltip="又是期末" aria-label="上一篇: 又是期末">
                 
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
@@ -366,7 +366,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/27676/" data-tooltip="操作系统中的算法" aria-label="下一篇: 操作系统中的算法">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/27676/" data-tooltip="操作系统中的算法" aria-label="下一篇: 操作系统中的算法">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -384,7 +384,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/40608/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/40608/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -392,7 +392,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/40608/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/40608/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -400,7 +400,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/40608/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/40608/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -427,7 +427,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/40608/">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/40608/">
                     <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
                 </a>
             </li>
@@ -435,7 +435,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/40608/">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/40608/">
                     <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
                 </a>
             </li>
@@ -443,7 +443,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/40608/">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/40608/">
                     <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
                 </a>
             </li>
@@ -466,7 +466,7 @@
             <i class="fa fa-times"></i>
         </div>
         
-            <img id="about-card-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
+            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
         
             <h4 id="about-card-name">Jelech</h4>
         
@@ -511,9 +511,9 @@
 
         
         
-<div id="cover" style="background-image:url('/blog/assets/images/cover.jpg');"></div>
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
         <!--SCRIPTS-->
-<script src="/blog/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
+<script src="/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
 <!--SCRIPTS END-->
 
     

@@ -12,17 +12,17 @@
         <meta name="keywords" content="博客,算法,HTML/CSS/JS,游戏服务器,游戏,">
     
     
-        <link rel="icon" href="https://jelech.gitee.io/blog/assets/images/favicon.ico">
+        <link rel="icon" href="https://jelech.gitee.io/assets/images/favicon.ico">
         <link rel="Shortcut Icon" type="image/x-icon" href="assets/images/favicon.ico">
     
     
-        <link rel="alternate" type="application/atom+xml" title="RSS" href="/blog/atom.xml">
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n设计模式笔记\n重构获得模式寻找变化点，在变化点运用设计模式\n静态-&gt;动态早绑定-&gt;晚绑定继承-&gt;组合编译时依赖-&gt;运行时依赖紧耦合-&gt;松耦合\n对扩展开放，对修改关闭：类的新增加功能应使用扩展功能，而不是通过修改原来的代码。比如一堆的elseif\nattention规划时,划分出稳定的和变化的\n\n组件协作: 使用框架与应用创建与划分时template Method从早绑定到晚绑定算法的骨架需要稳定才能使用这个方法使得子类可以不改变一个算法的结构，就可以重定义这个算法的某些步骤框架写好了部分函数和主调用函数，使用者只需要重定义一些子类信息就可以\nStrategy多态调用，对扩展开放，对修改关闭多个else if..并且限制不明显，未来很有可能扩展时，可以使用，代码过长会占用更多内存，而对象只会在调用时使用定义一系列算法，把他们都一个个封装起来，并且可以互相替换(变化)，使他们所服务的客户程序稳定使得在运行时支持在各种算法之间切换\nObeserve / Event父类通过调用多个观察者，观察子类的信息，更新一些其他的数据\n单一职责: 因为需求的增加，会让子类功能复用多次重复利用，应划清责任Decorator装饰继承父类的功能后，&#39;多个&#39;子类在细化细节时候对功能进行扩展，引入的静态特质，缺乏灵活性:比如都要加密，都要缓存...动态的给一个对象增加一些额外的职责，Decorator模式比生成子类更为灵活基类分为了子类与装饰类(Decorator类)\nBridge以下是预期内容\n对象创建对象性能借口隔离状态变化数据结构行为变化领域问题\n","dateCreated":"2018-11-28T20:01:28+08:00","dateModified":"2018-12-01T21:39:28+08:00","datePublished":"2018-11-28T20:01:28+08:00","description":"","headline":"设计模式学习笔记","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://jelech.gitee.io/blog/posts/3493/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://jelech.gitee.io/blog/posts/3493/","keywords":"笔记"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n设计模式笔记\n重构获得模式寻找变化点，在变化点运用设计模式\n静态-&gt;动态早绑定-&gt;晚绑定继承-&gt;组合编译时依赖-&gt;运行时依赖紧耦合-&gt;松耦合\n对扩展开放，对修改关闭：类的新增加功能应使用扩展功能，而不是通过修改原来的代码。比如一堆的elseif\nattention规划时,划分出稳定的和变化的\n\n组件协作: 使用框架与应用创建与划分时template Method从早绑定到晚绑定算法的骨架需要稳定才能使用这个方法使得子类可以不改变一个算法的结构，就可以重定义这个算法的某些步骤框架写好了部分函数和主调用函数，使用者只需要重定义一些子类信息就可以\nStrategy多态调用，对扩展开放，对修改关闭多个else if..并且限制不明显，未来很有可能扩展时，可以使用，代码过长会占用更多内存，而对象只会在调用时使用定义一系列算法，把他们都一个个封装起来，并且可以互相替换(变化)，使他们所服务的客户程序稳定使得在运行时支持在各种算法之间切换\nObeserve / Event父类通过调用多个观察者，观察子类的信息，更新一些其他的数据\n单一职责: 因为需求的增加，会让子类功能复用多次重复利用，应划清责任Decorator装饰继承父类的功能后，&#39;多个&#39;子类在细化细节时候对功能进行扩展，引入的静态特质，缺乏灵活性:比如都要加密，都要缓存...动态的给一个对象增加一些额外的职责，Decorator模式比生成子类更为灵活基类分为了子类与装饰类(Decorator类)\nBridge以下是预期内容\n对象创建对象性能借口隔离状态变化数据结构行为变化领域问题\n","dateCreated":"2018-11-28T20:01:28+08:00","dateModified":"2018-12-01T21:39:28+08:00","datePublished":"2018-11-28T20:01:28+08:00","description":"","headline":"设计模式学习笔记","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://jelech.gitee.io/posts/3493/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://jelech.gitee.io/posts/3493/","keywords":"笔记"}</script>
     <meta name="keywords" content="笔记">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="设计模式学习笔记">
-<meta property="og:url" content="https://jelech.gitee.io/blog/posts/3493/index.html">
+<meta property="og:url" content="https://jelech.gitee.io/posts/3493/index.html">
 <meta property="og:site_name" content="Jelech的博客">
 <meta property="og:locale" content="zh-cn">
 <meta property="og:updated_time" content="2018-12-01T13:39:28.834Z">
@@ -34,13 +34,13 @@
         
     
     
-        <meta property="og:image" content="https://jelech.gitee.io/blog/assets/images/avatar.jpg"/>
+        <meta property="og:image" content="https://jelech.gitee.io/assets/images/avatar.jpg"/>
     
     
     
     
     <!--STYLES-->
-    <link rel="stylesheet" href="/blog/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
+    <link rel="stylesheet" href="/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
     <!--STYLES END-->
     
 
@@ -71,14 +71,14 @@
 <header id="header" data-behavior="4">
     <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
     <div class="header-title">
-        <a class="header-title-link" href="/blog/ ">Jelech的博客</a>
+        <a class="header-title-link" href="/ ">Jelech的博客</a>
     </div>
     
         
             <a class="header-right-picture " href="#about">
         
         
-            <img class="header-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
+            <img class="header-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
         
         </a>
     
@@ -95,8 +95,8 @@
     <div class="sidebar-container">
         
             <div class="sidebar-profile">
-                <a href="/blog/#about">
-                    <img class="sidebar-profile-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
                 </a>
                 <h4 class="sidebar-profile-name">Jelech</h4>
                 
@@ -110,7 +110,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/ " title="首页">
+                        <a class="sidebar-button-link " href="/ " title="首页">
                     
                         <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">首页</span>
@@ -119,7 +119,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/all-categories" title="分类">
+                        <a class="sidebar-button-link " href="/all-categories" title="分类">
                     
                         <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">分类</span>
@@ -128,7 +128,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/all-tags" title="标签">
+                        <a class="sidebar-button-link " href="/all-tags" title="标签">
                     
                         <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">标签</span>
@@ -137,7 +137,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/all-archives" title="归档">
+                        <a class="sidebar-button-link " href="/all-archives" title="归档">
                     
                         <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">归档</span>
@@ -146,7 +146,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/game" title="游戏">
+                        <a class="sidebar-button-link " href="/game" title="游戏">
                     
                         <i class="sidebar-button-icon fas fa-gamepad" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">游戏</span>
@@ -177,7 +177,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/mailto" title="邮箱">
+                        <a class="sidebar-button-link " href="/mailto" title="邮箱">
                     
                         <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">邮箱</span>
@@ -214,7 +214,7 @@
     
         <span>发布在 </span>
         
-    <a class="category-link" href="/blog/categories/学习笔记/">学习笔记</a>
+    <a class="category-link" href="/categories/学习笔记/">学习笔记</a>
 
 
     
@@ -251,7 +251,7 @@
             <div class="post-footer-tags">
                 <span class="text-color-light text-small">标签</span><br>
                 
-    <a class="tag tag--primary tag--small t-link" href="/blog/tags/笔记/">笔记</a>
+    <a class="tag tag--primary tag--small t-link" href="/tags/笔记/">笔记</a>
 
             </div>
         
@@ -262,7 +262,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/65518/" data-tooltip="ACM总结" aria-label="上一篇: ACM总结">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/65518/" data-tooltip="ACM总结" aria-label="上一篇: ACM总结">
                 
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
@@ -271,7 +271,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/3676/" data-tooltip="安装Django" aria-label="下一篇: 安装Django">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/3676/" data-tooltip="安装Django" aria-label="下一篇: 安装Django">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -289,7 +289,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/3493/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/3493/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -297,7 +297,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/3493/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/3493/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -305,7 +305,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/3493/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/3493/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -353,7 +353,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/65518/" data-tooltip="ACM总结" aria-label="上一篇: ACM总结">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/65518/" data-tooltip="ACM总结" aria-label="上一篇: ACM总结">
                 
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
@@ -362,7 +362,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/3676/" data-tooltip="安装Django" aria-label="下一篇: 安装Django">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/3676/" data-tooltip="安装Django" aria-label="下一篇: 安装Django">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -380,7 +380,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/3493/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/3493/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -388,7 +388,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/3493/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/3493/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -396,7 +396,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/3493/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/3493/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -423,7 +423,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/3493/">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/3493/">
                     <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
                 </a>
             </li>
@@ -431,7 +431,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/3493/">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/3493/">
                     <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
                 </a>
             </li>
@@ -439,7 +439,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/3493/">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/3493/">
                     <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
                 </a>
             </li>
@@ -462,7 +462,7 @@
             <i class="fa fa-times"></i>
         </div>
         
-            <img id="about-card-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
+            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
         
             <h4 id="about-card-name">Jelech</h4>
         
@@ -507,9 +507,9 @@
 
         
         
-<div id="cover" style="background-image:url('/blog/assets/images/cover.jpg');"></div>
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
         <!--SCRIPTS-->
-<script src="/blog/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
+<script src="/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
 <!--SCRIPTS END-->
 
     

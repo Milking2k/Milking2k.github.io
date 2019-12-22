@@ -12,17 +12,17 @@
         <meta name="keywords" content="博客,算法,HTML/CSS/JS,游戏服务器,游戏,">
     
     
-        <link rel="icon" href="https://jelech.gitee.io/blog/assets/images/favicon.ico">
+        <link rel="icon" href="https://jelech.gitee.io/assets/images/favicon.ico">
         <link rel="Shortcut Icon" type="image/x-icon" href="assets/images/favicon.ico">
     
     
-        <link rel="alternate" type="application/atom+xml" title="RSS" href="/blog/atom.xml">
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\nBribe the prisoners （2009 Round 1C C）(区间DP)\n别找了…要科学上网的\nLarge dataset\n1 ≤ P ≤ 100001 ≤ Q ≤ 100\nSample\n\n\nInput28 1320 33 6 14\n\n\nOutputCase #1: 7Case #2: 35\n\n题意\n连续的P个牢房（单个囚犯）中需要释放Q个囚犯，每次释放，有连接的囚犯都需要给1金币（若中间断开则两边不连接）。求释放Q个囚犯最少金币？\n\n题解\n因为每次释放i位置的囚犯时，包括此时所需的金币数量，释放i左侧部分所需的金币总数，释放右侧部分所需的金币总数。这里给出dp[i][j]:=将A[i]号囚犯到A[j]号囚犯的连续部分里的所有囚犯都释放时（i到j中没有其他需要释放的囚犯）所需的最少金币总数。\n\n代码1234567891011121314151617181920212223242526272829303132333435363738394041#include &lt;bits/stdc++.h&gt;using namespace std;#define MAX_Q 100#define MAX_P 1e4int P,Q,A[MAX_Q+7];int dp[MAX_Q+7][MAX_Q+7];void solve()&#123;\tA[0]=0;\tA[Q+1] = P+1;\t//init\tfor (int i = 0; i &lt;= Q; ++i)\t&#123;\t\tdp[i][i+1] = 0;\t&#125;\tfor (int w = 2; w &lt;= Q+1; ++w)\t&#123;\t\tfor (int i = 0; i + w &lt;= Q+1; ++i)\t\t&#123;\t\t\tint j = i+w,t=INT_MAX;\t\t\tfor (int k = i+1; k &lt; j; ++k)\t\t\t&#123;\t\t\t\tt = min(t,dp[i][k]+dp[k][j]);\t\t\t&#125;\t\t\tdp[i][j] = t+A[j]-A[i]-2;\t\t&#125;\t&#125;\tprintf(\"%d\\n\", dp[0][Q+1]);&#125;int main(int argc, char const *argv[])&#123;\twhile(scanf(\"%d%d\", &amp;P, &amp;Q))\t&#123;\t\tfor (int i = 1; i &lt;= Q; ++i)\t\t&#123;\t\t\tscanf(\"%d\",&amp;A[i]);\t\t&#125;\t\tsolve();\t&#125;\treturn 0;&#125;\n","dateCreated":"2018-05-09T21:15:31+08:00","dateModified":"2018-12-02T09:22:39+08:00","datePublished":"2018-05-09T21:15:31+08:00","description":"","headline":"释放囚犯","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://jelech.gitee.io/blog/posts/30324/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://jelech.gitee.io/blog/posts/30324/","keywords":"刷题, acm"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\nBribe the prisoners （2009 Round 1C C）(区间DP)\n别找了…要科学上网的\nLarge dataset\n1 ≤ P ≤ 100001 ≤ Q ≤ 100\nSample\n\n\nInput28 1320 33 6 14\n\n\nOutputCase #1: 7Case #2: 35\n\n题意\n连续的P个牢房（单个囚犯）中需要释放Q个囚犯，每次释放，有连接的囚犯都需要给1金币（若中间断开则两边不连接）。求释放Q个囚犯最少金币？\n\n题解\n因为每次释放i位置的囚犯时，包括此时所需的金币数量，释放i左侧部分所需的金币总数，释放右侧部分所需的金币总数。这里给出dp[i][j]:=将A[i]号囚犯到A[j]号囚犯的连续部分里的所有囚犯都释放时（i到j中没有其他需要释放的囚犯）所需的最少金币总数。\n\n代码1234567891011121314151617181920212223242526272829303132333435363738394041#include &lt;bits/stdc++.h&gt;using namespace std;#define MAX_Q 100#define MAX_P 1e4int P,Q,A[MAX_Q+7];int dp[MAX_Q+7][MAX_Q+7];void solve()&#123;\tA[0]=0;\tA[Q+1] = P+1;\t//init\tfor (int i = 0; i &lt;= Q; ++i)\t&#123;\t\tdp[i][i+1] = 0;\t&#125;\tfor (int w = 2; w &lt;= Q+1; ++w)\t&#123;\t\tfor (int i = 0; i + w &lt;= Q+1; ++i)\t\t&#123;\t\t\tint j = i+w,t=INT_MAX;\t\t\tfor (int k = i+1; k &lt; j; ++k)\t\t\t&#123;\t\t\t\tt = min(t,dp[i][k]+dp[k][j]);\t\t\t&#125;\t\t\tdp[i][j] = t+A[j]-A[i]-2;\t\t&#125;\t&#125;\tprintf(\"%d\\n\", dp[0][Q+1]);&#125;int main(int argc, char const *argv[])&#123;\twhile(scanf(\"%d%d\", &amp;P, &amp;Q))\t&#123;\t\tfor (int i = 1; i &lt;= Q; ++i)\t\t&#123;\t\t\tscanf(\"%d\",&amp;A[i]);\t\t&#125;\t\tsolve();\t&#125;\treturn 0;&#125;\n","dateCreated":"2018-05-09T21:15:31+08:00","dateModified":"2018-12-02T09:22:39+08:00","datePublished":"2018-05-09T21:15:31+08:00","description":"","headline":"释放囚犯","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://jelech.gitee.io/posts/30324/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://jelech.gitee.io/posts/30324/","keywords":"刷题, acm"}</script>
     <meta name="keywords" content="刷题,acm">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="释放囚犯">
-<meta property="og:url" content="https://jelech.gitee.io/blog/posts/30324/index.html">
+<meta property="og:url" content="https://jelech.gitee.io/posts/30324/index.html">
 <meta property="og:site_name" content="Jelech的博客">
 <meta property="og:locale" content="zh-cn">
 <meta property="og:updated_time" content="2018-12-02T01:22:39.962Z">
@@ -34,13 +34,13 @@
         
     
     
-        <meta property="og:image" content="https://jelech.gitee.io/blog/assets/images/avatar.jpg"/>
+        <meta property="og:image" content="https://jelech.gitee.io/assets/images/avatar.jpg"/>
     
     
     
     
     <!--STYLES-->
-    <link rel="stylesheet" href="/blog/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
+    <link rel="stylesheet" href="/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
     <!--STYLES END-->
     
 
@@ -71,14 +71,14 @@
 <header id="header" data-behavior="4">
     <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
     <div class="header-title">
-        <a class="header-title-link" href="/blog/ ">Jelech的博客</a>
+        <a class="header-title-link" href="/ ">Jelech的博客</a>
     </div>
     
         
             <a class="header-right-picture " href="#about">
         
         
-            <img class="header-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
+            <img class="header-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
         
         </a>
     
@@ -95,8 +95,8 @@
     <div class="sidebar-container">
         
             <div class="sidebar-profile">
-                <a href="/blog/#about">
-                    <img class="sidebar-profile-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
                 </a>
                 <h4 class="sidebar-profile-name">Jelech</h4>
                 
@@ -110,7 +110,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/ " title="首页">
+                        <a class="sidebar-button-link " href="/ " title="首页">
                     
                         <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">首页</span>
@@ -119,7 +119,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/all-categories" title="分类">
+                        <a class="sidebar-button-link " href="/all-categories" title="分类">
                     
                         <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">分类</span>
@@ -128,7 +128,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/all-tags" title="标签">
+                        <a class="sidebar-button-link " href="/all-tags" title="标签">
                     
                         <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">标签</span>
@@ -137,7 +137,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/all-archives" title="归档">
+                        <a class="sidebar-button-link " href="/all-archives" title="归档">
                     
                         <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">归档</span>
@@ -146,7 +146,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/game" title="游戏">
+                        <a class="sidebar-button-link " href="/game" title="游戏">
                     
                         <i class="sidebar-button-icon fas fa-gamepad" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">游戏</span>
@@ -177,7 +177,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/mailto" title="邮箱">
+                        <a class="sidebar-button-link " href="/mailto" title="邮箱">
                     
                         <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">邮箱</span>
@@ -214,7 +214,7 @@
     
         <span>发布在 </span>
         
-    <a class="category-link" href="/blog/categories/ACM竞赛/">ACM竞赛</a>
+    <a class="category-link" href="/categories/ACM竞赛/">ACM竞赛</a>
 
 
     
@@ -258,7 +258,7 @@
             <div class="post-footer-tags">
                 <span class="text-color-light text-small">标签</span><br>
                 
-    <a class="tag tag--primary tag--small t-link" href="/blog/tags/acm/">acm</a> <a class="tag tag--primary tag--small t-link" href="/blog/tags/刷题/">刷题</a>
+    <a class="tag tag--primary tag--small t-link" href="/tags/acm/">acm</a> <a class="tag tag--primary tag--small t-link" href="/tags/刷题/">刷题</a>
 
             </div>
         
@@ -269,7 +269,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/64946/" data-tooltip="2018第九届山东ACM省赛" aria-label="上一篇: 2018第九届山东ACM省赛">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/64946/" data-tooltip="2018第九届山东ACM省赛" aria-label="上一篇: 2018第九届山东ACM省赛">
                 
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
@@ -278,7 +278,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/13833/" data-tooltip="如何安装opencv" aria-label="下一篇: 如何安装opencv">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/13833/" data-tooltip="如何安装opencv" aria-label="下一篇: 如何安装opencv">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -296,7 +296,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/30324/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/30324/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -304,7 +304,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/30324/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/30324/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -312,7 +312,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/30324/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/30324/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -360,7 +360,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/64946/" data-tooltip="2018第九届山东ACM省赛" aria-label="上一篇: 2018第九届山东ACM省赛">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/64946/" data-tooltip="2018第九届山东ACM省赛" aria-label="上一篇: 2018第九届山东ACM省赛">
                 
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
@@ -369,7 +369,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/13833/" data-tooltip="如何安装opencv" aria-label="下一篇: 如何安装opencv">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/13833/" data-tooltip="如何安装opencv" aria-label="下一篇: 如何安装opencv">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -387,7 +387,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/30324/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/30324/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -395,7 +395,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/30324/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/30324/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -403,7 +403,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/30324/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/30324/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -430,7 +430,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/30324/">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/30324/">
                     <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
                 </a>
             </li>
@@ -438,7 +438,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/30324/">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/30324/">
                     <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
                 </a>
             </li>
@@ -446,7 +446,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/30324/">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/30324/">
                     <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
                 </a>
             </li>
@@ -469,7 +469,7 @@
             <i class="fa fa-times"></i>
         </div>
         
-            <img id="about-card-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
+            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
         
             <h4 id="about-card-name">Jelech</h4>
         
@@ -514,9 +514,9 @@
 
         
         
-<div id="cover" style="background-image:url('/blog/assets/images/cover.jpg');"></div>
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
         <!--SCRIPTS-->
-<script src="/blog/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
+<script src="/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
 <!--SCRIPTS END-->
 
     

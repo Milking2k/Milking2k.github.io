@@ -12,17 +12,17 @@
         <meta name="keywords" content="博客,算法,HTML/CSS/JS,游戏服务器,游戏,">
     
     
-        <link rel="icon" href="https://jelech.gitee.io/blog/assets/images/favicon.ico">
+        <link rel="icon" href="https://jelech.gitee.io/assets/images/favicon.ico">
         <link rel="Shortcut Icon" type="image/x-icon" href="assets/images/favicon.ico">
     
     
-        <link rel="alternate" type="application/atom+xml" title="RSS" href="/blog/atom.xml">
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n操作系统的自白（一）\n操作系统是一种建立在电脑硬件上的计算机底层软件，他能接受上层软件的要求，也能操作下层的基础硬件。他作为帮助你进行计算机编程、使用，帮你管理底层的许多杂碎和问题…难道你不该感谢一下吗？\n\n分类\n为什么要分类？。。。。直接学啊！\n其实我想说一下的章节分类….面试好像都考不到。最多和死锁搭上边。我想问用户态和内核态呢？\n\n不算章节的章节\n进程描述和控制\n线程\n并发互斥与同步\n死锁和饥饿\n内存管理\n虚拟内存\n单处理调度\n复用和实时调度\nI/O管理和硬盘管理\n文件管理\n\n\n其实并不想这么写\n而且有本Unix下的c语言开发，非常好！\n\n重点\n主要是记录好所有的重点，而尽量的不进行描述，给之后复习节省脑力。看到关键词就能慢慢回忆起这部分内容。\n而且…我好像不是为了开发操作系统而学习的，很多超级细节的东西应该没必要….嘤\n理想真美好~\n或许把linux源码读一下可能更有利于学习，但是….如果有调用底层的东西确实看不下去啊。\n那没办法了\n\n嘤，开始吧\n\n进程和线程是兄弟吗\n不。他们是父子关系。你这种想法太可怕了。\n\n进程\n进程嘛，可以直接理解为我们平常用的程序。但是呢，有点不同的是，它也是个有ID身份证的！这种身份证啊，在他们那叫做PCB - Process Control Blocks\n\nPCB\nPCB是进程的身份证(唯一表示符，状态，优先级，程序控制，内存指针，文本数据，I/O状态信息，记录信息)\n哎呀，看字面意思也能懂的嘛，以后用到了慢慢讲嘛，一个进程无非就为了抢数据，得有更高身份的人，操作系统这个大大才会优先给他资源嘛。\n\n进程状态\n2-state model：就跑还是没跑的区别。\n5-state model：和交叉的接力棒很像哦。\n一个人来了，先准备好，然后开始跑。\n第二个人来了，要和第一个交接。\n一个跑，一个就准备好。好的，这就是两个人的互相py，哦不，是互相传力了。\n如果有个人不想跑了，那就退出了呗。\n如果有人突然想上厕所了。哎呀不能终止比赛啊，先让他去吧（阻塞了），再上另一个选手进行交叉接力。\n又有人想去了？去吧去吧，拍好队，怎么去的就怎么回来。\n嘿嘿，上厕所的回来了，先等着准备好。这就继续交接啦。\n需要图？不存在的，YY才是最强大的。\n\n\n\n\n7-state model：\n嘤，有人想上大厕所，有人想回趟家(?????)，这不能让排队的一直等着啊。\n那没法了，分类一下吧，时间长的假装他睡觉了，放另一个等待队列吧。\n上厕所的还是继续阻塞。回家的排了一定时间，给我把它放到另一个长♂久的队列里去。\n\n\n\n平时笔记-乱用户态和核心态：     用户态：             用户程序执行时机器所处的状态     权限小，只能执行特定指令。核心态：操作系统管理程序执行时机器所处的状态     权限大，能执行特权指令。      特权指令：I/O指令、设置中断屏蔽指令、清理内存指令、设置时钟指令。核心态只向用户提供接口，使得用户态能执行特定的指令和中断等。\n1、调度：进程是拥有资源和独立调度的基本单位     线程只是独立调度单位，运行时资源属于进程。\n2、拥有资源： 不管是有无线程的操作系统，进程都是拥有资源的基本单位，而线程只拥有极少的私有资源（程序计数器、一组寄存器、栈。用来保存线程的执行历史和线程的执行状态，这些资源也是进程的）\n3、并发性：有线程的操作系统，进程可以并发，线程也可以并发。可以理解为一个程序有好几个进程，每个进程又有好几个线程。\n4、系统开销：进程大（切换进程时要保存运行环境，重新启动时又要回复） ，线程小（自己本来就那么一点可怜的资源，开销肯定小）\n用户级线程和内核级线程区别：\n用户级线程：当一个用户级线程阻塞，整个进程都必须等待。内核级线程：当一个内核级线程阻塞，不会影响其他线程。因为一旦线程阻塞，内核会从当前或者其他进程(process)中重新选择一个线程保证程序的执行。进程通信：\n共享存储器系统 ：设置一个共享存储区消息传递系统：直接通信方式、间接通信方式（设置一个中间实体-信箱）管道通信系统：管道是用于连接读写进程以实现它们直接通信的共享文件，所以管道是共享文件。\n","dateCreated":"2018-12-06T22:09:33+08:00","dateModified":"2018-12-10T13:53:00+08:00","datePublished":"2018-12-06T22:09:33+08:00","description":"","headline":"跟我一起复习操作系统（一）","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://jelech.gitee.io/blog/posts/6676/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://jelech.gitee.io/blog/posts/6676/","keywords":"笔记, 操作系统"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n操作系统的自白（一）\n操作系统是一种建立在电脑硬件上的计算机底层软件，他能接受上层软件的要求，也能操作下层的基础硬件。他作为帮助你进行计算机编程、使用，帮你管理底层的许多杂碎和问题…难道你不该感谢一下吗？\n\n分类\n为什么要分类？。。。。直接学啊！\n其实我想说一下的章节分类….面试好像都考不到。最多和死锁搭上边。我想问用户态和内核态呢？\n\n不算章节的章节\n进程描述和控制\n线程\n并发互斥与同步\n死锁和饥饿\n内存管理\n虚拟内存\n单处理调度\n复用和实时调度\nI/O管理和硬盘管理\n文件管理\n\n\n其实并不想这么写\n而且有本Unix下的c语言开发，非常好！\n\n重点\n主要是记录好所有的重点，而尽量的不进行描述，给之后复习节省脑力。看到关键词就能慢慢回忆起这部分内容。\n而且…我好像不是为了开发操作系统而学习的，很多超级细节的东西应该没必要….嘤\n理想真美好~\n或许把linux源码读一下可能更有利于学习，但是….如果有调用底层的东西确实看不下去啊。\n那没办法了\n\n嘤，开始吧\n\n进程和线程是兄弟吗\n不。他们是父子关系。你这种想法太可怕了。\n\n进程\n进程嘛，可以直接理解为我们平常用的程序。但是呢，有点不同的是，它也是个有ID身份证的！这种身份证啊，在他们那叫做PCB - Process Control Blocks\n\nPCB\nPCB是进程的身份证(唯一表示符，状态，优先级，程序控制，内存指针，文本数据，I/O状态信息，记录信息)\n哎呀，看字面意思也能懂的嘛，以后用到了慢慢讲嘛，一个进程无非就为了抢数据，得有更高身份的人，操作系统这个大大才会优先给他资源嘛。\n\n进程状态\n2-state model：就跑还是没跑的区别。\n5-state model：和交叉的接力棒很像哦。\n一个人来了，先准备好，然后开始跑。\n第二个人来了，要和第一个交接。\n一个跑，一个就准备好。好的，这就是两个人的互相py，哦不，是互相传力了。\n如果有个人不想跑了，那就退出了呗。\n如果有人突然想上厕所了。哎呀不能终止比赛啊，先让他去吧（阻塞了），再上另一个选手进行交叉接力。\n又有人想去了？去吧去吧，拍好队，怎么去的就怎么回来。\n嘿嘿，上厕所的回来了，先等着准备好。这就继续交接啦。\n需要图？不存在的，YY才是最强大的。\n\n\n\n\n7-state model：\n嘤，有人想上大厕所，有人想回趟家(?????)，这不能让排队的一直等着啊。\n那没法了，分类一下吧，时间长的假装他睡觉了，放另一个等待队列吧。\n上厕所的还是继续阻塞。回家的排了一定时间，给我把它放到另一个长♂久的队列里去。\n\n\n\n平时笔记-乱用户态和核心态：     用户态：             用户程序执行时机器所处的状态     权限小，只能执行特定指令。核心态：操作系统管理程序执行时机器所处的状态     权限大，能执行特权指令。      特权指令：I/O指令、设置中断屏蔽指令、清理内存指令、设置时钟指令。核心态只向用户提供接口，使得用户态能执行特定的指令和中断等。\n1、调度：进程是拥有资源和独立调度的基本单位     线程只是独立调度单位，运行时资源属于进程。\n2、拥有资源： 不管是有无线程的操作系统，进程都是拥有资源的基本单位，而线程只拥有极少的私有资源（程序计数器、一组寄存器、栈。用来保存线程的执行历史和线程的执行状态，这些资源也是进程的）\n3、并发性：有线程的操作系统，进程可以并发，线程也可以并发。可以理解为一个程序有好几个进程，每个进程又有好几个线程。\n4、系统开销：进程大（切换进程时要保存运行环境，重新启动时又要回复） ，线程小（自己本来就那么一点可怜的资源，开销肯定小）\n用户级线程和内核级线程区别：\n用户级线程：当一个用户级线程阻塞，整个进程都必须等待。内核级线程：当一个内核级线程阻塞，不会影响其他线程。因为一旦线程阻塞，内核会从当前或者其他进程(process)中重新选择一个线程保证程序的执行。进程通信：\n共享存储器系统 ：设置一个共享存储区消息传递系统：直接通信方式、间接通信方式（设置一个中间实体-信箱）管道通信系统：管道是用于连接读写进程以实现它们直接通信的共享文件，所以管道是共享文件。\n","dateCreated":"2018-12-06T22:09:33+08:00","dateModified":"2018-12-10T13:53:00+08:00","datePublished":"2018-12-06T22:09:33+08:00","description":"","headline":"跟我一起复习操作系统（一）","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://jelech.gitee.io/posts/6676/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://jelech.gitee.io/posts/6676/","keywords":"笔记, 操作系统"}</script>
     <meta name="keywords" content="笔记,操作系统">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="跟我一起复习操作系统（一）">
-<meta property="og:url" content="https://jelech.gitee.io/blog/posts/6676/index.html">
+<meta property="og:url" content="https://jelech.gitee.io/posts/6676/index.html">
 <meta property="og:site_name" content="Jelech的博客">
 <meta property="og:locale" content="zh-cn">
 <meta property="og:updated_time" content="2018-12-10T05:53:00.066Z">
@@ -34,13 +34,13 @@
         
     
     
-        <meta property="og:image" content="https://jelech.gitee.io/blog/assets/images/avatar.jpg"/>
+        <meta property="og:image" content="https://jelech.gitee.io/assets/images/avatar.jpg"/>
     
     
     
     
     <!--STYLES-->
-    <link rel="stylesheet" href="/blog/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
+    <link rel="stylesheet" href="/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
     <!--STYLES END-->
     
 
@@ -71,14 +71,14 @@
 <header id="header" data-behavior="4">
     <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
     <div class="header-title">
-        <a class="header-title-link" href="/blog/ ">Jelech的博客</a>
+        <a class="header-title-link" href="/ ">Jelech的博客</a>
     </div>
     
         
             <a class="header-right-picture " href="#about">
         
         
-            <img class="header-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
+            <img class="header-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
         
         </a>
     
@@ -95,8 +95,8 @@
     <div class="sidebar-container">
         
             <div class="sidebar-profile">
-                <a href="/blog/#about">
-                    <img class="sidebar-profile-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
                 </a>
                 <h4 class="sidebar-profile-name">Jelech</h4>
                 
@@ -110,7 +110,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/ " title="首页">
+                        <a class="sidebar-button-link " href="/ " title="首页">
                     
                         <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">首页</span>
@@ -119,7 +119,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/all-categories" title="分类">
+                        <a class="sidebar-button-link " href="/all-categories" title="分类">
                     
                         <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">分类</span>
@@ -128,7 +128,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/all-tags" title="标签">
+                        <a class="sidebar-button-link " href="/all-tags" title="标签">
                     
                         <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">标签</span>
@@ -137,7 +137,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/all-archives" title="归档">
+                        <a class="sidebar-button-link " href="/all-archives" title="归档">
                     
                         <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">归档</span>
@@ -146,7 +146,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/game" title="游戏">
+                        <a class="sidebar-button-link " href="/game" title="游戏">
                     
                         <i class="sidebar-button-icon fas fa-gamepad" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">游戏</span>
@@ -177,7 +177,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/mailto" title="邮箱">
+                        <a class="sidebar-button-link " href="/mailto" title="邮箱">
                     
                         <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">邮箱</span>
@@ -214,7 +214,7 @@
     
         <span>发布在 </span>
         
-    <a class="category-link" href="/blog/categories/学习笔记/">学习笔记</a>
+    <a class="category-link" href="/categories/学习笔记/">学习笔记</a>
 
 
     
@@ -311,7 +311,7 @@
             <div class="post-footer-tags">
                 <span class="text-color-light text-small">标签</span><br>
                 
-    <a class="tag tag--primary tag--small t-link" href="/blog/tags/操作系统/">操作系统</a> <a class="tag tag--primary tag--small t-link" href="/blog/tags/笔记/">笔记</a>
+    <a class="tag tag--primary tag--small t-link" href="/tags/操作系统/">操作系统</a> <a class="tag tag--primary tag--small t-link" href="/tags/笔记/">笔记</a>
 
             </div>
         
@@ -322,7 +322,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/63716/" data-tooltip="python线程" aria-label="上一篇: python线程">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/52862/" data-tooltip="python爬虫基础" aria-label="上一篇: python爬虫基础">
                 
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
@@ -331,7 +331,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/45237/" data-tooltip="学习的阻碍" aria-label="下一篇: 学习的阻碍">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/45237/" data-tooltip="学习的阻碍" aria-label="下一篇: 学习的阻碍">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -349,7 +349,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/6676/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/6676/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -357,7 +357,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/6676/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/6676/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -365,7 +365,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/6676/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/6676/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -413,7 +413,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/63716/" data-tooltip="python线程" aria-label="上一篇: python线程">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/52862/" data-tooltip="python爬虫基础" aria-label="上一篇: python爬虫基础">
                 
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
@@ -422,7 +422,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/45237/" data-tooltip="学习的阻碍" aria-label="下一篇: 学习的阻碍">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/45237/" data-tooltip="学习的阻碍" aria-label="下一篇: 学习的阻碍">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -440,7 +440,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/6676/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/6676/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -448,7 +448,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/6676/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/6676/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -456,7 +456,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/6676/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/6676/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -483,7 +483,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/6676/">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/6676/">
                     <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
                 </a>
             </li>
@@ -491,7 +491,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/6676/">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/6676/">
                     <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
                 </a>
             </li>
@@ -499,7 +499,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/6676/">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/6676/">
                     <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
                 </a>
             </li>
@@ -522,7 +522,7 @@
             <i class="fa fa-times"></i>
         </div>
         
-            <img id="about-card-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
+            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
         
             <h4 id="about-card-name">Jelech</h4>
         
@@ -567,9 +567,9 @@
 
         
         
-<div id="cover" style="background-image:url('/blog/assets/images/cover.jpg');"></div>
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
         <!--SCRIPTS-->
-<script src="/blog/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
+<script src="/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
 <!--SCRIPTS END-->
 
     

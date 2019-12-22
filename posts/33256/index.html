@@ -12,17 +12,17 @@
         <meta name="keywords" content="博客,算法,HTML/CSS/JS,游戏服务器,游戏,">
     
     
-        <link rel="icon" href="https://jelech.gitee.io/blog/assets/images/favicon.ico">
+        <link rel="icon" href="https://jelech.gitee.io/assets/images/favicon.ico">
         <link rel="Shortcut Icon" type="image/x-icon" href="assets/images/favicon.ico">
     
     
-        <link rel="alternate" type="application/atom+xml" title="RSS" href="/blog/atom.xml">
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n更新一些动态规划的模板背包问题12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849//  01背包：  void bag01(int cost,int weight)  &#123;      for(i = v; i &gt;= cost; --i)      dp[i] = max(dp[i], dp[i-cost]+weight);  &#125;  //  完全背包：void complete(int cost, int weight)  &#123;      for(i = cost ; i &lt;= v; ++i)      dp[i] = max(dp[i], dp[i - cost] + weight);  &#125;  //  多重背包：  void multiply(int cost, int weight, int amount)  &#123;      if(cost * amount &gt;= v)          complete(cost, weight);      else&#123;          k = 1;          while (k &lt; amount)&#123;              bag01(k * cost, k * weight);              amount -= k;              k += k;          &#125;          bag01(cost * amount, weight * amount);      &#125;  &#125;  // other 递归类型int dp[1000000];// 1e6int c[55], m[110];int sum;void CompletePack(int c) &#123;    for (int v = c; v &lt;= sum / 2; ++v)        dp[v] = max(dp[v], dp[v - c] + c);&#125;void ZeroOnePack(int c) &#123;    for (int v = sum / 2; v &gt;= c; --v)        dp[v] = max(dp[v], dp[v - c] + c);&#125;void multiplePack(int c, int m） &#123;    if (m * c &gt; sum / 2) CompletePack(c);    else&#123;        int k = 1;        while (k &lt; m)&#123;            ZeroOnePack(k * c);            m -= k;            k &lt;&lt;= 1;        &#125;        if (m != 0) ZeroOnePack(m * c);    &#125;&#125;\nLIS 最长上升子序列12345678910111213141516171819202122232425262728/*    状态转移dp[i] = max&#123; 1.dp[j] + 1 &#125;;  j&lt;i; a[j]&lt;a[i];    d[i]是以i结尾的最长上升子序列    与i之前的 每个a[j]&lt;a[i]的 j的位置的最长上升子序列+1后的值比较*/void solve()&#123;   // 参考挑战程序设计入门经典;    for(int i = 0; i &lt; n; ++i)&#123;          dp[i] = 1;          for(int j = 0; j &lt; i; ++j)&#123;              if(a[j] &lt; a[i])&#123;                  dp[i] = max(dp[i], dp[j] + 1);              &#125; &#125; &#125;&#125;  /*     优化方法：    dp[i]表示长度为i+1的上升子序列的最末尾元素      找到第一个比dp末尾大的来代替 */void solve() &#123;  \tfor (int i = 0; i &lt; n; ++i)\t\tdp[i] = INF;\tfor (int i = 0; i &lt; n; ++i) \t\t*lower_bound(dp, dp + n, a[i]) = a[i];  //  返回一个指针  \tprintf(\"%d\\n\", *lower_bound(dp, dp + n, INF) - dp;  &#125;/*      函数lower_bound()返回一个 iterator 它指向在[first,last)标记的有序序列中可以插入value，而不会破坏容器顺序的第一个位置，而这个位置标记了一个不小于value的值。*/\nLCS 最长公共子序列123456789void solve() &#123;    for (int i = 0; i &lt; n; ++i) &#123;        for (int j = 0; j &lt; m; ++j) &#123;            if (s1[i] == s2[j]) &#123;                dp[i + 1][j + 1] = dp[i][j] + 1;              &#125;else &#123;                  dp[i + 1][j + 1] = max(dp[i][j + 1], dp[i + 1][j]);              &#125; &#125; &#125;&#125;","dateCreated":"2018-04-30T21:09:57+08:00","dateModified":"2018-12-01T21:37:59+08:00","datePublished":"2018-04-30T21:09:57+08:00","description":"","headline":"动态规划模板","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://jelech.gitee.io/blog/posts/33256/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://jelech.gitee.io/blog/posts/33256/","keywords":"模板"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n更新一些动态规划的模板背包问题12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849//  01背包：  void bag01(int cost,int weight)  &#123;      for(i = v; i &gt;= cost; --i)      dp[i] = max(dp[i], dp[i-cost]+weight);  &#125;  //  完全背包：void complete(int cost, int weight)  &#123;      for(i = cost ; i &lt;= v; ++i)      dp[i] = max(dp[i], dp[i - cost] + weight);  &#125;  //  多重背包：  void multiply(int cost, int weight, int amount)  &#123;      if(cost * amount &gt;= v)          complete(cost, weight);      else&#123;          k = 1;          while (k &lt; amount)&#123;              bag01(k * cost, k * weight);              amount -= k;              k += k;          &#125;          bag01(cost * amount, weight * amount);      &#125;  &#125;  // other 递归类型int dp[1000000];// 1e6int c[55], m[110];int sum;void CompletePack(int c) &#123;    for (int v = c; v &lt;= sum / 2; ++v)        dp[v] = max(dp[v], dp[v - c] + c);&#125;void ZeroOnePack(int c) &#123;    for (int v = sum / 2; v &gt;= c; --v)        dp[v] = max(dp[v], dp[v - c] + c);&#125;void multiplePack(int c, int m） &#123;    if (m * c &gt; sum / 2) CompletePack(c);    else&#123;        int k = 1;        while (k &lt; m)&#123;            ZeroOnePack(k * c);            m -= k;            k &lt;&lt;= 1;        &#125;        if (m != 0) ZeroOnePack(m * c);    &#125;&#125;\nLIS 最长上升子序列12345678910111213141516171819202122232425262728/*    状态转移dp[i] = max&#123; 1.dp[j] + 1 &#125;;  j&lt;i; a[j]&lt;a[i];    d[i]是以i结尾的最长上升子序列    与i之前的 每个a[j]&lt;a[i]的 j的位置的最长上升子序列+1后的值比较*/void solve()&#123;   // 参考挑战程序设计入门经典;    for(int i = 0; i &lt; n; ++i)&#123;          dp[i] = 1;          for(int j = 0; j &lt; i; ++j)&#123;              if(a[j] &lt; a[i])&#123;                  dp[i] = max(dp[i], dp[j] + 1);              &#125; &#125; &#125;&#125;  /*     优化方法：    dp[i]表示长度为i+1的上升子序列的最末尾元素      找到第一个比dp末尾大的来代替 */void solve() &#123;  \tfor (int i = 0; i &lt; n; ++i)\t\tdp[i] = INF;\tfor (int i = 0; i &lt; n; ++i) \t\t*lower_bound(dp, dp + n, a[i]) = a[i];  //  返回一个指针  \tprintf(\"%d\\n\", *lower_bound(dp, dp + n, INF) - dp;  &#125;/*      函数lower_bound()返回一个 iterator 它指向在[first,last)标记的有序序列中可以插入value，而不会破坏容器顺序的第一个位置，而这个位置标记了一个不小于value的值。*/\nLCS 最长公共子序列123456789void solve() &#123;    for (int i = 0; i &lt; n; ++i) &#123;        for (int j = 0; j &lt; m; ++j) &#123;            if (s1[i] == s2[j]) &#123;                dp[i + 1][j + 1] = dp[i][j] + 1;              &#125;else &#123;                  dp[i + 1][j + 1] = max(dp[i][j + 1], dp[i + 1][j]);              &#125; &#125; &#125;&#125;","dateCreated":"2018-04-30T21:09:57+08:00","dateModified":"2018-12-01T21:37:59+08:00","datePublished":"2018-04-30T21:09:57+08:00","description":"","headline":"动态规划模板","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://jelech.gitee.io/posts/33256/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://jelech.gitee.io/posts/33256/","keywords":"模板"}</script>
     <meta name="keywords" content="模板">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="动态规划模板">
-<meta property="og:url" content="https://jelech.gitee.io/blog/posts/33256/index.html">
+<meta property="og:url" content="https://jelech.gitee.io/posts/33256/index.html">
 <meta property="og:site_name" content="Jelech的博客">
 <meta property="og:locale" content="zh-cn">
 <meta property="og:updated_time" content="2018-12-01T13:37:59.888Z">
@@ -34,13 +34,13 @@
         
     
     
-        <meta property="og:image" content="https://jelech.gitee.io/blog/assets/images/avatar.jpg"/>
+        <meta property="og:image" content="https://jelech.gitee.io/assets/images/avatar.jpg"/>
     
     
     
     
     <!--STYLES-->
-    <link rel="stylesheet" href="/blog/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
+    <link rel="stylesheet" href="/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
     <!--STYLES END-->
     
 
@@ -71,14 +71,14 @@
 <header id="header" data-behavior="4">
     <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
     <div class="header-title">
-        <a class="header-title-link" href="/blog/ ">Jelech的博客</a>
+        <a class="header-title-link" href="/ ">Jelech的博客</a>
     </div>
     
         
             <a class="header-right-picture " href="#about">
         
         
-            <img class="header-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
+            <img class="header-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
         
         </a>
     
@@ -95,8 +95,8 @@
     <div class="sidebar-container">
         
             <div class="sidebar-profile">
-                <a href="/blog/#about">
-                    <img class="sidebar-profile-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
+                <a href="/#about">
+                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
                 </a>
                 <h4 class="sidebar-profile-name">Jelech</h4>
                 
@@ -110,7 +110,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/ " title="首页">
+                        <a class="sidebar-button-link " href="/ " title="首页">
                     
                         <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">首页</span>
@@ -119,7 +119,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/all-categories" title="分类">
+                        <a class="sidebar-button-link " href="/all-categories" title="分类">
                     
                         <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">分类</span>
@@ -128,7 +128,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/all-tags" title="标签">
+                        <a class="sidebar-button-link " href="/all-tags" title="标签">
                     
                         <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">标签</span>
@@ -137,7 +137,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/all-archives" title="归档">
+                        <a class="sidebar-button-link " href="/all-archives" title="归档">
                     
                         <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">归档</span>
@@ -146,7 +146,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/game" title="游戏">
+                        <a class="sidebar-button-link " href="/game" title="游戏">
                     
                         <i class="sidebar-button-icon fas fa-gamepad" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">游戏</span>
@@ -177,7 +177,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/blog/mailto" title="邮箱">
+                        <a class="sidebar-button-link " href="/mailto" title="邮箱">
                     
                         <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">邮箱</span>
@@ -214,7 +214,7 @@
     
         <span>发布在 </span>
         
-    <a class="category-link" href="/blog/categories/算法/">算法</a>
+    <a class="category-link" href="/categories/算法/">算法</a>
 
 
     
@@ -241,7 +241,7 @@
             <div class="post-footer-tags">
                 <span class="text-color-light text-small">标签</span><br>
                 
-    <a class="tag tag--primary tag--small t-link" href="/blog/tags/模板/">模板</a>
+    <a class="tag tag--primary tag--small t-link" href="/tags/模板/">模板</a>
 
             </div>
         
@@ -252,7 +252,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/56449/" data-tooltip="计算几何模板" aria-label="上一篇: 计算几何模板">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/56449/" data-tooltip="计算几何模板" aria-label="上一篇: 计算几何模板">
                 
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
@@ -261,7 +261,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/39634/" data-tooltip="中等难度模板" aria-label="下一篇: 中等难度模板">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/39634/" data-tooltip="中等难度模板" aria-label="下一篇: 中等难度模板">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -279,7 +279,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/33256/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/33256/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -287,7 +287,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/33256/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/33256/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -295,7 +295,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/33256/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/33256/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -343,7 +343,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/56449/" data-tooltip="计算几何模板" aria-label="上一篇: 计算几何模板">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/56449/" data-tooltip="计算几何模板" aria-label="上一篇: 计算几何模板">
                 
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
@@ -352,7 +352,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/39634/" data-tooltip="中等难度模板" aria-label="下一篇: 中等难度模板">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/39634/" data-tooltip="中等难度模板" aria-label="下一篇: 中等难度模板">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -370,7 +370,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/33256/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/33256/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -378,7 +378,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/33256/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/33256/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -386,7 +386,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/33256/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/33256/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -413,7 +413,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/33256/">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/33256/">
                     <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
                 </a>
             </li>
@@ -421,7 +421,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/33256/">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/33256/">
                     <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
                 </a>
             </li>
@@ -429,7 +429,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/33256/">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/33256/">
                     <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
                 </a>
             </li>
@@ -452,7 +452,7 @@
             <i class="fa fa-times"></i>
         </div>
         
-            <img id="about-card-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
+            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
         
             <h4 id="about-card-name">Jelech</h4>
         
@@ -497,9 +497,9 @@
 
         
         
-<div id="cover" style="background-image:url('/blog/assets/images/cover.jpg');"></div>
+<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
         <!--SCRIPTS-->
-<script src="/blog/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
+<script src="/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
 <!--SCRIPTS END-->
 
     
