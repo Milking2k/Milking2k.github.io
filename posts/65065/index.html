@@ -12,17 +12,17 @@
         <meta name="keywords" content="博客,算法,HTML/CSS/JS,游戏服务器,游戏,">
     
     
-        <link rel="icon" href="https://www.jelech.top/assets/images/favicon.ico">
+        <link rel="icon" href="https://jelech.gitee.io/blog/assets/images/favicon.ico">
         <link rel="Shortcut Icon" type="image/x-icon" href="assets/images/favicon.ico">
     
     
-        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/blog/atom.xml">
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n前言游戏开发中, 玩家操作的每次都可以理解为一个行为, 每次行为的结果会让玩家到某个状态。为了加快开发效率、让整个流程逻辑更清晰，出现了有限自动机。状态树的方法也能应用到这里。《linux高性能服务器》书中也介绍过有限自动机的概念。\n我学习过后，准备在这里对一些内容进行一些总结。\n有限自动机\nDFA 确定的有限状态自动机。FSM有限状态自动机，对于一个流程，有开始状态与终止状态，每个操作、事件对应一个行为，行为过后会转换到另一个状态。\n\n……其实上面部分比较熟悉，需要花点事件自己说明白，待补充\n行为树\nBT(Beahvior Tree) 是有行为节点组成的树状结构。节点是有层次的，子节点由其父节点进行控制。节点分为多种，每次会对子节点进行操作。如果满足某种条件则递归式的继续运行子节点的行为。执行返回有Success、Failure、Runing。\n\n节点分类\n序列(Sequence)节点：按照序列的形式执行所有节点，如果某个节点失败则返回失败\n循环(Loop)节点：循环的执行所有子节点一定的次数，可以设置为无限循环\n条件(Condition)节点：如果满足某个条件则返回成功或者失败\n动作(Action)节点：根据动作的结果返回成功、失败和运行\n等待(Wait)节点：等待一定时间过去后返回成功\n\n运行(Runing)状态\n行为节点返回成功和失败都会通知父节点做相应的动作。\n\n如果是返回的行状态，则父节点会继续运行这个动作，直到返回为成功，才继续运行之后的节点。我们称之为(#`O′)伪阻塞。这是因为每次运行的时候都是跳出了子节点，再进入子节点的，只是返回的是运行的时候，每一帧的下一步操作都是进入这个节点。\n假设现在有流程“走过去”，做“采矿”再做“返回”，一颗行为树就可以表达完毕，每件事情都是持续的，如果没有RUNNING，那其实就更像一颗“决策树”而非“行为树”。\n解决伪阻塞使用前置\n每个节点都可以添加一个前置附件或者后置附件\n\n添加前置附件，设置执行时机为Update或Both。name每次执行节点之前都会先执行配置里的条件。\n使用parallel节点该节点作用为“一遍检查条件、一遍执行动作”。该节点后的节点运行的时候回进行一次判断。\n有限状态机和行为树对于一系列事件，有限状态机更多表现出来的形式是一种有向图的形式，而行为树则是因为逻辑更像一个树形结构。\n","dateCreated":"2019-07-21T19:44:47+08:00","dateModified":"2019-10-28T21:30:11+08:00","datePublished":"2019-07-21T19:44:47+08:00","description":"","headline":"状态机与行为树","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://www.jelech.top/posts/65065/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://www.jelech.top/posts/65065/","keywords":"服务器"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n前言游戏开发中, 玩家操作的每次都可以理解为一个行为, 每次行为的结果会让玩家到某个状态。为了加快开发效率、让整个流程逻辑更清晰，出现了有限自动机。状态树的方法也能应用到这里。《linux高性能服务器》书中也介绍过有限自动机的概念。\n我学习过后，准备在这里对一些内容进行一些总结。\n有限自动机\nDFA 确定的有限状态自动机。FSM有限状态自动机，对于一个流程，有开始状态与终止状态，每个操作、事件对应一个行为，行为过后会转换到另一个状态。\n\n……其实上面部分比较熟悉，需要花点事件自己说明白，待补充\n行为树\nBT(Beahvior Tree) 是有行为节点组成的树状结构。节点是有层次的，子节点由其父节点进行控制。节点分为多种，每次会对子节点进行操作。如果满足某种条件则递归式的继续运行子节点的行为。执行返回有Success、Failure、Runing。\n\n节点分类\n序列(Sequence)节点：按照序列的形式执行所有节点，如果某个节点失败则返回失败\n循环(Loop)节点：循环的执行所有子节点一定的次数，可以设置为无限循环\n条件(Condition)节点：如果满足某个条件则返回成功或者失败\n动作(Action)节点：根据动作的结果返回成功、失败和运行\n等待(Wait)节点：等待一定时间过去后返回成功\n\n运行(Runing)状态\n行为节点返回成功和失败都会通知父节点做相应的动作。\n\n如果是返回的行状态，则父节点会继续运行这个动作，直到返回为成功，才继续运行之后的节点。我们称之为(#`O′)伪阻塞。这是因为每次运行的时候都是跳出了子节点，再进入子节点的，只是返回的是运行的时候，每一帧的下一步操作都是进入这个节点。\n假设现在有流程“走过去”，做“采矿”再做“返回”，一颗行为树就可以表达完毕，每件事情都是持续的，如果没有RUNNING，那其实就更像一颗“决策树”而非“行为树”。\n解决伪阻塞使用前置\n每个节点都可以添加一个前置附件或者后置附件\n\n添加前置附件，设置执行时机为Update或Both。name每次执行节点之前都会先执行配置里的条件。\n使用parallel节点该节点作用为“一遍检查条件、一遍执行动作”。该节点后的节点运行的时候回进行一次判断。\n有限状态机和行为树对于一系列事件，有限状态机更多表现出来的形式是一种有向图的形式，而行为树则是因为逻辑更像一个树形结构。\n","dateCreated":"2019-07-21T19:44:47+08:00","dateModified":"2019-10-28T21:30:11+08:00","datePublished":"2019-07-21T19:44:47+08:00","description":"","headline":"状态机与行为树","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://jelech.gitee.io/blog/posts/65065/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://jelech.gitee.io/blog/posts/65065/","keywords":"服务器"}</script>
     <meta name="keywords" content="服务器">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="状态机与行为树">
-<meta property="og:url" content="https://www.jelech.top/posts/65065/index.html">
+<meta property="og:url" content="https://jelech.gitee.io/blog/posts/65065/index.html">
 <meta property="og:site_name" content="Jelech的博客">
 <meta property="og:locale" content="zh-cn">
 <meta property="og:updated_time" content="2019-10-28T13:30:11.122Z">
@@ -34,13 +34,13 @@
         
     
     
-        <meta property="og:image" content="https://www.jelech.top/assets/images/avatar.jpg"/>
+        <meta property="og:image" content="https://jelech.gitee.io/blog/assets/images/avatar.jpg"/>
     
     
     
     
     <!--STYLES-->
-    <link rel="stylesheet" href="/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
+    <link rel="stylesheet" href="/blog/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
     <!--STYLES END-->
     
 
@@ -71,14 +71,14 @@
 <header id="header" data-behavior="4">
     <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
     <div class="header-title">
-        <a class="header-title-link" href="/ ">Jelech的博客</a>
+        <a class="header-title-link" href="/blog/ ">Jelech的博客</a>
     </div>
     
         
             <a class="header-right-picture " href="#about">
         
         
-            <img class="header-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+            <img class="header-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
         
         </a>
     
@@ -95,8 +95,8 @@
     <div class="sidebar-container">
         
             <div class="sidebar-profile">
-                <a href="/#about">
-                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+                <a href="/blog/#about">
+                    <img class="sidebar-profile-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
                 </a>
                 <h4 class="sidebar-profile-name">Jelech</h4>
                 
@@ -110,7 +110,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/ " title="首页">
+                        <a class="sidebar-button-link " href="/blog/ " title="首页">
                     
                         <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">首页</span>
@@ -119,7 +119,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/all-categories" title="分类">
+                        <a class="sidebar-button-link " href="/blog/all-categories" title="分类">
                     
                         <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">分类</span>
@@ -128,7 +128,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/all-tags" title="标签">
+                        <a class="sidebar-button-link " href="/blog/all-tags" title="标签">
                     
                         <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">标签</span>
@@ -137,7 +137,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/all-archives" title="归档">
+                        <a class="sidebar-button-link " href="/blog/all-archives" title="归档">
                     
                         <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">归档</span>
@@ -146,7 +146,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/game" title="游戏">
+                        <a class="sidebar-button-link " href="/blog/game" title="游戏">
                     
                         <i class="sidebar-button-icon fas fa-gamepad" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">游戏</span>
@@ -177,7 +177,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/mailto" title="邮箱">
+                        <a class="sidebar-button-link " href="/blog/mailto" title="邮箱">
                     
                         <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">邮箱</span>
@@ -214,7 +214,7 @@
     
         <span>发布在 </span>
         
-    <a class="category-link" href="/categories/技术探析/">技术探析</a>
+    <a class="category-link" href="/blog/categories/技术探析/">技术探析</a>
 
 
     
@@ -266,7 +266,7 @@
             <div class="post-footer-tags">
                 <span class="text-color-light text-small">标签</span><br>
                 
-    <a class="tag tag--primary tag--small t-link" href="/tags/服务器/">服务器</a>
+    <a class="tag tag--primary tag--small t-link" href="/blog/tags/服务器/">服务器</a>
 
             </div>
         
@@ -277,7 +277,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/23842/" data-tooltip="游戏服务器" aria-label="上一篇: 游戏服务器">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/23842/" data-tooltip="游戏服务器" aria-label="上一篇: 游戏服务器">
                 
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
@@ -286,7 +286,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/30301/" data-tooltip="短到超乎想象！！！" aria-label="下一篇: 短到超乎想象！！！">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/30301/" data-tooltip="短到超乎想象！！！" aria-label="下一篇: 短到超乎想象！！！">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -304,7 +304,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://www.jelech.top/posts/65065/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/65065/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -312,7 +312,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://www.jelech.top/posts/65065/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/65065/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -320,7 +320,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://www.jelech.top/posts/65065/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/65065/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -368,7 +368,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/23842/" data-tooltip="游戏服务器" aria-label="上一篇: 游戏服务器">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/23842/" data-tooltip="游戏服务器" aria-label="上一篇: 游戏服务器">
                 
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
@@ -377,7 +377,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/30301/" data-tooltip="短到超乎想象！！！" aria-label="下一篇: 短到超乎想象！！！">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/30301/" data-tooltip="短到超乎想象！！！" aria-label="下一篇: 短到超乎想象！！！">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -395,7 +395,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://www.jelech.top/posts/65065/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/65065/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -403,7 +403,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://www.jelech.top/posts/65065/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/65065/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -411,7 +411,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://www.jelech.top/posts/65065/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/65065/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -438,7 +438,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://www.jelech.top/posts/65065/">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/65065/">
                     <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
                 </a>
             </li>
@@ -446,7 +446,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://www.jelech.top/posts/65065/">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/65065/">
                     <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
                 </a>
             </li>
@@ -454,7 +454,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://www.jelech.top/posts/65065/">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/65065/">
                     <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
                 </a>
             </li>
@@ -477,7 +477,7 @@
             <i class="fa fa-times"></i>
         </div>
         
-            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+            <img id="about-card-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
         
             <h4 id="about-card-name">Jelech</h4>
         
@@ -522,9 +522,9 @@
 
         
         
-<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+<div id="cover" style="background-image:url('/blog/assets/images/cover.jpg');"></div>
         <!--SCRIPTS-->
-<script src="/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
+<script src="/blog/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
 <!--SCRIPTS END-->
 
     

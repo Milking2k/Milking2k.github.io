@@ -12,17 +12,17 @@
         <meta name="keywords" content="博客,算法,HTML/CSS/JS,游戏服务器,游戏,">
     
     
-        <link rel="icon" href="https://www.jelech.top/assets/images/favicon.ico">
+        <link rel="icon" href="https://jelech.gitee.io/blog/assets/images/favicon.ico">
         <link rel="Shortcut Icon" type="image/x-icon" href="assets/images/favicon.ico">
     
     
-        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/blog/atom.xml">
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n训练第18场\n哇。。今天差点爆零。状态不好，但是还是要继续坚持！不能拖累队友的进度\n\n\n今天状态很差，特别想睡觉，I题大家都过得很快，我却一点思路都没有，Yichen写完了D后，再和他讲了一下，然后直接暴力过了….\n我是不是太死板了..怎么就想想出正解呢\n不过，今天的D题第一眼看就像是个简单的广搜，但是一看复杂度上天。但是我想到了递推和DP来解决，不过复杂度没理清思路，仍然不敢下手写。比赛结束后其他队伍提示，用了线段树把O(n^3)的复杂度降到了O(n^2log(n))…竟然这么卡时间…不过线段树我也不熟悉.\n少年仍需努力啊\n\n\n更新个J题，是队友做的。\n一个图，每个点都有一个随时间减少的权值(钱)，点之间有路，路有权值(时间)，问从序号1的点开始，最多可以拿到多少钱。\n其中给定n个点m条边。接着n行，初始i点的g权值，每天减少d权值。接着m行，i,j两点需要时间t。\n\n12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849#include &lt;bits/stdc++.h&gt;using namespace std; const int maxn=1005*2;int n,m;int val[maxn],ddd[maxn];int mp[maxn][maxn];int dp[maxn][maxn];vector&lt;int&gt;mm[maxn];int cost(int x,int t)&#123;return max(val[x]-t*ddd[x],0);&#125;int main()&#123;    while(~scanf(\"%d%d\",&amp;n,&amp;m))&#123;        for(int i=0;i&lt;=n;i++)&#123;            mm[i].clear();        &#125;        memset(mp,0x3f,sizeof(mp));        int maxe=-1;        for(int i=1;i&lt;=n;i++)&#123;            scanf(\"%d%d\",&amp;val[i],&amp;ddd[i]);            maxe=max(maxe,val[i]);        &#125;        maxe+=10;        for(int i=1;i&lt;=m;i++)&#123;            int t1,t2,t3;            scanf(\"%d%d%d\",&amp;t1,&amp;t2,&amp;t3);            mp[t1][t2]=t3;            mp[t2][t1]=t3;            mm[t1].push_back(t2);            mm[t2].push_back(t1);        &#125;        memset(dp,0,sizeof(dp));        dp[1][1]=val[1];        int sum=dp[1][1];        for(int i=2;i&lt;=maxe;i++)&#123;            for(int j=1;j&lt;=n;j++)&#123;                for(int k=0;k&lt;mm[j].size();k++)&#123;                    int now=mm[j][k];                    if(i-mp[now][j]&gt;=1&amp;&amp;dp[i-mp[now][j]][now]&amp;&amp;(i-mp[now][j]))&#123;                        dp[i][j]=max(dp[i][j],dp[i-mp[now][j]][now]+cost(j,i-1));                        sum=max(sum,dp[i][j]);                    &#125;                &#125;            &#125;        &#125;        printf(\"%d\\n\",sum);    &#125;    return 0;&#125;","dateCreated":"2018-04-29T00:13:02+08:00","dateModified":"2018-12-01T21:40:11+08:00","datePublished":"2018-04-29T00:13:02+08:00","description":"","headline":"组队训练","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://www.jelech.top/posts/33755/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://www.jelech.top/posts/33755/","keywords":"刷题, 组队"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n训练第18场\n哇。。今天差点爆零。状态不好，但是还是要继续坚持！不能拖累队友的进度\n\n\n今天状态很差，特别想睡觉，I题大家都过得很快，我却一点思路都没有，Yichen写完了D后，再和他讲了一下，然后直接暴力过了….\n我是不是太死板了..怎么就想想出正解呢\n不过，今天的D题第一眼看就像是个简单的广搜，但是一看复杂度上天。但是我想到了递推和DP来解决，不过复杂度没理清思路，仍然不敢下手写。比赛结束后其他队伍提示，用了线段树把O(n^3)的复杂度降到了O(n^2log(n))…竟然这么卡时间…不过线段树我也不熟悉.\n少年仍需努力啊\n\n\n更新个J题，是队友做的。\n一个图，每个点都有一个随时间减少的权值(钱)，点之间有路，路有权值(时间)，问从序号1的点开始，最多可以拿到多少钱。\n其中给定n个点m条边。接着n行，初始i点的g权值，每天减少d权值。接着m行，i,j两点需要时间t。\n\n12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849#include &lt;bits/stdc++.h&gt;using namespace std; const int maxn=1005*2;int n,m;int val[maxn],ddd[maxn];int mp[maxn][maxn];int dp[maxn][maxn];vector&lt;int&gt;mm[maxn];int cost(int x,int t)&#123;return max(val[x]-t*ddd[x],0);&#125;int main()&#123;    while(~scanf(\"%d%d\",&amp;n,&amp;m))&#123;        for(int i=0;i&lt;=n;i++)&#123;            mm[i].clear();        &#125;        memset(mp,0x3f,sizeof(mp));        int maxe=-1;        for(int i=1;i&lt;=n;i++)&#123;            scanf(\"%d%d\",&amp;val[i],&amp;ddd[i]);            maxe=max(maxe,val[i]);        &#125;        maxe+=10;        for(int i=1;i&lt;=m;i++)&#123;            int t1,t2,t3;            scanf(\"%d%d%d\",&amp;t1,&amp;t2,&amp;t3);            mp[t1][t2]=t3;            mp[t2][t1]=t3;            mm[t1].push_back(t2);            mm[t2].push_back(t1);        &#125;        memset(dp,0,sizeof(dp));        dp[1][1]=val[1];        int sum=dp[1][1];        for(int i=2;i&lt;=maxe;i++)&#123;            for(int j=1;j&lt;=n;j++)&#123;                for(int k=0;k&lt;mm[j].size();k++)&#123;                    int now=mm[j][k];                    if(i-mp[now][j]&gt;=1&amp;&amp;dp[i-mp[now][j]][now]&amp;&amp;(i-mp[now][j]))&#123;                        dp[i][j]=max(dp[i][j],dp[i-mp[now][j]][now]+cost(j,i-1));                        sum=max(sum,dp[i][j]);                    &#125;                &#125;            &#125;        &#125;        printf(\"%d\\n\",sum);    &#125;    return 0;&#125;","dateCreated":"2018-04-29T00:13:02+08:00","dateModified":"2018-12-01T21:40:11+08:00","datePublished":"2018-04-29T00:13:02+08:00","description":"","headline":"组队训练","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://jelech.gitee.io/blog/posts/33755/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://jelech.gitee.io/blog/posts/33755/","keywords":"刷题, 组队"}</script>
     <meta name="keywords" content="刷题,组队">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="组队训练">
-<meta property="og:url" content="https://www.jelech.top/posts/33755/index.html">
+<meta property="og:url" content="https://jelech.gitee.io/blog/posts/33755/index.html">
 <meta property="og:site_name" content="Jelech的博客">
 <meta property="og:locale" content="zh-cn">
 <meta property="og:updated_time" content="2018-12-01T13:40:11.598Z">
@@ -34,13 +34,13 @@
         
     
     
-        <meta property="og:image" content="https://www.jelech.top/assets/images/avatar.jpg"/>
+        <meta property="og:image" content="https://jelech.gitee.io/blog/assets/images/avatar.jpg"/>
     
     
     
     
     <!--STYLES-->
-    <link rel="stylesheet" href="/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
+    <link rel="stylesheet" href="/blog/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
     <!--STYLES END-->
     
 
@@ -71,14 +71,14 @@
 <header id="header" data-behavior="4">
     <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
     <div class="header-title">
-        <a class="header-title-link" href="/ ">Jelech的博客</a>
+        <a class="header-title-link" href="/blog/ ">Jelech的博客</a>
     </div>
     
         
             <a class="header-right-picture " href="#about">
         
         
-            <img class="header-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+            <img class="header-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
         
         </a>
     
@@ -95,8 +95,8 @@
     <div class="sidebar-container">
         
             <div class="sidebar-profile">
-                <a href="/#about">
-                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+                <a href="/blog/#about">
+                    <img class="sidebar-profile-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
                 </a>
                 <h4 class="sidebar-profile-name">Jelech</h4>
                 
@@ -110,7 +110,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/ " title="首页">
+                        <a class="sidebar-button-link " href="/blog/ " title="首页">
                     
                         <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">首页</span>
@@ -119,7 +119,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/all-categories" title="分类">
+                        <a class="sidebar-button-link " href="/blog/all-categories" title="分类">
                     
                         <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">分类</span>
@@ -128,7 +128,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/all-tags" title="标签">
+                        <a class="sidebar-button-link " href="/blog/all-tags" title="标签">
                     
                         <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">标签</span>
@@ -137,7 +137,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/all-archives" title="归档">
+                        <a class="sidebar-button-link " href="/blog/all-archives" title="归档">
                     
                         <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">归档</span>
@@ -146,7 +146,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/game" title="游戏">
+                        <a class="sidebar-button-link " href="/blog/game" title="游戏">
                     
                         <i class="sidebar-button-icon fas fa-gamepad" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">游戏</span>
@@ -177,7 +177,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/mailto" title="邮箱">
+                        <a class="sidebar-button-link " href="/blog/mailto" title="邮箱">
                     
                         <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">邮箱</span>
@@ -214,7 +214,7 @@
     
         <span>发布在 </span>
         
-    <a class="category-link" href="/categories/ACM竞赛/">ACM竞赛</a>
+    <a class="category-link" href="/blog/categories/ACM竞赛/">ACM竞赛</a>
 
 
     
@@ -253,7 +253,7 @@
             <div class="post-footer-tags">
                 <span class="text-color-light text-small">标签</span><br>
                 
-    <a class="tag tag--primary tag--small t-link" href="/tags/刷题/">刷题</a> <a class="tag tag--primary tag--small t-link" href="/tags/组队/">组队</a>
+    <a class="tag tag--primary tag--small t-link" href="/blog/tags/刷题/">刷题</a> <a class="tag tag--primary tag--small t-link" href="/blog/tags/组队/">组队</a>
 
             </div>
         
@@ -264,7 +264,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/38733/" data-tooltip="一些简易的模板" aria-label="上一篇: 一些简易的模板">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/38733/" data-tooltip="一些简易的模板" aria-label="上一篇: 一些简易的模板">
                 
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
@@ -273,7 +273,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/14339/" data-tooltip="洛谷天梯A组" aria-label="下一篇: 洛谷天梯A组">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/14339/" data-tooltip="洛谷天梯A组" aria-label="下一篇: 洛谷天梯A组">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -291,7 +291,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://www.jelech.top/posts/33755/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/33755/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -299,7 +299,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://www.jelech.top/posts/33755/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/33755/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -307,7 +307,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://www.jelech.top/posts/33755/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/33755/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -355,7 +355,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/38733/" data-tooltip="一些简易的模板" aria-label="上一篇: 一些简易的模板">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/38733/" data-tooltip="一些简易的模板" aria-label="上一篇: 一些简易的模板">
                 
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
@@ -364,7 +364,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/14339/" data-tooltip="洛谷天梯A组" aria-label="下一篇: 洛谷天梯A组">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/14339/" data-tooltip="洛谷天梯A组" aria-label="下一篇: 洛谷天梯A组">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -382,7 +382,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://www.jelech.top/posts/33755/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/33755/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -390,7 +390,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://www.jelech.top/posts/33755/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/33755/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -398,7 +398,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://www.jelech.top/posts/33755/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/33755/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -425,7 +425,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://www.jelech.top/posts/33755/">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/33755/">
                     <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
                 </a>
             </li>
@@ -433,7 +433,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://www.jelech.top/posts/33755/">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/33755/">
                     <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
                 </a>
             </li>
@@ -441,7 +441,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://www.jelech.top/posts/33755/">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/33755/">
                     <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
                 </a>
             </li>
@@ -464,7 +464,7 @@
             <i class="fa fa-times"></i>
         </div>
         
-            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+            <img id="about-card-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
         
             <h4 id="about-card-name">Jelech</h4>
         
@@ -509,9 +509,9 @@
 
         
         
-<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+<div id="cover" style="background-image:url('/blog/assets/images/cover.jpg');"></div>
         <!--SCRIPTS-->
-<script src="/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
+<script src="/blog/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
 <!--SCRIPTS END-->
 
     

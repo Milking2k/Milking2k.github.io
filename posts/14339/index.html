@@ -12,17 +12,17 @@
         <meta name="keywords" content="博客,算法,HTML/CSS/JS,游戏服务器,游戏,">
     
     
-        <link rel="icon" href="https://www.jelech.top/assets/images/favicon.ico">
+        <link rel="icon" href="https://jelech.gitee.io/blog/assets/images/favicon.ico">
         <link rel="Shortcut Icon" type="image/x-icon" href="assets/images/favicon.ico">
     
     
-        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/blog/atom.xml">
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n又开坑啦！！！ 准备短时间内把洛谷的普及组都刷了，不过看了一眼题。。好像很难啊。。全部代码地址    \n\n这里只更新一些比较复杂的题，普及组刚开始水题还是挺多的。。。\n\n\nP1086 花生采摘一个图，不同点有不同的值，要求从上边界进入，上边界处。给定k步内求能拿到的最大值。\n跳动的要求是从大到小选取。并且步长不能超过k。\n\n\n12345678910111213141516171819202122232425262728293031323334353637383940414243#include &lt;bits/stdc++.h&gt;using namespace std;#define rd(x) scanf(\"%d\",&amp;x)#define rdd(x,y) scanf(\"%d%d\",&amp;x,&amp;y)#define rddd(x,y,k) scanf(\"%d%d%d\",&amp;x,&amp;y,&amp;k)#define ll long long intstruct node&#123;\tint x,y,val;&#125;emt[405];int n,m,k;bool cmp(node a,node b)&#123;return a.val&gt;b.val;&#125;int main(int argc, char const *argv[])&#123;\twhile(~rddd(n,m,k))&#123;\t\tint top=0;\t\tfor (int i = 0; i &lt; n; ++i)&#123;\t\t\tfor (int j = 0; j &lt; m; ++j)&#123;\t\t\t\tint cnt;\t\t\t\trd(cnt);\t\t\t\tif(cnt!=0)&#123;\t\t\t\t\temt[top].x = j;\t\t\t\t\temt[top].y = i;\t\t\t\t\temt[top++].val = cnt;\t\t\t\t&#125;\t\t\t&#125;\t\t&#125;\t\tsort(emt,emt+top,cmp);\t\tint sumbf[400]=&#123;0&#125;;\t\tsumbf[0]=1;\t\tfor (int i = 1; i &lt; top; ++i)&#123;\t\t\tsumbf[i] = 1 + sumbf[i-1] + abs(emt[i].x-emt[i-1].x) + abs(emt[i].y-emt[i-1].y); \t\t&#125;\t\tint ans=0;\t\tk = k-emt[0].y;\t\tint i;\t\tfor (i = 0; sumbf[i] + emt[i].y+1 &lt; k; ++i)&#123;\t\t\tans+=emt[i].val;\t\t&#125;\t\tprintf(\"%d\\n\", ans);\t&#125;\treturn 0;&#125;\n\n等待难题中…\n\n","dateCreated":"2018-04-28T23:48:06+08:00","dateModified":"2018-12-01T21:40:24+08:00","datePublished":"2018-04-28T23:48:06+08:00","description":"","headline":"洛谷天梯A组","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://www.jelech.top/posts/14339/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://www.jelech.top/posts/14339/","keywords":"刷题, 天梯"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n又开坑啦！！！ 准备短时间内把洛谷的普及组都刷了，不过看了一眼题。。好像很难啊。。全部代码地址    \n\n这里只更新一些比较复杂的题，普及组刚开始水题还是挺多的。。。\n\n\nP1086 花生采摘一个图，不同点有不同的值，要求从上边界进入，上边界处。给定k步内求能拿到的最大值。\n跳动的要求是从大到小选取。并且步长不能超过k。\n\n\n12345678910111213141516171819202122232425262728293031323334353637383940414243#include &lt;bits/stdc++.h&gt;using namespace std;#define rd(x) scanf(\"%d\",&amp;x)#define rdd(x,y) scanf(\"%d%d\",&amp;x,&amp;y)#define rddd(x,y,k) scanf(\"%d%d%d\",&amp;x,&amp;y,&amp;k)#define ll long long intstruct node&#123;\tint x,y,val;&#125;emt[405];int n,m,k;bool cmp(node a,node b)&#123;return a.val&gt;b.val;&#125;int main(int argc, char const *argv[])&#123;\twhile(~rddd(n,m,k))&#123;\t\tint top=0;\t\tfor (int i = 0; i &lt; n; ++i)&#123;\t\t\tfor (int j = 0; j &lt; m; ++j)&#123;\t\t\t\tint cnt;\t\t\t\trd(cnt);\t\t\t\tif(cnt!=0)&#123;\t\t\t\t\temt[top].x = j;\t\t\t\t\temt[top].y = i;\t\t\t\t\temt[top++].val = cnt;\t\t\t\t&#125;\t\t\t&#125;\t\t&#125;\t\tsort(emt,emt+top,cmp);\t\tint sumbf[400]=&#123;0&#125;;\t\tsumbf[0]=1;\t\tfor (int i = 1; i &lt; top; ++i)&#123;\t\t\tsumbf[i] = 1 + sumbf[i-1] + abs(emt[i].x-emt[i-1].x) + abs(emt[i].y-emt[i-1].y); \t\t&#125;\t\tint ans=0;\t\tk = k-emt[0].y;\t\tint i;\t\tfor (i = 0; sumbf[i] + emt[i].y+1 &lt; k; ++i)&#123;\t\t\tans+=emt[i].val;\t\t&#125;\t\tprintf(\"%d\\n\", ans);\t&#125;\treturn 0;&#125;\n\n等待难题中…\n\n","dateCreated":"2018-04-28T23:48:06+08:00","dateModified":"2018-12-01T21:40:24+08:00","datePublished":"2018-04-28T23:48:06+08:00","description":"","headline":"洛谷天梯A组","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://jelech.gitee.io/blog/posts/14339/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://jelech.gitee.io/blog/posts/14339/","keywords":"刷题, 天梯"}</script>
     <meta name="keywords" content="刷题,天梯">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="洛谷天梯A组">
-<meta property="og:url" content="https://www.jelech.top/posts/14339/index.html">
+<meta property="og:url" content="https://jelech.gitee.io/blog/posts/14339/index.html">
 <meta property="og:site_name" content="Jelech的博客">
 <meta property="og:locale" content="zh-cn">
 <meta property="og:image" content="https://cdn.luogu.org/upload/pic/1182.png">
@@ -36,13 +36,13 @@
         
     
     
-        <meta property="og:image" content="https://www.jelech.top/assets/images/avatar.jpg"/>
+        <meta property="og:image" content="https://jelech.gitee.io/blog/assets/images/avatar.jpg"/>
     
     
     
     
     <!--STYLES-->
-    <link rel="stylesheet" href="/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
+    <link rel="stylesheet" href="/blog/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
     <!--STYLES END-->
     
 
@@ -73,14 +73,14 @@
 <header id="header" data-behavior="4">
     <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
     <div class="header-title">
-        <a class="header-title-link" href="/ ">Jelech的博客</a>
+        <a class="header-title-link" href="/blog/ ">Jelech的博客</a>
     </div>
     
         
             <a class="header-right-picture " href="#about">
         
         
-            <img class="header-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+            <img class="header-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
         
         </a>
     
@@ -97,8 +97,8 @@
     <div class="sidebar-container">
         
             <div class="sidebar-profile">
-                <a href="/#about">
-                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+                <a href="/blog/#about">
+                    <img class="sidebar-profile-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
                 </a>
                 <h4 class="sidebar-profile-name">Jelech</h4>
                 
@@ -112,7 +112,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/ " title="首页">
+                        <a class="sidebar-button-link " href="/blog/ " title="首页">
                     
                         <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">首页</span>
@@ -121,7 +121,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/all-categories" title="分类">
+                        <a class="sidebar-button-link " href="/blog/all-categories" title="分类">
                     
                         <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">分类</span>
@@ -130,7 +130,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/all-tags" title="标签">
+                        <a class="sidebar-button-link " href="/blog/all-tags" title="标签">
                     
                         <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">标签</span>
@@ -139,7 +139,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/all-archives" title="归档">
+                        <a class="sidebar-button-link " href="/blog/all-archives" title="归档">
                     
                         <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">归档</span>
@@ -148,7 +148,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/game" title="游戏">
+                        <a class="sidebar-button-link " href="/blog/game" title="游戏">
                     
                         <i class="sidebar-button-icon fas fa-gamepad" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">游戏</span>
@@ -179,7 +179,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/mailto" title="邮箱">
+                        <a class="sidebar-button-link " href="/blog/mailto" title="邮箱">
                     
                         <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">邮箱</span>
@@ -216,7 +216,7 @@
     
         <span>发布在 </span>
         
-    <a class="category-link" href="/categories/ACM竞赛/">ACM竞赛</a>
+    <a class="category-link" href="/blog/categories/ACM竞赛/">ACM竞赛</a>
 
 
     
@@ -254,7 +254,7 @@
             <div class="post-footer-tags">
                 <span class="text-color-light text-small">标签</span><br>
                 
-    <a class="tag tag--primary tag--small t-link" href="/tags/刷题/">刷题</a> <a class="tag tag--primary tag--small t-link" href="/tags/天梯/">天梯</a>
+    <a class="tag tag--primary tag--small t-link" href="/blog/tags/刷题/">刷题</a> <a class="tag tag--primary tag--small t-link" href="/blog/tags/天梯/">天梯</a>
 
             </div>
         
@@ -265,7 +265,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/33755/" data-tooltip="组队训练" aria-label="上一篇: 组队训练">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/33755/" data-tooltip="组队训练" aria-label="上一篇: 组队训练">
                 
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
@@ -274,7 +274,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/35593/" data-tooltip="QT学习笔记" aria-label="下一篇: QT学习笔记">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/35593/" data-tooltip="QT学习笔记" aria-label="下一篇: QT学习笔记">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -292,7 +292,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://www.jelech.top/posts/14339/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/14339/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -300,7 +300,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://www.jelech.top/posts/14339/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/14339/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -308,7 +308,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://www.jelech.top/posts/14339/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/14339/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -356,7 +356,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/33755/" data-tooltip="组队训练" aria-label="上一篇: 组队训练">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/33755/" data-tooltip="组队训练" aria-label="上一篇: 组队训练">
                 
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
@@ -365,7 +365,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/35593/" data-tooltip="QT学习笔记" aria-label="下一篇: QT学习笔记">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/35593/" data-tooltip="QT学习笔记" aria-label="下一篇: QT学习笔记">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -383,7 +383,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://www.jelech.top/posts/14339/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/14339/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -391,7 +391,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://www.jelech.top/posts/14339/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/14339/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -399,7 +399,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://www.jelech.top/posts/14339/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/14339/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -426,7 +426,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://www.jelech.top/posts/14339/">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/14339/">
                     <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
                 </a>
             </li>
@@ -434,7 +434,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://www.jelech.top/posts/14339/">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/14339/">
                     <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
                 </a>
             </li>
@@ -442,7 +442,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://www.jelech.top/posts/14339/">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/14339/">
                     <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
                 </a>
             </li>
@@ -465,7 +465,7 @@
             <i class="fa fa-times"></i>
         </div>
         
-            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+            <img id="about-card-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
         
             <h4 id="about-card-name">Jelech</h4>
         
@@ -510,9 +510,9 @@
 
         
         
-<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+<div id="cover" style="background-image:url('/blog/assets/images/cover.jpg');"></div>
         <!--SCRIPTS-->
-<script src="/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
+<script src="/blog/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
 <!--SCRIPTS END-->
 
     

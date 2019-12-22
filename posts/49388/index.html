@@ -12,37 +12,37 @@
         <meta name="keywords" content="博客,算法,HTML/CSS/JS,游戏服务器,游戏,">
     
     
-        <link rel="icon" href="https://www.jelech.top/assets/images/favicon.ico">
+        <link rel="icon" href="https://jelech.gitee.io/blog/assets/images/favicon.ico">
         <link rel="Shortcut Icon" type="image/x-icon" href="assets/images/favicon.ico">
     
     
-        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/blog/atom.xml">
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\nNodeJS code notes当初学习node.js时候的笔记，现在看来，写的都很简陋和天真，进了计算机专业后，跟着学了真正的计算机知识。再回来看这些问题，真的觉得突然简单了很多。特别是算法的学习对我的帮助真的很大很大！现在想想还有点小激动！！下面是笔记的第一版本，在排版上做了一些修改，其他基本保持原样。之后我会在这个基础上修改。\nNodeJs安装官网下载安装，使用git调用(调Path)，试用官网网页的创建一个服务器储存为server.js，git调用 node server.js，返回日志console.log\n12345678var http = require('http')\t\t\t\t\t//加载http模块var server = http.createServer(function (req,res) &#123;    res.writeHead(200,&#123;'Conten-Type':'text/plain'&#125;)//声明传出的类型//写具体内容    res.end('Hello Node.js\\n')\t\t\t\t//结束传出&#125;)server.listen(1337,'127.0.0.1')console.log('Server running at http://127.0.0.1:1377/')\nnodejs引用了规范模块与包管理工具.Commonjs规范：模块定义，标识，引用模块分类：核心模块、文件模块、第三方模块exports.add = name/function 暴露对象。module.exports = name 暴露对象。//修改传统对象实例\n.forEach //遍历require(‘./name’)加载模块Node.js API ：//url具体的地址：\n\nurl.parse(‘http…’，true//让query解析为对象，\ntrue//path显示方法)对地址拆开解析：\nurl.format(‘’)\n\n\nprotocol                     底层使用协议\nslashes                      是否有协议双斜线\nhost                     ip地址/域名\nport                     端口默认80\nhostname                     主机名\nhash:                      页面锚点\nsearch                     查询字符串参数\nquery                      发送给服务器的数据、字符串\npathnam                      /path\nhref                      完整超链接\n\n————————————————————-安全————————————————————\n\nquerystring.string({ name:’scott’ }, ’不同对象的分离’, ’对象和值之间的符号’)\nquerystring.parse(‘…’, ’告诉浏览器用什么分开解析’, ’告诉浏览器用:代表值等符号’，’’)\nquerystring.escape(‘&lt;…&gt;’)把内容转义字符\nquerystring.unescape(‘…’)把字符转义内容\n\nHTTP//协议//线搜索自身DNS缓存/系统自身//读取HOST文件//发送一个DNS请求//宽带运营商服务器查看本身缓存//运营商服务器发送一个迭代DNS解析的请求    //结果返回操作系统内核同时缓存/操作系统内核把结果返回浏览器//TCP连接请求//发送HTTP请求//服务器接收HTTP请求，返回数据//浏览器显示\n\n请求方法:GET:获取数据               POST:提交数据                        PUT:更新上传数据DELETE:删除                   HEAD:获取一个元数据                   TRACE:POTIONS:状态码：1XX:接收处理ing                       2XX:处理ed                        3XX:进一步处理4XX:客户端错误               5XX:服务器错误\n\n————————————————————-安全————————————————————\nHTTP进阶概念1234567891011function learn (something)&#123;\tconsole.log(‘something’)&#125;function we(callback,something)&#123;  something += ‘ is coll’  callback(something)&#125;we(learn, ‘Nodejs’)\t\t\t\t//具名函数we(function()&#123;\tconsole.log(something)&#125;,Jack)//\n​回调://将后续逻辑封装在函数中作为起始函数的参数,逐层嵌套/传入一个匿名函数\n同步/异步://顺序执行任务，后等前//时长会出现因为延迟，没有运行结束就已经进行下一步（多线程）        \nI/O:        \n单线程/多线程://单线程安全同意//多线程资源控制        \n阻塞/非阻塞:\n事件:\n事件驱动:为某个时间注册了函数，当一个事件发生才调用函数        \n基于事件驱动的回调:\n事件循环:                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              \nHTTP源码解读作用域://局部、全局\n12345678910var pet = &#123;    words: ’...’    speak: function(say) &#123;    console.log(say + ‘ ’ + this.words)&#125;&#125;var dog = &#123;    words: ‘Wang’&#125;pet.speak.call(dog, ’Speak’)\nab -n1000 -c10 http://... n请求数, c线路默认1 ————Apache ab\n \nHTTP小爬虫 npm install cheerio1234567891011121314151617181920212223242526272829303132333435363738394041424344var http = require(‘http’)var url = ‘http://www.imooc.com/learn/348’http.get(url, function(res) &#123;    var html = ‘’    res.on(‘data’, function(data) &#123;\t\t\t\thtml += data\t\t&#125;)    res.on(‘end’, function() &#123;  \t\t\tconsole.log(html)\t\t&#125;)&#125;).on(‘error’, function() &#123;\t\tconsole.log(‘获取出错’)&#125;)var http = require(‘http’)var cheerio = require(‘cheerio’)var url = ‘http://www.imooc.com/learn/348’function filterChapters(html) &#123;    var $ = cheerio. load(html)    var chapters = $(‘.learnchapter’)  [&#123;    chapterTitle:’’,    videos: [      title: ‘’,      id: ‘’    ]  &#125;]&#125;http.get(url, function(res) &#123;    var html = ‘’    res.on(‘data’, function(data) &#123;        html += data    &#125;)    res.on(‘end’, function() &#123;      \tfilterChapters(html)  \t&#125;)&#125;).on(‘error’, function() &#123;  \tconsole.log(‘获取出错’)&#125;)//unfinished\nPromiseES6 的Promise是一种对象,有3种状态(未完成,已完成,失败),可以使用.then().then().then链式使用Promise 库:bluebird,Q,then.js,es6-promise,ypromise,async,native-promise-only重写爬虫(https使用的加密方式,在http和tcp之间需要SSL/TLS证书)\n123456789101112var http = require('https')var fs = require('fs')var options = &#123;    key: fs.readFileSync('ssh_key.pem')    cert: fs.readFileSync('ssh_cert.pem')&#125;//可以运行一个https服务器https.createServer(option, funcion(req, res)&#123;    res.writeHead(200)    res.end('Hello')&#125;).listen(8090)\n","dateCreated":"2018-05-02T23:44:47+08:00","dateModified":"2018-12-02T09:23:44+08:00","datePublished":"2018-05-02T23:44:47+08:00","description":"","headline":"node.js的学习笔记","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://www.jelech.top/posts/49388/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://www.jelech.top/posts/49388/","keywords":"笔记, 前端"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\nNodeJS code notes当初学习node.js时候的笔记，现在看来，写的都很简陋和天真，进了计算机专业后，跟着学了真正的计算机知识。再回来看这些问题，真的觉得突然简单了很多。特别是算法的学习对我的帮助真的很大很大！现在想想还有点小激动！！下面是笔记的第一版本，在排版上做了一些修改，其他基本保持原样。之后我会在这个基础上修改。\nNodeJs安装官网下载安装，使用git调用(调Path)，试用官网网页的创建一个服务器储存为server.js，git调用 node server.js，返回日志console.log\n12345678var http = require('http')\t\t\t\t\t//加载http模块var server = http.createServer(function (req,res) &#123;    res.writeHead(200,&#123;'Conten-Type':'text/plain'&#125;)//声明传出的类型//写具体内容    res.end('Hello Node.js\\n')\t\t\t\t//结束传出&#125;)server.listen(1337,'127.0.0.1')console.log('Server running at http://127.0.0.1:1377/')\nnodejs引用了规范模块与包管理工具.Commonjs规范：模块定义，标识，引用模块分类：核心模块、文件模块、第三方模块exports.add = name/function 暴露对象。module.exports = name 暴露对象。//修改传统对象实例\n.forEach //遍历require(‘./name’)加载模块Node.js API ：//url具体的地址：\n\nurl.parse(‘http…’，true//让query解析为对象，\ntrue//path显示方法)对地址拆开解析：\nurl.format(‘’)\n\n\nprotocol                     底层使用协议\nslashes                      是否有协议双斜线\nhost                     ip地址/域名\nport                     端口默认80\nhostname                     主机名\nhash:                      页面锚点\nsearch                     查询字符串参数\nquery                      发送给服务器的数据、字符串\npathnam                      /path\nhref                      完整超链接\n\n————————————————————-安全————————————————————\n\nquerystring.string({ name:’scott’ }, ’不同对象的分离’, ’对象和值之间的符号’)\nquerystring.parse(‘…’, ’告诉浏览器用什么分开解析’, ’告诉浏览器用:代表值等符号’，’’)\nquerystring.escape(‘&lt;…&gt;’)把内容转义字符\nquerystring.unescape(‘…’)把字符转义内容\n\nHTTP//协议//线搜索自身DNS缓存/系统自身//读取HOST文件//发送一个DNS请求//宽带运营商服务器查看本身缓存//运营商服务器发送一个迭代DNS解析的请求    //结果返回操作系统内核同时缓存/操作系统内核把结果返回浏览器//TCP连接请求//发送HTTP请求//服务器接收HTTP请求，返回数据//浏览器显示\n\n请求方法:GET:获取数据               POST:提交数据                        PUT:更新上传数据DELETE:删除                   HEAD:获取一个元数据                   TRACE:POTIONS:状态码：1XX:接收处理ing                       2XX:处理ed                        3XX:进一步处理4XX:客户端错误               5XX:服务器错误\n\n————————————————————-安全————————————————————\nHTTP进阶概念1234567891011function learn (something)&#123;\tconsole.log(‘something’)&#125;function we(callback,something)&#123;  something += ‘ is coll’  callback(something)&#125;we(learn, ‘Nodejs’)\t\t\t\t//具名函数we(function()&#123;\tconsole.log(something)&#125;,Jack)//\n​回调://将后续逻辑封装在函数中作为起始函数的参数,逐层嵌套/传入一个匿名函数\n同步/异步://顺序执行任务，后等前//时长会出现因为延迟，没有运行结束就已经进行下一步（多线程）        \nI/O:        \n单线程/多线程://单线程安全同意//多线程资源控制        \n阻塞/非阻塞:\n事件:\n事件驱动:为某个时间注册了函数，当一个事件发生才调用函数        \n基于事件驱动的回调:\n事件循环:                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              \nHTTP源码解读作用域://局部、全局\n12345678910var pet = &#123;    words: ’...’    speak: function(say) &#123;    console.log(say + ‘ ’ + this.words)&#125;&#125;var dog = &#123;    words: ‘Wang’&#125;pet.speak.call(dog, ’Speak’)\nab -n1000 -c10 http://... n请求数, c线路默认1 ————Apache ab\n \nHTTP小爬虫 npm install cheerio1234567891011121314151617181920212223242526272829303132333435363738394041424344var http = require(‘http’)var url = ‘http://www.imooc.com/learn/348’http.get(url, function(res) &#123;    var html = ‘’    res.on(‘data’, function(data) &#123;\t\t\t\thtml += data\t\t&#125;)    res.on(‘end’, function() &#123;  \t\t\tconsole.log(html)\t\t&#125;)&#125;).on(‘error’, function() &#123;\t\tconsole.log(‘获取出错’)&#125;)var http = require(‘http’)var cheerio = require(‘cheerio’)var url = ‘http://www.imooc.com/learn/348’function filterChapters(html) &#123;    var $ = cheerio. load(html)    var chapters = $(‘.learnchapter’)  [&#123;    chapterTitle:’’,    videos: [      title: ‘’,      id: ‘’    ]  &#125;]&#125;http.get(url, function(res) &#123;    var html = ‘’    res.on(‘data’, function(data) &#123;        html += data    &#125;)    res.on(‘end’, function() &#123;      \tfilterChapters(html)  \t&#125;)&#125;).on(‘error’, function() &#123;  \tconsole.log(‘获取出错’)&#125;)//unfinished\nPromiseES6 的Promise是一种对象,有3种状态(未完成,已完成,失败),可以使用.then().then().then链式使用Promise 库:bluebird,Q,then.js,es6-promise,ypromise,async,native-promise-only重写爬虫(https使用的加密方式,在http和tcp之间需要SSL/TLS证书)\n123456789101112var http = require('https')var fs = require('fs')var options = &#123;    key: fs.readFileSync('ssh_key.pem')    cert: fs.readFileSync('ssh_cert.pem')&#125;//可以运行一个https服务器https.createServer(option, funcion(req, res)&#123;    res.writeHead(200)    res.end('Hello')&#125;).listen(8090)\n","dateCreated":"2018-05-02T23:44:47+08:00","dateModified":"2018-12-02T09:23:44+08:00","datePublished":"2018-05-02T23:44:47+08:00","description":"","headline":"node.js的学习笔记","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://jelech.gitee.io/blog/posts/49388/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://jelech.gitee.io/blog/posts/49388/","keywords":"笔记, 前端"}</script>
     <meta name="keywords" content="笔记,前端">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="node.js的学习笔记">
-<meta property="og:url" content="https://www.jelech.top/posts/49388/index.html">
+<meta property="og:url" content="https://jelech.gitee.io/blog/posts/49388/index.html">
 <meta property="og:site_name" content="Jelech的博客">
 <meta property="og:locale" content="zh-cn">
-<meta property="og:image" content="https://www.jelech.top/images/nodejsnote/htmlhead.jpg">
+<meta property="og:image" content="https://jelech.gitee.io/images/nodejsnote/htmlhead.jpg">
 <meta property="og:updated_time" content="2018-12-02T01:23:44.640Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="node.js的学习笔记">
-<meta name="twitter:image" content="https://www.jelech.top/images/nodejsnote/htmlhead.jpg">
+<meta name="twitter:image" content="https://jelech.gitee.io/images/nodejsnote/htmlhead.jpg">
 <meta name="twitter:creator" content="@twitter">
     
     
         
     
     
-        <meta property="og:image" content="https://www.jelech.top/assets/images/avatar.jpg"/>
+        <meta property="og:image" content="https://jelech.gitee.io/blog/assets/images/avatar.jpg"/>
     
     
     
     
     <!--STYLES-->
-    <link rel="stylesheet" href="/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
+    <link rel="stylesheet" href="/blog/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
     <!--STYLES END-->
     
 
@@ -73,14 +73,14 @@
 <header id="header" data-behavior="4">
     <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
     <div class="header-title">
-        <a class="header-title-link" href="/ ">Jelech的博客</a>
+        <a class="header-title-link" href="/blog/ ">Jelech的博客</a>
     </div>
     
         
             <a class="header-right-picture " href="#about">
         
         
-            <img class="header-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+            <img class="header-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
         
         </a>
     
@@ -97,8 +97,8 @@
     <div class="sidebar-container">
         
             <div class="sidebar-profile">
-                <a href="/#about">
-                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+                <a href="/blog/#about">
+                    <img class="sidebar-profile-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
                 </a>
                 <h4 class="sidebar-profile-name">Jelech</h4>
                 
@@ -112,7 +112,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/ " title="首页">
+                        <a class="sidebar-button-link " href="/blog/ " title="首页">
                     
                         <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">首页</span>
@@ -121,7 +121,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/all-categories" title="分类">
+                        <a class="sidebar-button-link " href="/blog/all-categories" title="分类">
                     
                         <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">分类</span>
@@ -130,7 +130,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/all-tags" title="标签">
+                        <a class="sidebar-button-link " href="/blog/all-tags" title="标签">
                     
                         <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">标签</span>
@@ -139,7 +139,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/all-archives" title="归档">
+                        <a class="sidebar-button-link " href="/blog/all-archives" title="归档">
                     
                         <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">归档</span>
@@ -148,7 +148,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/game" title="游戏">
+                        <a class="sidebar-button-link " href="/blog/game" title="游戏">
                     
                         <i class="sidebar-button-icon fas fa-gamepad" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">游戏</span>
@@ -179,7 +179,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/mailto" title="邮箱">
+                        <a class="sidebar-button-link " href="/blog/mailto" title="邮箱">
                     
                         <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">邮箱</span>
@@ -216,7 +216,7 @@
     
         <span>发布在 </span>
         
-    <a class="category-link" href="/categories/学习笔记/">学习笔记</a>
+    <a class="category-link" href="/blog/categories/学习笔记/">学习笔记</a>
 
 
     
@@ -292,7 +292,7 @@
             <div class="post-footer-tags">
                 <span class="text-color-light text-small">标签</span><br>
                 
-    <a class="tag tag--primary tag--small t-link" href="/tags/前端/">前端</a> <a class="tag tag--primary tag--small t-link" href="/tags/笔记/">笔记</a>
+    <a class="tag tag--primary tag--small t-link" href="/blog/tags/前端/">前端</a> <a class="tag tag--primary tag--small t-link" href="/blog/tags/笔记/">笔记</a>
 
             </div>
         
@@ -303,7 +303,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/4499/" data-tooltip="github被封以及HOST的使用" aria-label="上一篇: github被封以及HOST的使用">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/4499/" data-tooltip="github被封以及HOST的使用" aria-label="上一篇: github被封以及HOST的使用">
                 
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
@@ -312,7 +312,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/18091/" data-tooltip="SWERC2017新一轮训练赛" aria-label="下一篇: SWERC2017新一轮训练赛">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/18091/" data-tooltip="SWERC2017新一轮训练赛" aria-label="下一篇: SWERC2017新一轮训练赛">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -330,7 +330,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://www.jelech.top/posts/49388/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/49388/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -338,7 +338,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://www.jelech.top/posts/49388/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/49388/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -346,7 +346,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://www.jelech.top/posts/49388/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/49388/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -394,7 +394,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/4499/" data-tooltip="github被封以及HOST的使用" aria-label="上一篇: github被封以及HOST的使用">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/4499/" data-tooltip="github被封以及HOST的使用" aria-label="上一篇: github被封以及HOST的使用">
                 
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
@@ -403,7 +403,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/18091/" data-tooltip="SWERC2017新一轮训练赛" aria-label="下一篇: SWERC2017新一轮训练赛">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/18091/" data-tooltip="SWERC2017新一轮训练赛" aria-label="下一篇: SWERC2017新一轮训练赛">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -421,7 +421,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://www.jelech.top/posts/49388/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/49388/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -429,7 +429,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://www.jelech.top/posts/49388/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/49388/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -437,7 +437,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://www.jelech.top/posts/49388/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/49388/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -464,7 +464,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://www.jelech.top/posts/49388/">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/49388/">
                     <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
                 </a>
             </li>
@@ -472,7 +472,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://www.jelech.top/posts/49388/">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/49388/">
                     <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
                 </a>
             </li>
@@ -480,7 +480,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://www.jelech.top/posts/49388/">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/49388/">
                     <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
                 </a>
             </li>
@@ -503,7 +503,7 @@
             <i class="fa fa-times"></i>
         </div>
         
-            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+            <img id="about-card-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
         
             <h4 id="about-card-name">Jelech</h4>
         
@@ -548,9 +548,9 @@
 
         
         
-<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+<div id="cover" style="background-image:url('/blog/assets/images/cover.jpg');"></div>
         <!--SCRIPTS-->
-<script src="/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
+<script src="/blog/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
 <!--SCRIPTS END-->
 
     

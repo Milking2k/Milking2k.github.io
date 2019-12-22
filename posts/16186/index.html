@@ -12,17 +12,17 @@
         <meta name="keywords" content="博客,算法,HTML/CSS/JS,游戏服务器,游戏,">
     
     
-        <link rel="icon" href="https://www.jelech.top/assets/images/favicon.ico">
+        <link rel="icon" href="https://jelech.gitee.io/blog/assets/images/favicon.ico">
         <link rel="Shortcut Icon" type="image/x-icon" href="assets/images/favicon.ico">
     
     
-        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/blog/atom.xml">
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n学习笔记O(∩_∩)O倍增\n倍增是一种思想。依据这种思想，衍生出了ST表、LCA(最近公共祖先)以及一些在树上的倍增应用。\n\n考虑这样一个问题：如何快速在一个序列s中查询到不大于a的值？（这里序列已排序好正常思想就是二分，每次取得s中l,r,mid的值，进行比较后快速logn速度逼近正确的值。但是这里我们不考虑二分倍增和二分的思想很类似。对于一个单调的序列，我们可以快速的跳过太小的（或者太大的）数，从而快速逼近结果。简单的模拟一下倍增：· 设置一个长度p，每次如果查询到的值小于目标，位置k+=p，长度p=2*p· 如果查询到的值大于目标，长度p=p/2。并重复上一个步骤。· 循环查询到确切的目标。比如，起初位置在k为0，p为2.查询到s[k+p]为小于目标的数，k就变成了k+p，p增倍了。下一次查询到s[k+p]大于了目标数，我们就把p先减小为一半。再查一次。如果有概念了，可以想象出平均下来是logn的。\nST表\nst表灵活的使用了倍增的思想可以进行对区间最值问题的快速查找与更新预处理O（n·logn），查询O（1），空间（n·logn）\n\n线段树虽说是区间维护的全能王，但是也恰巧这样导致了他在一些特别的方面处理比较慢，线段树的查询是O(logn)的，而且占用的空间也较大，所以容易被卡常数。\n字典树 Trie\n将所有字符串依据前缀构建的一棵树其中的节点表示字符串的某个字符，树的根是一个空指针是一种存放字符串的数据结构（就是为了其他算法的使用专门设计的\n\nAC自动机（好像顺序乱套了\n\n不是可以自动Acepte的程序是基于kmp思想，建立在字典树上的自动匹配字符串算法多个模板串，一个目标串重要词典:失败指针(fail指针)：指的是在匹配某个字符串的时候，如果到当前的位置发现不匹配，会跳到某个其他前缀匹配的位置，继续匹配。如果仍然没有，就会跳回到根\n\n佩尔方程（没想到还是要学数论\n\n满足：x^2 - dy^2 = 1 的方程方程通过假设x1,x2两个解，解出了另一个新的解。这代表了如果知道方程中的最小特解，就能推论出所有的解。通解：`Xn = Xn-1  X1 + d  Yn-1  Y1Yn = Xn-1  X1 + Yn-1  Y1`半难以发现正解公式，需要通过自己一步一步推公式。\n\n赛后笔记\n先贪心再暴力打表找规律推公式关于long long 要先仔细读题思考哪些部分需要再修改部分\n\n","dateCreated":"2018-09-20T21:09:57+08:00","dateModified":"2019-05-25T21:13:39+08:00","datePublished":"2018-09-20T21:09:57+08:00","description":"","headline":"算法学习笔记","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://www.jelech.top/posts/16186/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://www.jelech.top/posts/16186/","keywords":"算法"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n学习笔记O(∩_∩)O倍增\n倍增是一种思想。依据这种思想，衍生出了ST表、LCA(最近公共祖先)以及一些在树上的倍增应用。\n\n考虑这样一个问题：如何快速在一个序列s中查询到不大于a的值？（这里序列已排序好正常思想就是二分，每次取得s中l,r,mid的值，进行比较后快速logn速度逼近正确的值。但是这里我们不考虑二分倍增和二分的思想很类似。对于一个单调的序列，我们可以快速的跳过太小的（或者太大的）数，从而快速逼近结果。简单的模拟一下倍增：· 设置一个长度p，每次如果查询到的值小于目标，位置k+=p，长度p=2*p· 如果查询到的值大于目标，长度p=p/2。并重复上一个步骤。· 循环查询到确切的目标。比如，起初位置在k为0，p为2.查询到s[k+p]为小于目标的数，k就变成了k+p，p增倍了。下一次查询到s[k+p]大于了目标数，我们就把p先减小为一半。再查一次。如果有概念了，可以想象出平均下来是logn的。\nST表\nst表灵活的使用了倍增的思想可以进行对区间最值问题的快速查找与更新预处理O（n·logn），查询O（1），空间（n·logn）\n\n线段树虽说是区间维护的全能王，但是也恰巧这样导致了他在一些特别的方面处理比较慢，线段树的查询是O(logn)的，而且占用的空间也较大，所以容易被卡常数。\n字典树 Trie\n将所有字符串依据前缀构建的一棵树其中的节点表示字符串的某个字符，树的根是一个空指针是一种存放字符串的数据结构（就是为了其他算法的使用专门设计的\n\nAC自动机（好像顺序乱套了\n\n不是可以自动Acepte的程序是基于kmp思想，建立在字典树上的自动匹配字符串算法多个模板串，一个目标串重要词典:失败指针(fail指针)：指的是在匹配某个字符串的时候，如果到当前的位置发现不匹配，会跳到某个其他前缀匹配的位置，继续匹配。如果仍然没有，就会跳回到根\n\n佩尔方程（没想到还是要学数论\n\n满足：x^2 - dy^2 = 1 的方程方程通过假设x1,x2两个解，解出了另一个新的解。这代表了如果知道方程中的最小特解，就能推论出所有的解。通解：`Xn = Xn-1  X1 + d  Yn-1  Y1Yn = Xn-1  X1 + Yn-1  Y1`半难以发现正解公式，需要通过自己一步一步推公式。\n\n赛后笔记\n先贪心再暴力打表找规律推公式关于long long 要先仔细读题思考哪些部分需要再修改部分\n\n","dateCreated":"2018-09-20T21:09:57+08:00","dateModified":"2019-05-25T21:13:39+08:00","datePublished":"2018-09-20T21:09:57+08:00","description":"","headline":"算法学习笔记","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://jelech.gitee.io/blog/posts/16186/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://jelech.gitee.io/blog/posts/16186/","keywords":"算法"}</script>
     <meta name="keywords" content="算法">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="算法学习笔记">
-<meta property="og:url" content="https://www.jelech.top/posts/16186/index.html">
+<meta property="og:url" content="https://jelech.gitee.io/blog/posts/16186/index.html">
 <meta property="og:site_name" content="Jelech的博客">
 <meta property="og:locale" content="zh-cn">
 <meta property="og:updated_time" content="2019-05-25T13:13:39.047Z">
@@ -34,13 +34,13 @@
         
     
     
-        <meta property="og:image" content="https://www.jelech.top/assets/images/avatar.jpg"/>
+        <meta property="og:image" content="https://jelech.gitee.io/blog/assets/images/avatar.jpg"/>
     
     
     
     
     <!--STYLES-->
-    <link rel="stylesheet" href="/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
+    <link rel="stylesheet" href="/blog/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
     <!--STYLES END-->
     
 
@@ -71,14 +71,14 @@
 <header id="header" data-behavior="4">
     <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
     <div class="header-title">
-        <a class="header-title-link" href="/ ">Jelech的博客</a>
+        <a class="header-title-link" href="/blog/ ">Jelech的博客</a>
     </div>
     
         
             <a class="header-right-picture " href="#about">
         
         
-            <img class="header-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+            <img class="header-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
         
         </a>
     
@@ -95,8 +95,8 @@
     <div class="sidebar-container">
         
             <div class="sidebar-profile">
-                <a href="/#about">
-                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+                <a href="/blog/#about">
+                    <img class="sidebar-profile-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
                 </a>
                 <h4 class="sidebar-profile-name">Jelech</h4>
                 
@@ -110,7 +110,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/ " title="首页">
+                        <a class="sidebar-button-link " href="/blog/ " title="首页">
                     
                         <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">首页</span>
@@ -119,7 +119,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/all-categories" title="分类">
+                        <a class="sidebar-button-link " href="/blog/all-categories" title="分类">
                     
                         <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">分类</span>
@@ -128,7 +128,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/all-tags" title="标签">
+                        <a class="sidebar-button-link " href="/blog/all-tags" title="标签">
                     
                         <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">标签</span>
@@ -137,7 +137,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/all-archives" title="归档">
+                        <a class="sidebar-button-link " href="/blog/all-archives" title="归档">
                     
                         <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">归档</span>
@@ -146,7 +146,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/game" title="游戏">
+                        <a class="sidebar-button-link " href="/blog/game" title="游戏">
                     
                         <i class="sidebar-button-icon fas fa-gamepad" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">游戏</span>
@@ -177,7 +177,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/mailto" title="邮箱">
+                        <a class="sidebar-button-link " href="/blog/mailto" title="邮箱">
                     
                         <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">邮箱</span>
@@ -214,7 +214,7 @@
     
         <span>发布在 </span>
         
-    <a class="category-link" href="/categories/算法/">算法</a>
+    <a class="category-link" href="/blog/categories/算法/">算法</a>
 
 
     
@@ -261,7 +261,7 @@
             <div class="post-footer-tags">
                 <span class="text-color-light text-small">标签</span><br>
                 
-    <a class="tag tag--primary tag--small t-link" href="/tags/算法/">算法</a>
+    <a class="tag tag--primary tag--small t-link" href="/blog/tags/算法/">算法</a>
 
             </div>
         
@@ -272,7 +272,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/3676/" data-tooltip="安装Django" aria-label="上一篇: 安装Django">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/3676/" data-tooltip="安装Django" aria-label="上一篇: 安装Django">
                 
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
@@ -281,7 +281,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/21344/" data-tooltip="linux下安装python3" aria-label="下一篇: linux下安装python3">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/21344/" data-tooltip="linux下安装python3" aria-label="下一篇: linux下安装python3">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -299,7 +299,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://www.jelech.top/posts/16186/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/16186/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -307,7 +307,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://www.jelech.top/posts/16186/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/16186/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -315,7 +315,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://www.jelech.top/posts/16186/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/16186/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -363,7 +363,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/3676/" data-tooltip="安装Django" aria-label="上一篇: 安装Django">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/3676/" data-tooltip="安装Django" aria-label="上一篇: 安装Django">
                 
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
@@ -372,7 +372,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/21344/" data-tooltip="linux下安装python3" aria-label="下一篇: linux下安装python3">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/21344/" data-tooltip="linux下安装python3" aria-label="下一篇: linux下安装python3">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -390,7 +390,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://www.jelech.top/posts/16186/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/16186/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -398,7 +398,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://www.jelech.top/posts/16186/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/16186/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -406,7 +406,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://www.jelech.top/posts/16186/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/16186/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -433,7 +433,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://www.jelech.top/posts/16186/">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/16186/">
                     <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
                 </a>
             </li>
@@ -441,7 +441,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://www.jelech.top/posts/16186/">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/16186/">
                     <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
                 </a>
             </li>
@@ -449,7 +449,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://www.jelech.top/posts/16186/">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/16186/">
                     <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
                 </a>
             </li>
@@ -472,7 +472,7 @@
             <i class="fa fa-times"></i>
         </div>
         
-            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+            <img id="about-card-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
         
             <h4 id="about-card-name">Jelech</h4>
         
@@ -517,9 +517,9 @@
 
         
         
-<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+<div id="cover" style="background-image:url('/blog/assets/images/cover.jpg');"></div>
         <!--SCRIPTS-->
-<script src="/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
+<script src="/blog/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
 <!--SCRIPTS END-->
 
     

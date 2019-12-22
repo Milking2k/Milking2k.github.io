@@ -12,17 +12,17 @@
         <meta name="keywords" content="博客,算法,HTML/CSS/JS,游戏服务器,游戏,">
     
     
-        <link rel="icon" href="https://www.jelech.top/assets/images/favicon.ico">
+        <link rel="icon" href="https://jelech.gitee.io/blog/assets/images/favicon.ico">
         <link rel="Shortcut Icon" type="image/x-icon" href="assets/images/favicon.ico">
     
     
-        <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
+        <link rel="alternate" type="application/atom+xml" title="RSS" href="/blog/atom.xml">
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n一些中等难度的模板可以的话会更新一些对模板代码的理解\n并查集路径压缩 迭代 最优版12345678910111213141516171819202122int father[maxn]; //储存i的father父节点void makeSet() &#123; //初始化并查集数组    for (int i = 0; i &lt; maxn; i++)     father[i] = i;&#125;int findRoot(int x) &#123;//迭代找根节点    int root = x; // 根节点    while (root != father[root]) // 寻找根节点    \troot = father[root];    while (x != root) &#123;    \tint tmp = father[x];    \tfather[x] = root; // 根节点赋值    \tx = tmp;    &#125;    return root;&#125;void Union(int x, int y) &#123;//将x所在的集合和y所在的集合整合起来形成一个集合。     int a, b;    a = findRoot(x);    b = findRoot(y);    father[a] = b;// y连在x的根节点上 或father[b] = a为x连在y的根节点上；&#125;\n克鲁斯卡尔算法 （最小生成树）第一步：点、边、加入vector，把所有边按从小到大排序第二步：并查集部分 + 下面的code12345678void Kruskal() &#123;    ans = 0;    for (int i = 0; i&lt;len; i++)        if (Find(edge[i].a) != Find(edge[i].b)) &#123;            Union(edge[i].a, edge[i].b);            ans += edge[i].len;            &#125;&#125;\n普里姆算法 (稠密图 求最小生成树)堆优化版，时间复杂度：O(elgn)1234567891011121314151617181920212223242526272829303132333435363738struct node &#123;      int v, len;      node(int v = 0, int len = 0) :v(v), len(len) &#123;&#125;      bool operator &lt; (const node &amp;a)const &#123;  // 加入队列的元素自动按距离从小到大排序          return len&gt; a.len;      &#125;  &#125;;vector&lt;node&gt; G[maxn];int vis[maxn];int dis[maxn];void init() &#123;      for (int i = 0; i&lt;maxn; i++) &#123;          G[i].clear();          dis[i] = INF;          vis[i] = false;      &#125;  &#125;  int Prim(int s) &#123;      priority_queue&lt;node&gt;Q; // 定义优先队列      int ans = 0;      Q.push(node(s,0));  // 起点加入队列      while (!Q.empty()) &#123;           node now = Q.top(); Q.pop();  // 取出距离最小的点          int v = now.v;          if (vis[v]) continue;  // 同一个节点，可能会推入2次或2次以上队列，这样第一个被标记后，剩下的需要直接跳过。          vis[v] = true;  // 标记一下          ans += now.len;          for (int i = 0; i&lt;G[v].size(); i++) &#123;  // 开始更新              int v2 = G[v][i].v;              int len = G[v][i].len;              if (!vis[v2] &amp;&amp; dis[v2] &gt; len) &#123;                   dis[v2] = len;                  Q.push(node(v2, dis[v2]));  // 更新的点加入队列并排序              &#125;          &#125;      &#125;      return ans; &#125;\n单源最短路\nDijkstra迪杰斯特拉算法1234567891011121314151617181920212223242526272829303132333435363738struct node &#123;      int v, len;      node(int v = 0, int len = 0) :v(v), len(len) &#123;&#125;      bool operator &lt; (const node &amp;a)const &#123;  //  距离从小到大排序          return len &gt; a.len;      &#125;  &#125;;  vector&lt;node&gt;G[maxn];  bool vis[maxn];  int dis[maxn];void init() &#123;      for (int i = 0; i&lt;maxn; i++) &#123;          G[i].clear();          vis[i] = false;          dis[i] = INF;      &#125;  &#125;  int dijkstra(int s, int e) &#123;      priority_queue&lt;node&gt;Q;      Q.push(node(s, 0)); //  加入队列并排序      dis[s] = 0;      while (!Q.empty()) &#123;          node now = Q.top();     //  取出当前最小的          Q.pop();          int v = now.v;          if (vis[v]) continue;   //  如果标记过了, 直接continue          vis[v] = true;          for (int i = 0; i&lt;G[v].size(); i++) &#123;   //  更新              int v2 = G[v][i].v;              int len = G[v][i].len;              if (!vis[v2] &amp;&amp; dis[v2] &gt; dis[v] + len) &#123;                  dis[v2] = dis[v] + len;                  Q.push(node(v2, dis[v2]));              &#125;          &#125;      &#125;      return dis[e];  &#125;\nSPFA最短路径快速算法 |- 可处理负环 -| |- 队列优化 -|\n\n不断的将s的邻接点加入队列，取出不断的进行松弛操作，直到队列为空  \n如果一个结点被加入队列超过n-1次，那么显然图中有负环  123456789101112131415161718192021222324252627282930313233343536vector&lt;node&gt; G[maxn];bool inqueue[maxn];int dist[maxn];void Init()  &#123;      for(int i = 0 ; i &lt; maxn ; ++i)&#123;          G[i].clear();          dist[i] = INF;      &#125;  &#125;  int SPFA(int s,int e)  &#123;      int v1,v2,weight;      queue&lt;int&gt; Q;      memset(inqueue,false,sizeof(inqueue)); // 标记是否在队列中      memset(cnt,0,sizeof(cnt)); // 加入队列的次数      dist[s] = 0;      Q.push(s); // 起点加入队列      inqueue[s] = true; // 标记      while(!Q.empty())&#123;          v1 = Q.front();          Q.pop();          inqueue[v1] = false; // 取消标记          for(int i = 0 ; i &lt; G[v1].size() ; ++i)&#123; // 搜索v1的链表              v2 = G[v1][i].vex;              weight = G[v1][i].weight;              if(dist[v2] &gt; dist[v1] + weight)&#123; // 松弛操作                  dist[v2] = dist[v1] + weight;                  if(inqueue[v2] == false)&#123;  // 再次加入队列                      inqueue[v2] = true;                      //cnt[v2]++;  // 判负环                      //if(cnt[v2] &gt; n) return -1;                      Q.push(v2);                  &#125; &#125; &#125;      &#125;      return dist[e];  &#125;\n\n\nFloyd-Warshall弗洛伊德算法123456789101112/* main() */for (int i = 0; i &lt; n; i++) &#123;   //  初始化为0      for (int j = 0; j &lt; n; j++)          scanf(\"%lf\", &amp;dis[i][j]);  &#125;  for (int k = 0; k &lt; n; k++) &#123;      for (int i = 0; i &lt; n; i++) &#123;          for (int j = 0; j &lt; n; j++) &#123;              dis[i][j] = min(dis[i][j], dis[i][k] + dis[k][j]);          &#125;      &#125;&#125;\n二分图12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273/* |交叉染色法 判断二分图| */int bipartite(int s) &#123;      int u, v;      queue&lt;int&gt;Q;      color[s] = 1;      Q.push(s);      while (!Q.empty()) &#123;          u = Q.front();          Q.pop();          for (int i = 0; i &lt; G[u].size(); i++) &#123;              v = G[u][i];              if (color[v] == 0) &#123;                  color[v] = -color[u];                  Q.push(v);              &#125;              else if (color[v] == color[u])  return 0;          &#125;      &#125;      return 1;  &#125;/*匈牙利算法*//* |求解最大匹配问题| |递归实现| */vector&lt;int&gt;G[maxn];  bool inpath[maxn];  //  标记  int match[maxn];    //  记录匹配对象  void init() &#123;    memset(match, -1, sizeof(match));    for (int i = 0; i &lt; maxn; ++i) G[i].clear();&#125;  bool findpath(int k) &#123;      for (int i = 0; i &lt; G[k].size(); ++i) &#123;          int v = G[k][i];          if (!inpath[v]) &#123;              inpath[v] = true;              if (match[v] == -1 || findpath(match[v])) &#123; // 递归                  match[v] = k; // 即匹配对象是“k妹子”的                  return true;              &#125;          &#125;      &#125;      return false;  &#125;  void hungary() &#123;      int cnt = 0;      for (int i = 1; i &lt;= m; i++) &#123;  // m为需要匹配的“妹子”数          memset(inpath, false, sizeof(inpath)); // 每次都要初始化          if (findpath(i)) cnt++;      &#125;      cout &lt;&lt; cnt &lt;&lt; endl;  &#125;/* |求解最大匹配问题| |dfs实现| */int v1, v2;  bool Map[501][501];  bool visit[501];  int link[501];  int result;bool dfs(int x)  &#123;    for (int y = 1; y &lt;= v2; ++y)  &#123;          if (Map[x][y] &amp;&amp; !visit[y])  &#123;              visit[y] = true;              if (link[y] == 0 || dfs(link[y]))  &#123;                  link[y] = x;                  return true;              &#125; &#125; &#125;      return false;  &#125;void Search()  &#123;      for (int x = 1; x &lt;= v1; x++)  &#123;          memset(visit,false,sizeof(visit));          if (dfs(x)) result++;    &#125;&#125;\n字符串 KMP仍然是个理解的谜题 = =\n123456789101112131415161718192021222324252627282930void getnext(char str[maxn], int nextt[maxn]) &#123;    int j = 0, k = -1;    nextt[0] = -1;    while (j &lt; m) &#123;        if (k == -1 || str[j] == str[k]) &#123;            j++;            k++;            nextt[j] = k;        &#125;        else k = nextt[k];    &#125;&#125;void kmp(int a[maxn], int b[maxn]) &#123;    int nextt[maxm];    int i = 0, j = 0;    getnext(b, nextt);    while (i &lt; n) &#123;        if (j == -1 || a[i] == b[j]) &#123; // 母串不动，子串移动            j++;            i++;        &#125;        else             j = nextt[j]; // i不需要回溯了 i = i - j + 1        if (j == m) &#123;            printf(\"%d\\n\", i - m + 1); // 母串的位置减去子串的长度+1            return;            &#125;        &#125;        printf(\"-1\\n\");&#125;\n","dateCreated":"2018-04-30T19:50:56+08:00","dateModified":"2018-12-01T21:37:30+08:00","datePublished":"2018-04-30T19:50:56+08:00","description":"","headline":"中等难度模板","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://www.jelech.top/posts/39634/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://www.jelech.top/posts/39634/","keywords":"模板"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n一些中等难度的模板可以的话会更新一些对模板代码的理解\n并查集路径压缩 迭代 最优版12345678910111213141516171819202122int father[maxn]; //储存i的father父节点void makeSet() &#123; //初始化并查集数组    for (int i = 0; i &lt; maxn; i++)     father[i] = i;&#125;int findRoot(int x) &#123;//迭代找根节点    int root = x; // 根节点    while (root != father[root]) // 寻找根节点    \troot = father[root];    while (x != root) &#123;    \tint tmp = father[x];    \tfather[x] = root; // 根节点赋值    \tx = tmp;    &#125;    return root;&#125;void Union(int x, int y) &#123;//将x所在的集合和y所在的集合整合起来形成一个集合。     int a, b;    a = findRoot(x);    b = findRoot(y);    father[a] = b;// y连在x的根节点上 或father[b] = a为x连在y的根节点上；&#125;\n克鲁斯卡尔算法 （最小生成树）第一步：点、边、加入vector，把所有边按从小到大排序第二步：并查集部分 + 下面的code12345678void Kruskal() &#123;    ans = 0;    for (int i = 0; i&lt;len; i++)        if (Find(edge[i].a) != Find(edge[i].b)) &#123;            Union(edge[i].a, edge[i].b);            ans += edge[i].len;            &#125;&#125;\n普里姆算法 (稠密图 求最小生成树)堆优化版，时间复杂度：O(elgn)1234567891011121314151617181920212223242526272829303132333435363738struct node &#123;      int v, len;      node(int v = 0, int len = 0) :v(v), len(len) &#123;&#125;      bool operator &lt; (const node &amp;a)const &#123;  // 加入队列的元素自动按距离从小到大排序          return len&gt; a.len;      &#125;  &#125;;vector&lt;node&gt; G[maxn];int vis[maxn];int dis[maxn];void init() &#123;      for (int i = 0; i&lt;maxn; i++) &#123;          G[i].clear();          dis[i] = INF;          vis[i] = false;      &#125;  &#125;  int Prim(int s) &#123;      priority_queue&lt;node&gt;Q; // 定义优先队列      int ans = 0;      Q.push(node(s,0));  // 起点加入队列      while (!Q.empty()) &#123;           node now = Q.top(); Q.pop();  // 取出距离最小的点          int v = now.v;          if (vis[v]) continue;  // 同一个节点，可能会推入2次或2次以上队列，这样第一个被标记后，剩下的需要直接跳过。          vis[v] = true;  // 标记一下          ans += now.len;          for (int i = 0; i&lt;G[v].size(); i++) &#123;  // 开始更新              int v2 = G[v][i].v;              int len = G[v][i].len;              if (!vis[v2] &amp;&amp; dis[v2] &gt; len) &#123;                   dis[v2] = len;                  Q.push(node(v2, dis[v2]));  // 更新的点加入队列并排序              &#125;          &#125;      &#125;      return ans; &#125;\n单源最短路\nDijkstra迪杰斯特拉算法1234567891011121314151617181920212223242526272829303132333435363738struct node &#123;      int v, len;      node(int v = 0, int len = 0) :v(v), len(len) &#123;&#125;      bool operator &lt; (const node &amp;a)const &#123;  //  距离从小到大排序          return len &gt; a.len;      &#125;  &#125;;  vector&lt;node&gt;G[maxn];  bool vis[maxn];  int dis[maxn];void init() &#123;      for (int i = 0; i&lt;maxn; i++) &#123;          G[i].clear();          vis[i] = false;          dis[i] = INF;      &#125;  &#125;  int dijkstra(int s, int e) &#123;      priority_queue&lt;node&gt;Q;      Q.push(node(s, 0)); //  加入队列并排序      dis[s] = 0;      while (!Q.empty()) &#123;          node now = Q.top();     //  取出当前最小的          Q.pop();          int v = now.v;          if (vis[v]) continue;   //  如果标记过了, 直接continue          vis[v] = true;          for (int i = 0; i&lt;G[v].size(); i++) &#123;   //  更新              int v2 = G[v][i].v;              int len = G[v][i].len;              if (!vis[v2] &amp;&amp; dis[v2] &gt; dis[v] + len) &#123;                  dis[v2] = dis[v] + len;                  Q.push(node(v2, dis[v2]));              &#125;          &#125;      &#125;      return dis[e];  &#125;\nSPFA最短路径快速算法 |- 可处理负环 -| |- 队列优化 -|\n\n不断的将s的邻接点加入队列，取出不断的进行松弛操作，直到队列为空  \n如果一个结点被加入队列超过n-1次，那么显然图中有负环  123456789101112131415161718192021222324252627282930313233343536vector&lt;node&gt; G[maxn];bool inqueue[maxn];int dist[maxn];void Init()  &#123;      for(int i = 0 ; i &lt; maxn ; ++i)&#123;          G[i].clear();          dist[i] = INF;      &#125;  &#125;  int SPFA(int s,int e)  &#123;      int v1,v2,weight;      queue&lt;int&gt; Q;      memset(inqueue,false,sizeof(inqueue)); // 标记是否在队列中      memset(cnt,0,sizeof(cnt)); // 加入队列的次数      dist[s] = 0;      Q.push(s); // 起点加入队列      inqueue[s] = true; // 标记      while(!Q.empty())&#123;          v1 = Q.front();          Q.pop();          inqueue[v1] = false; // 取消标记          for(int i = 0 ; i &lt; G[v1].size() ; ++i)&#123; // 搜索v1的链表              v2 = G[v1][i].vex;              weight = G[v1][i].weight;              if(dist[v2] &gt; dist[v1] + weight)&#123; // 松弛操作                  dist[v2] = dist[v1] + weight;                  if(inqueue[v2] == false)&#123;  // 再次加入队列                      inqueue[v2] = true;                      //cnt[v2]++;  // 判负环                      //if(cnt[v2] &gt; n) return -1;                      Q.push(v2);                  &#125; &#125; &#125;      &#125;      return dist[e];  &#125;\n\n\nFloyd-Warshall弗洛伊德算法123456789101112/* main() */for (int i = 0; i &lt; n; i++) &#123;   //  初始化为0      for (int j = 0; j &lt; n; j++)          scanf(\"%lf\", &amp;dis[i][j]);  &#125;  for (int k = 0; k &lt; n; k++) &#123;      for (int i = 0; i &lt; n; i++) &#123;          for (int j = 0; j &lt; n; j++) &#123;              dis[i][j] = min(dis[i][j], dis[i][k] + dis[k][j]);          &#125;      &#125;&#125;\n二分图12345678910111213141516171819202122232425262728293031323334353637383940414243444546474849505152535455565758596061626364656667686970717273/* |交叉染色法 判断二分图| */int bipartite(int s) &#123;      int u, v;      queue&lt;int&gt;Q;      color[s] = 1;      Q.push(s);      while (!Q.empty()) &#123;          u = Q.front();          Q.pop();          for (int i = 0; i &lt; G[u].size(); i++) &#123;              v = G[u][i];              if (color[v] == 0) &#123;                  color[v] = -color[u];                  Q.push(v);              &#125;              else if (color[v] == color[u])  return 0;          &#125;      &#125;      return 1;  &#125;/*匈牙利算法*//* |求解最大匹配问题| |递归实现| */vector&lt;int&gt;G[maxn];  bool inpath[maxn];  //  标记  int match[maxn];    //  记录匹配对象  void init() &#123;    memset(match, -1, sizeof(match));    for (int i = 0; i &lt; maxn; ++i) G[i].clear();&#125;  bool findpath(int k) &#123;      for (int i = 0; i &lt; G[k].size(); ++i) &#123;          int v = G[k][i];          if (!inpath[v]) &#123;              inpath[v] = true;              if (match[v] == -1 || findpath(match[v])) &#123; // 递归                  match[v] = k; // 即匹配对象是“k妹子”的                  return true;              &#125;          &#125;      &#125;      return false;  &#125;  void hungary() &#123;      int cnt = 0;      for (int i = 1; i &lt;= m; i++) &#123;  // m为需要匹配的“妹子”数          memset(inpath, false, sizeof(inpath)); // 每次都要初始化          if (findpath(i)) cnt++;      &#125;      cout &lt;&lt; cnt &lt;&lt; endl;  &#125;/* |求解最大匹配问题| |dfs实现| */int v1, v2;  bool Map[501][501];  bool visit[501];  int link[501];  int result;bool dfs(int x)  &#123;    for (int y = 1; y &lt;= v2; ++y)  &#123;          if (Map[x][y] &amp;&amp; !visit[y])  &#123;              visit[y] = true;              if (link[y] == 0 || dfs(link[y]))  &#123;                  link[y] = x;                  return true;              &#125; &#125; &#125;      return false;  &#125;void Search()  &#123;      for (int x = 1; x &lt;= v1; x++)  &#123;          memset(visit,false,sizeof(visit));          if (dfs(x)) result++;    &#125;&#125;\n字符串 KMP仍然是个理解的谜题 = =\n123456789101112131415161718192021222324252627282930void getnext(char str[maxn], int nextt[maxn]) &#123;    int j = 0, k = -1;    nextt[0] = -1;    while (j &lt; m) &#123;        if (k == -1 || str[j] == str[k]) &#123;            j++;            k++;            nextt[j] = k;        &#125;        else k = nextt[k];    &#125;&#125;void kmp(int a[maxn], int b[maxn]) &#123;    int nextt[maxm];    int i = 0, j = 0;    getnext(b, nextt);    while (i &lt; n) &#123;        if (j == -1 || a[i] == b[j]) &#123; // 母串不动，子串移动            j++;            i++;        &#125;        else             j = nextt[j]; // i不需要回溯了 i = i - j + 1        if (j == m) &#123;            printf(\"%d\\n\", i - m + 1); // 母串的位置减去子串的长度+1            return;            &#125;        &#125;        printf(\"-1\\n\");&#125;\n","dateCreated":"2018-04-30T19:50:56+08:00","dateModified":"2018-12-01T21:37:30+08:00","datePublished":"2018-04-30T19:50:56+08:00","description":"","headline":"中等难度模板","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://jelech.gitee.io/blog/posts/39634/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://jelech.gitee.io/blog/posts/39634/","keywords":"模板"}</script>
     <meta name="keywords" content="模板">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="中等难度模板">
-<meta property="og:url" content="https://www.jelech.top/posts/39634/index.html">
+<meta property="og:url" content="https://jelech.gitee.io/blog/posts/39634/index.html">
 <meta property="og:site_name" content="Jelech的博客">
 <meta property="og:locale" content="zh-cn">
 <meta property="og:updated_time" content="2018-12-01T13:37:30.150Z">
@@ -34,13 +34,13 @@
         
     
     
-        <meta property="og:image" content="https://www.jelech.top/assets/images/avatar.jpg"/>
+        <meta property="og:image" content="https://jelech.gitee.io/blog/assets/images/avatar.jpg"/>
     
     
     
     
     <!--STYLES-->
-    <link rel="stylesheet" href="/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
+    <link rel="stylesheet" href="/blog/assets/css/style-du2xmrqdqrl2ollgeiw050kpl6l4nbyz7bumjuurjgsxyopifvukebxc9lqe.min.css">
     <!--STYLES END-->
     
 
@@ -71,14 +71,14 @@
 <header id="header" data-behavior="4">
     <i id="btn-open-sidebar" class="fa fa-lg fa-bars"></i>
     <div class="header-title">
-        <a class="header-title-link" href="/ ">Jelech的博客</a>
+        <a class="header-title-link" href="/blog/ ">Jelech的博客</a>
     </div>
     
         
             <a class="header-right-picture " href="#about">
         
         
-            <img class="header-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+            <img class="header-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
         
         </a>
     
@@ -95,8 +95,8 @@
     <div class="sidebar-container">
         
             <div class="sidebar-profile">
-                <a href="/#about">
-                    <img class="sidebar-profile-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+                <a href="/blog/#about">
+                    <img class="sidebar-profile-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
                 </a>
                 <h4 class="sidebar-profile-name">Jelech</h4>
                 
@@ -110,7 +110,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/ " title="首页">
+                        <a class="sidebar-button-link " href="/blog/ " title="首页">
                     
                         <i class="sidebar-button-icon fa fa-home" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">首页</span>
@@ -119,7 +119,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/all-categories" title="分类">
+                        <a class="sidebar-button-link " href="/blog/all-categories" title="分类">
                     
                         <i class="sidebar-button-icon fa fa-bookmark" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">分类</span>
@@ -128,7 +128,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/all-tags" title="标签">
+                        <a class="sidebar-button-link " href="/blog/all-tags" title="标签">
                     
                         <i class="sidebar-button-icon fa fa-tags" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">标签</span>
@@ -137,7 +137,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/all-archives" title="归档">
+                        <a class="sidebar-button-link " href="/blog/all-archives" title="归档">
                     
                         <i class="sidebar-button-icon fa fa-archive" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">归档</span>
@@ -146,7 +146,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/game" title="游戏">
+                        <a class="sidebar-button-link " href="/blog/game" title="游戏">
                     
                         <i class="sidebar-button-icon fas fa-gamepad" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">游戏</span>
@@ -177,7 +177,7 @@
             
                 <li class="sidebar-button">
                     
-                        <a class="sidebar-button-link " href="/mailto" title="邮箱">
+                        <a class="sidebar-button-link " href="/blog/mailto" title="邮箱">
                     
                         <i class="sidebar-button-icon fa fa-envelope" aria-hidden="true"></i>
                         <span class="sidebar-button-desc">邮箱</span>
@@ -214,7 +214,7 @@
     
         <span>发布在 </span>
         
-    <a class="category-link" href="/categories/算法/">算法</a>
+    <a class="category-link" href="/blog/categories/算法/">算法</a>
 
 
     
@@ -255,7 +255,7 @@
             <div class="post-footer-tags">
                 <span class="text-color-light text-small">标签</span><br>
                 
-    <a class="tag tag--primary tag--small t-link" href="/tags/模板/">模板</a>
+    <a class="tag tag--primary tag--small t-link" href="/blog/tags/模板/">模板</a>
 
             </div>
         
@@ -266,7 +266,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/33256/" data-tooltip="动态规划模板" aria-label="上一篇: 动态规划模板">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/33256/" data-tooltip="动态规划模板" aria-label="上一篇: 动态规划模板">
                 
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
@@ -275,7 +275,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/38733/" data-tooltip="一些简易的模板" aria-label="下一篇: 一些简易的模板">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/38733/" data-tooltip="一些简易的模板" aria-label="下一篇: 一些简易的模板">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -293,7 +293,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://www.jelech.top/posts/39634/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/39634/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -301,7 +301,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://www.jelech.top/posts/39634/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/39634/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -309,7 +309,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://www.jelech.top/posts/39634/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/39634/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -357,7 +357,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/33256/" data-tooltip="动态规划模板" aria-label="上一篇: 动态规划模板">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/33256/" data-tooltip="动态规划模板" aria-label="上一篇: 动态规划模板">
                 
                     <i class="fa fa-angle-left" aria-hidden="true"></i>
                     <span class="hide-xs hide-sm text-small icon-ml">上一篇</span>
@@ -366,7 +366,7 @@
             <li class="post-action">
                 
                     
-                    <a class="post-action-btn btn btn--default tooltip--top" href="/posts/38733/" data-tooltip="一些简易的模板" aria-label="下一篇: 一些简易的模板">
+                    <a class="post-action-btn btn btn--default tooltip--top" href="/blog/posts/38733/" data-tooltip="一些简易的模板" aria-label="下一篇: 一些简易的模板">
                 
                     <span class="hide-xs hide-sm text-small icon-mr">下一篇</span>
                     <i class="fa fa-angle-right" aria-hidden="true"></i>
@@ -384,7 +384,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://www.jelech.top/posts/39634/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/39634/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -392,7 +392,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://www.jelech.top/posts/39634/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/39634/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -400,7 +400,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://www.jelech.top/posts/39634/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/39634/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -427,7 +427,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://www.jelech.top/posts/39634/">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/blog/posts/39634/">
                     <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
                 </a>
             </li>
@@ -435,7 +435,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://www.jelech.top/posts/39634/">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/blog/posts/39634/">
                     <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
                 </a>
             </li>
@@ -443,7 +443,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://www.jelech.top/posts/39634/">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/blog/posts/39634/">
                     <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
                 </a>
             </li>
@@ -466,7 +466,7 @@
             <i class="fa fa-times"></i>
         </div>
         
-            <img id="about-card-picture" src="/assets/images/avatar.jpg" alt="作者的图片">
+            <img id="about-card-picture" src="/blog/assets/images/avatar.jpg" alt="作者的图片">
         
             <h4 id="about-card-name">Jelech</h4>
         
@@ -511,9 +511,9 @@
 
         
         
-<div id="cover" style="background-image:url('/assets/images/cover.jpg');"></div>
+<div id="cover" style="background-image:url('/blog/assets/images/cover.jpg');"></div>
         <!--SCRIPTS-->
-<script src="/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
+<script src="/blog/assets/js/script-vufjrm3fmbuttogo1hxuu0w9w0sesk5iyysjuguc2hdhufot9szxg8twijry.min.js"></script>
 <!--SCRIPTS END-->
 
     
