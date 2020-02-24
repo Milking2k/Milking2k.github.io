@@ -12,33 +12,33 @@
         <meta name="keywords" content="博客,算法,HTML/CSS/JS,游戏服务器,游戏,">
     
     
-        <link rel="icon" href="https://jelech.gitee.io/assets/images/favicon.ico">
+        <link rel="icon" href="https://jelech.top/assets/images/favicon.ico">
         <link rel="Shortcut Icon" type="image/x-icon" href="assets/images/favicon.ico">
     
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n这次任务我主要使用了QT Creator已经足够，因此就从这个开始介绍吧\n\n界面介绍\n下图是QT的主要界面。其中模式选择是我们经常在编辑和设计之间进行切换的模块，构建调试有快捷键ctrl+r(构建并运行)。输出面板会在运行/调试的时候自动跳出。\n\n我们新建一个项目。截图界面如下：\n\n这就是我们常用的一个界面了。左边是项目文件，需要增加其他文件直接右键进行设置就行。项目文件中包括了一下几大类\n\n左边的项目文件中，头文件一般会写c++文件的引用，以及一些全局变量的声明。\n\n源文件中保存了我们所有的c++文件。\n\n界面文件是我们进行画图，构建界面的地方。没错我们的界面是画出来的。\n\n还会有一个资源文件，里面保存了我们需要引用的图片文件，文档文件等等。\n右边的代码编辑模块就是我们常写代码的地方啦。请开始你的表演吧。\n\n\n\n开始构建界面\n界面的编辑需要我们进入*.ui 文件进行编辑，注意的是界面的绘画尽量不要使用代码的形式，第一是格式qt可能不认识，第二是开发效率太慢。\n\n界面开发模块的左边是一些组件，里面包含了你几乎所有需要的类型。这次的课程设计我大部分使用的是Text Browser，label，Push button。调整各种组件后，应尽量在右侧的对象/类中进行对组件的命名，这就是以后代码中你的这个组件的类的名字，方便于以后的使用。注意到右下有一些组件的属性设置。大部分时候我们对text的设置和调用最多。如何使用我们在之后代码部分进行讨论。\n右键中有个编辑样式表，打开后可以对这个组件进行一些编辑。功能都很人性化，使用方法也只是点点，大家自己探索吧。这里提醒一下，在选择背景图片的时候会发现里面没有图片，可能是你没有把图片导入到你的项目中，这时候需要你进入编辑模块里右键你的项目导入现有文件。这样才能使用图片。\n当构思完一个界面后，你需要的是进行对各个模块进行绑定。换句话说，就是需要把你自己写的程序函数和这个按钮/文字框/表/…进行绑定。 右键点击需要绑定的组件选择转到槽就可以啦。\n\n代码.组件绑定\n选择转到槽之后，qt会自动转到编辑模块中指定的void函数中，他的.h文件也会自动更新，现在你需要做的就是编辑这个函数，或者在里面进行对其他函数的调用。\n在继续讲解之前，这里贴一些QT包装好的函数。因为QT中一般使用qDebug() 进行调试，这时候他是不支持String类型的，因此在和你c++文件中进行交流时候需要进行对字符串的修改。不过不得不说，他虽然增加了许多麻烦，但是QString却比String好用不知多少倍。1234561. QString s = QString::fromStdString(String);2. QString s = QString::number(number);3. string s = qstring.toStdString();4. int a = qstring.toInt(0,10);5. float a = qstring.tofloat(0,10,2);6. QFile qfile &lt;&lt; qstring.toUtf8();\n经常使用的就是这一些转换。这里第6条是文件输出时候要转换为utf-8，不然文件中存的都是乱码。\n然后就开始对组件的绑定了。这次课程设计中我只使用了一些绑定的方法，毕竟项目比较小。\n\n第一种是点击按钮后弹出新的窗口，一般用于主界面。我们需要修改的文件有以下几个\n\n主窗口的mainWindow.h\n引用新窗口的头文件，这里我假设选择了refund.h。在private中添加 refund *wd_name 进行声明一个指针，这样弹出的窗口就不会突然弹出又消失;\n\n主窗口的mainWindow.cpp\n在相关按钮的槽函数(就是刚刚需要自己编辑的那个void函数)下写\n12wd_name = new refund(); wd_name.show();\n这个时候就完成了对按钮和创建新窗口的绑定。但是注意，refund.h是新建了一个界面后系统自动生成的。在进行绑定之前需要完成对这个窗口的构建。\n\n\n\n第二种是点击按钮后一个文本框文字的改变，这也是我们常用的一种方法。它可以很完美的绑定上需要读取的数据，进行处理后返回数据。我们需要修改的文件有以下几个\n\n按钮/文本框的refund.cpp文件\n和主窗口的弹出新窗口类似，我们也需要在这个槽函数中进行对数据的绑定和读取。这里得说一下，在窗口新建的时候，qt已经帮我们自动生成了一些代码，其中经常使用的是ui对象，它代表的是这个窗口中所有对象的合并，可以直接通过调用ui-&gt;CtName进行获取(修改)组件的属性。假设我们在refund中用了一个label，需要让他显示字符串”hello world” 那就在函数中写\n1ui-&gt;labelName-&gt;setText(\"hello world\");\n这样在我们点击按钮后就能修改这个label中的值。相似的属性还有很多，我列举一些我使用到的，其他类型的几乎都这样使用的，如果有其他的需要可以进网站https://qtguide.ustclug.org/进行查询\n1234567ui-&gt;tableWidget-&gt;setRowCount(0);//设置表单行数为0，即初始化为空ui-&gt;tableWidget-&gt;setSortingEnabled(true);//设置表单自动排列ui-&gt;tableWidget-&gt;sortByColumn(6, Qt::AscendingOrder);//设置表单初始依据排列根据，这里根据第6列int nOldRowCount = ui-&gt;tableWidget-&gt;rowCount();//获取当前表单的行数QTableWidgetItem *itemName = new QTableWidgetItem(qstring);//将一个QString声明为表单内容ui-&gt;tableWidget-&gt;setItem(nOldRowCount, i, itemName);//设置nOldRowCount行中第i位置的内容QString s = ui-&gt;labelName-&gt;Text();//获取一个标签的文字内容\n\n\n\n\n最近要开始组队训练…因此要暂时停更了qaq   加油加油\n TO BE CONTINUE……\n","dateCreated":"2018-03-27T17:15:09+08:00","dateModified":"2020-02-24T12:20:29+08:00","datePublished":"2018-03-27T17:15:09+08:00","description":"","headline":"QT学习笔记","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://jelech.gitee.io/posts/35593/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://jelech.gitee.io/posts/35593/","keywords":"笔记, c++框架"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n这次任务我主要使用了QT Creator已经足够，因此就从这个开始介绍吧\n\n界面介绍\n下图是QT的主要界面。其中模式选择是我们经常在编辑和设计之间进行切换的模块，构建调试有快捷键ctrl+r(构建并运行)。输出面板会在运行/调试的时候自动跳出。\n\n我们新建一个项目。截图界面如下：\n\n这就是我们常用的一个界面了。左边是项目文件，需要增加其他文件直接右键进行设置就行。项目文件中包括了一下几大类\n\n左边的项目文件中，头文件一般会写c++文件的引用，以及一些全局变量的声明。\n\n源文件中保存了我们所有的c++文件。\n\n界面文件是我们进行画图，构建界面的地方。没错我们的界面是画出来的。\n\n还会有一个资源文件，里面保存了我们需要引用的图片文件，文档文件等等。\n右边的代码编辑模块就是我们常写代码的地方啦。请开始你的表演吧。\n\n\n\n开始构建界面\n界面的编辑需要我们进入*.ui 文件进行编辑，注意的是界面的绘画尽量不要使用代码的形式，第一是格式qt可能不认识，第二是开发效率太慢。\n\n界面开发模块的左边是一些组件，里面包含了你几乎所有需要的类型。这次的课程设计我大部分使用的是Text Browser，label，Push button。调整各种组件后，应尽量在右侧的对象/类中进行对组件的命名，这就是以后代码中你的这个组件的类的名字，方便于以后的使用。注意到右下有一些组件的属性设置。大部分时候我们对text的设置和调用最多。如何使用我们在之后代码部分进行讨论。\n右键中有个编辑样式表，打开后可以对这个组件进行一些编辑。功能都很人性化，使用方法也只是点点，大家自己探索吧。这里提醒一下，在选择背景图片的时候会发现里面没有图片，可能是你没有把图片导入到你的项目中，这时候需要你进入编辑模块里右键你的项目导入现有文件。这样才能使用图片。\n当构思完一个界面后，你需要的是进行对各个模块进行绑定。换句话说，就是需要把你自己写的程序函数和这个按钮/文字框/表/…进行绑定。 右键点击需要绑定的组件选择转到槽就可以啦。\n\n代码.组件绑定\n选择转到槽之后，qt会自动转到编辑模块中指定的void函数中，他的.h文件也会自动更新，现在你需要做的就是编辑这个函数，或者在里面进行对其他函数的调用。\n在继续讲解之前，这里贴一些QT包装好的函数。因为QT中一般使用qDebug() 进行调试，这时候他是不支持String类型的，因此在和你c++文件中进行交流时候需要进行对字符串的修改。不过不得不说，他虽然增加了许多麻烦，但是QString却比String好用不知多少倍。1234561. QString s = QString::fromStdString(String);2. QString s = QString::number(number);3. string s = qstring.toStdString();4. int a = qstring.toInt(0,10);5. float a = qstring.tofloat(0,10,2);6. QFile qfile &lt;&lt; qstring.toUtf8();\n经常使用的就是这一些转换。这里第6条是文件输出时候要转换为utf-8，不然文件中存的都是乱码。\n然后就开始对组件的绑定了。这次课程设计中我只使用了一些绑定的方法，毕竟项目比较小。\n\n第一种是点击按钮后弹出新的窗口，一般用于主界面。我们需要修改的文件有以下几个\n\n主窗口的mainWindow.h\n引用新窗口的头文件，这里我假设选择了refund.h。在private中添加 refund *wd_name 进行声明一个指针，这样弹出的窗口就不会突然弹出又消失;\n\n主窗口的mainWindow.cpp\n在相关按钮的槽函数(就是刚刚需要自己编辑的那个void函数)下写\n12wd_name = new refund(); wd_name.show();\n这个时候就完成了对按钮和创建新窗口的绑定。但是注意，refund.h是新建了一个界面后系统自动生成的。在进行绑定之前需要完成对这个窗口的构建。\n\n\n\n第二种是点击按钮后一个文本框文字的改变，这也是我们常用的一种方法。它可以很完美的绑定上需要读取的数据，进行处理后返回数据。我们需要修改的文件有以下几个\n\n按钮/文本框的refund.cpp文件\n和主窗口的弹出新窗口类似，我们也需要在这个槽函数中进行对数据的绑定和读取。这里得说一下，在窗口新建的时候，qt已经帮我们自动生成了一些代码，其中经常使用的是ui对象，它代表的是这个窗口中所有对象的合并，可以直接通过调用ui-&gt;CtName进行获取(修改)组件的属性。假设我们在refund中用了一个label，需要让他显示字符串”hello world” 那就在函数中写\n1ui-&gt;labelName-&gt;setText(\"hello world\");\n这样在我们点击按钮后就能修改这个label中的值。相似的属性还有很多，我列举一些我使用到的，其他类型的几乎都这样使用的，如果有其他的需要可以进网站https://qtguide.ustclug.org/进行查询\n1234567ui-&gt;tableWidget-&gt;setRowCount(0);//设置表单行数为0，即初始化为空ui-&gt;tableWidget-&gt;setSortingEnabled(true);//设置表单自动排列ui-&gt;tableWidget-&gt;sortByColumn(6, Qt::AscendingOrder);//设置表单初始依据排列根据，这里根据第6列int nOldRowCount = ui-&gt;tableWidget-&gt;rowCount();//获取当前表单的行数QTableWidgetItem *itemName = new QTableWidgetItem(qstring);//将一个QString声明为表单内容ui-&gt;tableWidget-&gt;setItem(nOldRowCount, i, itemName);//设置nOldRowCount行中第i位置的内容QString s = ui-&gt;labelName-&gt;Text();//获取一个标签的文字内容\n\n\n\n\n最近要开始组队训练…因此要暂时停更了qaq   加油加油\n TO BE CONTINUE……\n","dateCreated":"2018-03-27T17:15:09+08:00","dateModified":"2020-02-24T12:20:29+08:00","datePublished":"2018-03-27T17:15:09+08:00","description":"","headline":"QT学习笔记","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://jelech.top/posts/35593/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://jelech.top/posts/35593/","keywords":"笔记, c++框架"}</script>
     <meta name="keywords" content="笔记,c++框架">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="QT学习笔记">
-<meta property="og:url" content="https://jelech.gitee.io/posts/35593/index.html">
+<meta property="og:url" content="https://jelech.top/posts/35593/index.html">
 <meta property="og:site_name" content="Jelech的博客">
 <meta property="og:locale" content="zh-cn">
-<meta property="og:image" content="https://jelech.gitee.io/assets/images/qtUsingNote/1.jpg">
-<meta property="og:image" content="https://jelech.gitee.io/assets/images/qtUsingNote/2.jpg">
-<meta property="og:image" content="https://jelech.gitee.io/assets/images/qtUsingNote/3.jpg">
+<meta property="og:image" content="https://jelech.top/assets/images/qtUsingNote/1.jpg">
+<meta property="og:image" content="https://jelech.top/assets/images/qtUsingNote/2.jpg">
+<meta property="og:image" content="https://jelech.top/assets/images/qtUsingNote/3.jpg">
 <meta property="og:updated_time" content="2020-02-24T04:20:29.050Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="QT学习笔记">
-<meta name="twitter:image" content="https://jelech.gitee.io/assets/images/qtUsingNote/1.jpg">
+<meta name="twitter:image" content="https://jelech.top/assets/images/qtUsingNote/1.jpg">
 <meta name="twitter:creator" content="@twitter">
     
     
         
     
     
-        <meta property="og:image" content="https://jelech.gitee.io/assets/images/avatar.jpg"/>
+        <meta property="og:image" content="https://jelech.top/assets/images/avatar.jpg"/>
     
     
     
@@ -338,7 +338,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/35593/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.top/posts/35593/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -346,7 +346,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/35593/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.top/posts/35593/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -354,7 +354,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/35593/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.top/posts/35593/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -428,7 +428,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/35593/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.top/posts/35593/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -436,7 +436,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/35593/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.top/posts/35593/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -444,7 +444,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/35593/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.top/posts/35593/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -471,7 +471,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/35593/">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.top/posts/35593/">
                     <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
                 </a>
             </li>
@@ -479,7 +479,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/35593/">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.top/posts/35593/">
                     <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
                 </a>
             </li>
@@ -487,7 +487,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/35593/">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jelech.top/posts/35593/">
                     <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
                 </a>
             </li>

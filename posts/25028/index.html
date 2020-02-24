@@ -12,31 +12,31 @@
         <meta name="keywords" content="博客,算法,HTML/CSS/JS,游戏服务器,游戏,">
     
     
-        <link rel="icon" href="https://jelech.gitee.io/assets/images/favicon.ico">
+        <link rel="icon" href="https://jelech.top/assets/images/favicon.ico">
         <link rel="Shortcut Icon" type="image/x-icon" href="assets/images/favicon.ico">
     
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n基础一些内置函数\nclose 主要用来关闭channel\nlen 求长度\nnew 用于分配基础类型的内存\nmake 用于分配引用类型的内存：chan, map, slice\nappend 用于追加元素到slice中\npanic, recover 用于做错误处理\n\npanic 像raise一样会主动拉出错误，可以用defer 语句处理，用 err := recover() 可以获取错误，并且recover了，则会恢复现场，但是这个现场是跳出了panic的函数的\nstrconv包把字符串转换为相应类型。比如strconv.Atoi(s)\n返回实体类型，与err编号\n结构体类型别名1type newName oldName\n结构体和C++中的struct类似，相较于class类来说：\n\n结构体中的变量值在内存中的位置和C++类似，会有内存对齐\n一般定义为大写开始的变量为共有，小写开始的为私有\n\n12345type Person struct&#123;    Name string    Age int    hight int&#125;\n\nstruct可以添加函数\n\n1234func (p *Person) SayHI() (ret int) &#123;    println(\"hi\")    return 0&#125;\n\n构造函数约定new开头，返回结构体指针\n\n123456func newPerson(name string, age int) *Person&#123; // 注意返回一个指针    return &amp;Person&#123;        Name:name,        Age:age, // 最后需要加上逗号    &#125;&#125;\n结构体匿名字段字段类型作为了名字, 但是一般都不会定义int,string这类的匿名，而是一个新的类型，这样有利于提取出公共部分可理解， 而外部访问的时候又可以更直观：\n12345678910type address struct&#123;    city string&#125;type person struct&#123;    name string    address // 嵌套后&#125;p := new(person)p.city // 从address中自动找到了city\n继承机制嵌套其他struct的时候同时也会把函数也嵌套过来，当然，如果函数名重复的话会忽略，自己声明的优先级更高\n12345678910111213141516type animal struct&#123;&#125;func (a *anival) move() &#123;    println(\"move\")&#125;type cat struct&#123;    animal // cat中嵌套了animal&#125;func (c *cat) say() &#123;    println(\"say\")&#125;// 使用c := new(cat)c.say()c.move() // 会从嵌套类中找到move()\n结构体与json1234567import \"encoding/json\"p = newPerson(\"je\", 12)s, err := json.Marshal(p) //转为jsonjson.Unmarshal([]byte(s), &amp;p) // 记住传指针\n但是json访问的时候需要p为首字母大写，但有的json需要小写。\n此时就要就需要在struct后加反引号，在包解析的时候会自动转换123type Person struct&#123;    Name string `json:\"name\", db:\"name\", ini:\"name` // 在json的名字，db中的名字，init.conf中的名字等。&#125;\n接口用于抽象化一些类型的共有部分。比如猫狗都能叫，可以抽象出一个类型speak函数，那么在之后调用的时候能直接使用speak，而传入参数能的多种类型的\n而其他的struct只要实现了interface中的方法，那么就能传入后调用出来。\n12345678910111213141516type animal interface&#123;    speak()&#125;type cat struct&#123;&#125;type dog struct&#123;&#125;func (c *cat) speak() &#123;&#125;func (d *dog) speak() &#123;&#125;func do(a *animal) &#123;    a.speak()&#125;// use ... 这样就能动态的使用相应的speak函数了do(new(cat))do(new(dog))\n空接口空接口是所有类型的父接口，这样做是为了传入一种类型，比如在map中存动态的类型，一个函数接收所有的类型。\n注意有一个大括号 interface{}\n123456789m1 := make(map[string]interface&#123;&#125;, 10)m1[\"name\"] = \"je\"m1[\"age\"] = 13func show(a interface&#123;&#125;) &#123;&#125;// useshow(bool)show(\"hi\")\n类型断言\nx: 表示为interface{}的变量\nT: 表示断言x可能的类型\n\n1isTrue, err := x.(T)\npackage包包内的变量/函数需要首字母大写才能在外部调用\n1234package 包名import (    别名 jelech.top/PackName)\n这里说明一下，一个go包在运行的时候会进行：\n\n全局声明\n运行init()函数。init函数是内置的，和main类似\n运行main()函数\n\n在 A import B，B import C时，会先运行initC，再initB和initA。\n文件操作import &quot;os&quot;\n\nos.Open()返回一个*File，对这个指针进行操作\nlen, err = os.Read([]byte) 读取一个文件，返回长度和错误标识\n\nimport &quot;bufio&quot;\n\nline, err := reader.ReadString(&#39;\\n&#39;)一直读取直到遇到某个字符\n\nimport &quot;ioutil&quot;\n\nret, err := ioutil.ReadFile(path) 直接打开文件全部读取到ret中\n\n\n… 有待补充\n\ntime包\nntime := time.Now() 获取当前时间\nntime.Year(), ntime.Month()... 获取时间的详细部分\n\n时间戳\nntime.Unix() 获取时间戳\nntime.Unix(time int64) 将时间戳转换为标准格式时间\nntime.UnixNano() 纳秒时间戳\n\n时间操作时间间隔在go中已经用常量定义，类型为Duration，纳秒为最小单位1(time.Nanosecond)\nAdd(d Duration) 时间加上一个间隔\nSub(u Time) 返回距离u时间多久。结果为 t-u\nEqual(u Time) 判断时间是否相同，会有时区的影响\nBefore(u Time), After(u Time) 判断是否在u之前、之后。\ntime.Tick(d Duration) 设置一个定时器，本质上是一个通道\nntime.Format(%s) 时间格式化，但是格式化的形式是GO诞生时间…[2006/01/02 15:04:05]\n反射程序在运行期间对程序本身进行访问和修改的能力。Go语言使用reflect包提供程序的反射信息。\n现有的使用场景可以举个例子：加载ini文件时，需要动态判断某个字符是什么类型的，这个定义是再代码中的。\n需要注意的是反射性能并不高，需要尽量少用\nreflect每一个对象都又Type,Value两个属性。分别对应reflect.Type 和 reflect.Value。\n也可以使用 TypeOf() 和 ValueOf()两个函数进行对对象的属性获取\n而类型又可以分为：类型Name, 种类Kind类型。比如一个结构体的Name是我们取的名字，而kind是struct类型\nt := reflect.Type; t.Name, t.Kind()\nElem() 在函数中通过反射的方法修改变量的值，可以使用这个函数来获取对应的指针\nIsNil(), IsValid() 判断v持有的值是否为nil，比如指针是否为空。valid判断v是否持有一个值，这个值是否有效\n\n…这里需要再加强学习一下\n\n结构体反射Field(i int) 用于获取第i个字段的信息，当然也包括.Name, .Index, .Type, .Tag tag是结构体内变量的附加信息，参考json\nNumField() 获取结构体中的变量个数\n并发\nGo天生支持并发，这一章对于Go非常重要，我之后会单独起一篇来记录一下他的原理，这里简要说明一下\n\ngoroutine类似与线程，属于用户态的线程。当你需要让某个任务并发执行的时候，只需要把这个任务包装为一个函数，开启goroutine去执行这个函数就可以了。使用方法是在函数前加一个 go 就可以了\nGo语言提供了channel在多个goroutine之间进行通信。\n注意闭包的情况，在go并发的时候，内部的匿名函数如果使用了外部的变量，那么在真正调用的时候会使得结果并不是我们想要的结果。详细参考一下闭包\n结束等待waitsync.WaitGroup 是一个线程结束标记，类似一个channel，在新建一个线程时候将其加1，每个线程结束都defer一个wg.Done() 这样做直到线程全部结束时，wg.wait()就能通过了\n1234567891011var wg sync.WaitGroupfor i := 0; i &lt; 100; i++ &#123;    wg.Add(1)    go func(i int) &#123;        defer wg.Done()        println(i)    &#125;(i)&#125;wg.Wait()println(\"done\")\nGMP调度OS线程一般都固定的栈内存为2MB，而goroutine的栈一开始设置为2KB，但是并不是固定的，之后可以增大和缩小。\n\nG 存放goroutine的信息，以及和P的绑定等信息\nM 是Go运行时对操作系统内核线程的虚拟，M和内核线程一般是1to1的\np 管理一组goroutine队列，其中存放当前goroutine运行的上下文环境，并且自带又自己的队列调度机制。P与M一般也是一一对应的。\n\n会把m个goroutine分配给n个操作系统线程来执行\nruntime.GOMAXPROCS() 可以限制当前进程可以使用的线程个数。默认的是CPU的逻辑核心数，会默认跑满整个CPU\n更加详细的可以参考其他博客 \nchannelGo的并发模型是CSP，提倡通过通信共享内存，而不是通过同共享内存来进行通信\n通道像一个传送带或者队列。FIFO的顺序，每个通道需要一个具体的类型指定传输的元素类型\nchannel是一个引用类型，需要先初始化才能使用，所以是使用make来进行初始化\n123456789var ch chan intch = make(chan int) // 不带缓冲的ch = make(chan int, 10) // 带缓冲的// 把10发送到ch中ch &lt;- 10// 从ch中拿出到cur中cur := &lt;- ch\n缓冲区如果channel没有设置缓冲区，那么在发送的时候会一直等待，直到有人接收。\nclose(ch) 关闭一个通道，只有在通知方goroutine所有的数据发送完毕了才需要关闭通道，他是可以被GC回收的，因此关闭通道这个操作并不是必须的。\n- 对关闭了的通道进行读会返回0\nfor range range支持了从通道中取值\n单向通道\nfunc f1(ch1 chan&lt;- int) 声明一个单向通道，这里是声明了只能进行写入\nfunc f1(ch1 &lt;-chan int) 声明一个单向通道，这里是声明了只能进行读出\n\n多路复用select从多个通道里进行取值。\n123456789// 基本语法select&#123;    case &lt;-ch1:        //...    case data := &lt;-ch2:        //...    default:        //...&#125;\n正则表达式go使用包regexp包进行正则表达式的使用。\n这里有正则的常用规则：\n\n","dateCreated":"2019-11-07T17:01:02+08:00","dateModified":"2019-11-21T18:24:46+08:00","datePublished":"2019-11-07T17:01:02+08:00","description":"","headline":"一起学GO(二)","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://jelech.gitee.io/posts/25028/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://jelech.gitee.io/posts/25028/","keywords":"笔记, GO"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n基础一些内置函数\nclose 主要用来关闭channel\nlen 求长度\nnew 用于分配基础类型的内存\nmake 用于分配引用类型的内存：chan, map, slice\nappend 用于追加元素到slice中\npanic, recover 用于做错误处理\n\npanic 像raise一样会主动拉出错误，可以用defer 语句处理，用 err := recover() 可以获取错误，并且recover了，则会恢复现场，但是这个现场是跳出了panic的函数的\nstrconv包把字符串转换为相应类型。比如strconv.Atoi(s)\n返回实体类型，与err编号\n结构体类型别名1type newName oldName\n结构体和C++中的struct类似，相较于class类来说：\n\n结构体中的变量值在内存中的位置和C++类似，会有内存对齐\n一般定义为大写开始的变量为共有，小写开始的为私有\n\n12345type Person struct&#123;    Name string    Age int    hight int&#125;\n\nstruct可以添加函数\n\n1234func (p *Person) SayHI() (ret int) &#123;    println(\"hi\")    return 0&#125;\n\n构造函数约定new开头，返回结构体指针\n\n123456func newPerson(name string, age int) *Person&#123; // 注意返回一个指针    return &amp;Person&#123;        Name:name,        Age:age, // 最后需要加上逗号    &#125;&#125;\n结构体匿名字段字段类型作为了名字, 但是一般都不会定义int,string这类的匿名，而是一个新的类型，这样有利于提取出公共部分可理解， 而外部访问的时候又可以更直观：\n12345678910type address struct&#123;    city string&#125;type person struct&#123;    name string    address // 嵌套后&#125;p := new(person)p.city // 从address中自动找到了city\n继承机制嵌套其他struct的时候同时也会把函数也嵌套过来，当然，如果函数名重复的话会忽略，自己声明的优先级更高\n12345678910111213141516type animal struct&#123;&#125;func (a *anival) move() &#123;    println(\"move\")&#125;type cat struct&#123;    animal // cat中嵌套了animal&#125;func (c *cat) say() &#123;    println(\"say\")&#125;// 使用c := new(cat)c.say()c.move() // 会从嵌套类中找到move()\n结构体与json1234567import \"encoding/json\"p = newPerson(\"je\", 12)s, err := json.Marshal(p) //转为jsonjson.Unmarshal([]byte(s), &amp;p) // 记住传指针\n但是json访问的时候需要p为首字母大写，但有的json需要小写。\n此时就要就需要在struct后加反引号，在包解析的时候会自动转换123type Person struct&#123;    Name string `json:\"name\", db:\"name\", ini:\"name` // 在json的名字，db中的名字，init.conf中的名字等。&#125;\n接口用于抽象化一些类型的共有部分。比如猫狗都能叫，可以抽象出一个类型speak函数，那么在之后调用的时候能直接使用speak，而传入参数能的多种类型的\n而其他的struct只要实现了interface中的方法，那么就能传入后调用出来。\n12345678910111213141516type animal interface&#123;    speak()&#125;type cat struct&#123;&#125;type dog struct&#123;&#125;func (c *cat) speak() &#123;&#125;func (d *dog) speak() &#123;&#125;func do(a *animal) &#123;    a.speak()&#125;// use ... 这样就能动态的使用相应的speak函数了do(new(cat))do(new(dog))\n空接口空接口是所有类型的父接口，这样做是为了传入一种类型，比如在map中存动态的类型，一个函数接收所有的类型。\n注意有一个大括号 interface{}\n123456789m1 := make(map[string]interface&#123;&#125;, 10)m1[\"name\"] = \"je\"m1[\"age\"] = 13func show(a interface&#123;&#125;) &#123;&#125;// useshow(bool)show(\"hi\")\n类型断言\nx: 表示为interface{}的变量\nT: 表示断言x可能的类型\n\n1isTrue, err := x.(T)\npackage包包内的变量/函数需要首字母大写才能在外部调用\n1234package 包名import (    别名 jelech.top/PackName)\n这里说明一下，一个go包在运行的时候会进行：\n\n全局声明\n运行init()函数。init函数是内置的，和main类似\n运行main()函数\n\n在 A import B，B import C时，会先运行initC，再initB和initA。\n文件操作import &quot;os&quot;\n\nos.Open()返回一个*File，对这个指针进行操作\nlen, err = os.Read([]byte) 读取一个文件，返回长度和错误标识\n\nimport &quot;bufio&quot;\n\nline, err := reader.ReadString(&#39;\\n&#39;)一直读取直到遇到某个字符\n\nimport &quot;ioutil&quot;\n\nret, err := ioutil.ReadFile(path) 直接打开文件全部读取到ret中\n\n\n… 有待补充\n\ntime包\nntime := time.Now() 获取当前时间\nntime.Year(), ntime.Month()... 获取时间的详细部分\n\n时间戳\nntime.Unix() 获取时间戳\nntime.Unix(time int64) 将时间戳转换为标准格式时间\nntime.UnixNano() 纳秒时间戳\n\n时间操作时间间隔在go中已经用常量定义，类型为Duration，纳秒为最小单位1(time.Nanosecond)\nAdd(d Duration) 时间加上一个间隔\nSub(u Time) 返回距离u时间多久。结果为 t-u\nEqual(u Time) 判断时间是否相同，会有时区的影响\nBefore(u Time), After(u Time) 判断是否在u之前、之后。\ntime.Tick(d Duration) 设置一个定时器，本质上是一个通道\nntime.Format(%s) 时间格式化，但是格式化的形式是GO诞生时间…[2006/01/02 15:04:05]\n反射程序在运行期间对程序本身进行访问和修改的能力。Go语言使用reflect包提供程序的反射信息。\n现有的使用场景可以举个例子：加载ini文件时，需要动态判断某个字符是什么类型的，这个定义是再代码中的。\n需要注意的是反射性能并不高，需要尽量少用\nreflect每一个对象都又Type,Value两个属性。分别对应reflect.Type 和 reflect.Value。\n也可以使用 TypeOf() 和 ValueOf()两个函数进行对对象的属性获取\n而类型又可以分为：类型Name, 种类Kind类型。比如一个结构体的Name是我们取的名字，而kind是struct类型\nt := reflect.Type; t.Name, t.Kind()\nElem() 在函数中通过反射的方法修改变量的值，可以使用这个函数来获取对应的指针\nIsNil(), IsValid() 判断v持有的值是否为nil，比如指针是否为空。valid判断v是否持有一个值，这个值是否有效\n\n…这里需要再加强学习一下\n\n结构体反射Field(i int) 用于获取第i个字段的信息，当然也包括.Name, .Index, .Type, .Tag tag是结构体内变量的附加信息，参考json\nNumField() 获取结构体中的变量个数\n并发\nGo天生支持并发，这一章对于Go非常重要，我之后会单独起一篇来记录一下他的原理，这里简要说明一下\n\ngoroutine类似与线程，属于用户态的线程。当你需要让某个任务并发执行的时候，只需要把这个任务包装为一个函数，开启goroutine去执行这个函数就可以了。使用方法是在函数前加一个 go 就可以了\nGo语言提供了channel在多个goroutine之间进行通信。\n注意闭包的情况，在go并发的时候，内部的匿名函数如果使用了外部的变量，那么在真正调用的时候会使得结果并不是我们想要的结果。详细参考一下闭包\n结束等待waitsync.WaitGroup 是一个线程结束标记，类似一个channel，在新建一个线程时候将其加1，每个线程结束都defer一个wg.Done() 这样做直到线程全部结束时，wg.wait()就能通过了\n1234567891011var wg sync.WaitGroupfor i := 0; i &lt; 100; i++ &#123;    wg.Add(1)    go func(i int) &#123;        defer wg.Done()        println(i)    &#125;(i)&#125;wg.Wait()println(\"done\")\nGMP调度OS线程一般都固定的栈内存为2MB，而goroutine的栈一开始设置为2KB，但是并不是固定的，之后可以增大和缩小。\n\nG 存放goroutine的信息，以及和P的绑定等信息\nM 是Go运行时对操作系统内核线程的虚拟，M和内核线程一般是1to1的\np 管理一组goroutine队列，其中存放当前goroutine运行的上下文环境，并且自带又自己的队列调度机制。P与M一般也是一一对应的。\n\n会把m个goroutine分配给n个操作系统线程来执行\nruntime.GOMAXPROCS() 可以限制当前进程可以使用的线程个数。默认的是CPU的逻辑核心数，会默认跑满整个CPU\n更加详细的可以参考其他博客 \nchannelGo的并发模型是CSP，提倡通过通信共享内存，而不是通过同共享内存来进行通信\n通道像一个传送带或者队列。FIFO的顺序，每个通道需要一个具体的类型指定传输的元素类型\nchannel是一个引用类型，需要先初始化才能使用，所以是使用make来进行初始化\n123456789var ch chan intch = make(chan int) // 不带缓冲的ch = make(chan int, 10) // 带缓冲的// 把10发送到ch中ch &lt;- 10// 从ch中拿出到cur中cur := &lt;- ch\n缓冲区如果channel没有设置缓冲区，那么在发送的时候会一直等待，直到有人接收。\nclose(ch) 关闭一个通道，只有在通知方goroutine所有的数据发送完毕了才需要关闭通道，他是可以被GC回收的，因此关闭通道这个操作并不是必须的。\n- 对关闭了的通道进行读会返回0\nfor range range支持了从通道中取值\n单向通道\nfunc f1(ch1 chan&lt;- int) 声明一个单向通道，这里是声明了只能进行写入\nfunc f1(ch1 &lt;-chan int) 声明一个单向通道，这里是声明了只能进行读出\n\n多路复用select从多个通道里进行取值。\n123456789// 基本语法select&#123;    case &lt;-ch1:        //...    case data := &lt;-ch2:        //...    default:        //...&#125;\n正则表达式go使用包regexp包进行正则表达式的使用。\n这里有正则的常用规则：\n\n","dateCreated":"2019-11-07T17:01:02+08:00","dateModified":"2019-11-21T18:24:46+08:00","datePublished":"2019-11-07T17:01:02+08:00","description":"","headline":"一起学GO(二)","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://jelech.top/posts/25028/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://jelech.top/posts/25028/","keywords":"笔记, GO"}</script>
     <meta name="keywords" content="笔记,GO">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="一起学GO(二)">
-<meta property="og:url" content="https://jelech.gitee.io/posts/25028/index.html">
+<meta property="og:url" content="https://jelech.top/posts/25028/index.html">
 <meta property="og:site_name" content="Jelech的博客">
 <meta property="og:locale" content="zh-cn">
-<meta property="og:image" content="https://jelech.gitee.io/assets/golangREGEX.jpg">
+<meta property="og:image" content="https://jelech.top/assets/golangREGEX.jpg">
 <meta property="og:updated_time" content="2019-11-21T10:24:46.486Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一起学GO(二)">
-<meta name="twitter:image" content="https://jelech.gitee.io/assets/golangREGEX.jpg">
+<meta name="twitter:image" content="https://jelech.top/assets/golangREGEX.jpg">
 <meta name="twitter:creator" content="@twitter">
     
     
         
     
     
-        <meta property="og:image" content="https://jelech.gitee.io/assets/images/avatar.jpg"/>
+        <meta property="og:image" content="https://jelech.top/assets/images/avatar.jpg"/>
     
     
     
@@ -411,7 +411,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/25028/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.top/posts/25028/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -419,7 +419,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/25028/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.top/posts/25028/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -427,7 +427,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/25028/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.top/posts/25028/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -501,7 +501,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/25028/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.top/posts/25028/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -509,7 +509,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/25028/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.top/posts/25028/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -517,7 +517,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/25028/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.top/posts/25028/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -544,7 +544,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/25028/">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.top/posts/25028/">
                     <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
                 </a>
             </li>
@@ -552,7 +552,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/25028/">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.top/posts/25028/">
                     <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
                 </a>
             </li>
@@ -560,7 +560,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/25028/">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jelech.top/posts/25028/">
                     <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
                 </a>
             </li>

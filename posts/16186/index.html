@@ -12,17 +12,17 @@
         <meta name="keywords" content="博客,算法,HTML/CSS/JS,游戏服务器,游戏,">
     
     
-        <link rel="icon" href="https://jelech.gitee.io/assets/images/favicon.ico">
+        <link rel="icon" href="https://jelech.top/assets/images/favicon.ico">
         <link rel="Shortcut Icon" type="image/x-icon" href="assets/images/favicon.ico">
     
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n学习笔记O(∩_∩)O倍增\n倍增是一种思想。依据这种思想，衍生出了ST表、LCA(最近公共祖先)以及一些在树上的倍增应用。\n\n考虑这样一个问题：如何快速在一个序列s中查询到不大于a的值？（这里序列已排序好正常思想就是二分，每次取得s中l,r,mid的值，进行比较后快速logn速度逼近正确的值。但是这里我们不考虑二分倍增和二分的思想很类似。对于一个单调的序列，我们可以快速的跳过太小的（或者太大的）数，从而快速逼近结果。简单的模拟一下倍增：· 设置一个长度p，每次如果查询到的值小于目标，位置k+=p，长度p=2*p· 如果查询到的值大于目标，长度p=p/2。并重复上一个步骤。· 循环查询到确切的目标。比如，起初位置在k为0，p为2.查询到s[k+p]为小于目标的数，k就变成了k+p，p增倍了。下一次查询到s[k+p]大于了目标数，我们就把p先减小为一半。再查一次。如果有概念了，可以想象出平均下来是logn的。\nST表\nst表灵活的使用了倍增的思想可以进行对区间最值问题的快速查找与更新预处理O（n·logn），查询O（1），空间（n·logn）\n\n线段树虽说是区间维护的全能王，但是也恰巧这样导致了他在一些特别的方面处理比较慢，线段树的查询是O(logn)的，而且占用的空间也较大，所以容易被卡常数。\n字典树 Trie\n将所有字符串依据前缀构建的一棵树其中的节点表示字符串的某个字符，树的根是一个空指针是一种存放字符串的数据结构（就是为了其他算法的使用专门设计的\n\nAC自动机（好像顺序乱套了\n\n不是可以自动Acepte的程序是基于kmp思想，建立在字典树上的自动匹配字符串算法多个模板串，一个目标串重要词典:失败指针(fail指针)：指的是在匹配某个字符串的时候，如果到当前的位置发现不匹配，会跳到某个其他前缀匹配的位置，继续匹配。如果仍然没有，就会跳回到根\n\n佩尔方程（没想到还是要学数论\n\n满足：x^2 - dy^2 = 1 的方程方程通过假设x1,x2两个解，解出了另一个新的解。这代表了如果知道方程中的最小特解，就能推论出所有的解。通解：`Xn = Xn-1  X1 + d  Yn-1  Y1Yn = Xn-1  X1 + Yn-1  Y1`半难以发现正解公式，需要通过自己一步一步推公式。\n\n赛后笔记\n先贪心再暴力打表找规律推公式关于long long 要先仔细读题思考哪些部分需要再修改部分\n\n","dateCreated":"2018-09-20T21:09:57+08:00","dateModified":"2019-05-25T21:13:39+08:00","datePublished":"2018-09-20T21:09:57+08:00","description":"","headline":"算法学习笔记","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://jelech.gitee.io/posts/16186/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://jelech.gitee.io/posts/16186/","keywords":"算法"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n学习笔记O(∩_∩)O倍增\n倍增是一种思想。依据这种思想，衍生出了ST表、LCA(最近公共祖先)以及一些在树上的倍增应用。\n\n考虑这样一个问题：如何快速在一个序列s中查询到不大于a的值？（这里序列已排序好正常思想就是二分，每次取得s中l,r,mid的值，进行比较后快速logn速度逼近正确的值。但是这里我们不考虑二分倍增和二分的思想很类似。对于一个单调的序列，我们可以快速的跳过太小的（或者太大的）数，从而快速逼近结果。简单的模拟一下倍增：· 设置一个长度p，每次如果查询到的值小于目标，位置k+=p，长度p=2*p· 如果查询到的值大于目标，长度p=p/2。并重复上一个步骤。· 循环查询到确切的目标。比如，起初位置在k为0，p为2.查询到s[k+p]为小于目标的数，k就变成了k+p，p增倍了。下一次查询到s[k+p]大于了目标数，我们就把p先减小为一半。再查一次。如果有概念了，可以想象出平均下来是logn的。\nST表\nst表灵活的使用了倍增的思想可以进行对区间最值问题的快速查找与更新预处理O（n·logn），查询O（1），空间（n·logn）\n\n线段树虽说是区间维护的全能王，但是也恰巧这样导致了他在一些特别的方面处理比较慢，线段树的查询是O(logn)的，而且占用的空间也较大，所以容易被卡常数。\n字典树 Trie\n将所有字符串依据前缀构建的一棵树其中的节点表示字符串的某个字符，树的根是一个空指针是一种存放字符串的数据结构（就是为了其他算法的使用专门设计的\n\nAC自动机（好像顺序乱套了\n\n不是可以自动Acepte的程序是基于kmp思想，建立在字典树上的自动匹配字符串算法多个模板串，一个目标串重要词典:失败指针(fail指针)：指的是在匹配某个字符串的时候，如果到当前的位置发现不匹配，会跳到某个其他前缀匹配的位置，继续匹配。如果仍然没有，就会跳回到根\n\n佩尔方程（没想到还是要学数论\n\n满足：x^2 - dy^2 = 1 的方程方程通过假设x1,x2两个解，解出了另一个新的解。这代表了如果知道方程中的最小特解，就能推论出所有的解。通解：`Xn = Xn-1  X1 + d  Yn-1  Y1Yn = Xn-1  X1 + Yn-1  Y1`半难以发现正解公式，需要通过自己一步一步推公式。\n\n赛后笔记\n先贪心再暴力打表找规律推公式关于long long 要先仔细读题思考哪些部分需要再修改部分\n\n","dateCreated":"2018-09-20T21:09:57+08:00","dateModified":"2019-05-25T21:13:39+08:00","datePublished":"2018-09-20T21:09:57+08:00","description":"","headline":"算法学习笔记","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://jelech.top/posts/16186/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://jelech.top/posts/16186/","keywords":"算法"}</script>
     <meta name="keywords" content="算法">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="算法学习笔记">
-<meta property="og:url" content="https://jelech.gitee.io/posts/16186/index.html">
+<meta property="og:url" content="https://jelech.top/posts/16186/index.html">
 <meta property="og:site_name" content="Jelech的博客">
 <meta property="og:locale" content="zh-cn">
 <meta property="og:updated_time" content="2019-05-25T13:13:39.047Z">
@@ -34,7 +34,7 @@
         
     
     
-        <meta property="og:image" content="https://jelech.gitee.io/assets/images/avatar.jpg"/>
+        <meta property="og:image" content="https://jelech.top/assets/images/avatar.jpg"/>
     
     
     
@@ -299,7 +299,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/16186/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.top/posts/16186/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -307,7 +307,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/16186/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.top/posts/16186/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -315,7 +315,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/16186/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.top/posts/16186/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -390,7 +390,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/16186/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.top/posts/16186/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -398,7 +398,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/16186/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.top/posts/16186/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -406,7 +406,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/16186/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.top/posts/16186/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -433,7 +433,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/16186/">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.top/posts/16186/">
                     <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
                 </a>
             </li>
@@ -441,7 +441,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/16186/">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.top/posts/16186/">
                     <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
                 </a>
             </li>
@@ -449,7 +449,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/16186/">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jelech.top/posts/16186/">
                     <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
                 </a>
             </li>

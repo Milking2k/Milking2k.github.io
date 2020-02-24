@@ -12,17 +12,17 @@
         <meta name="keywords" content="博客,算法,HTML/CSS/JS,游戏服务器,游戏,">
     
     
-        <link rel="icon" href="https://jelech.gitee.io/assets/images/favicon.ico">
+        <link rel="icon" href="https://jelech.top/assets/images/favicon.ico">
         <link rel="Shortcut Icon" type="image/x-icon" href="assets/images/favicon.ico">
     
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\nEducational Codeforces Round 47 (Rated for Div. 2)\n原文链接ABCDEFG\n\nA题意\nA题： 用钱包walt买价值emt的物品，顺序用钱，不找回，最多购买\n\nA题解\n顺序扫一遍，有满足的就加，并后移。一种卡尺操作。\n\n12345678910111213141516171819202122232425#include &lt;iostream&gt;#include &lt;cstdio&gt;using namespace std;int t,n,m,emt[1007],walt[1007];int main(int argc, char const *argv[])&#123;\tscanf(\"%d%d\",&amp;n,&amp;m);\tfor (int i = 0; i &lt; n; ++i) &#123;\t\tscanf(\"%d\",&amp;emt[i]);\t&#125;\tfor (int i = 0; i &lt; m; ++i) &#123;\t\tscanf(\"%d\",&amp;walt[i]);\t&#125;\tint ans=0,j=0;// to the walt\tfor (int i = 0; i &lt; n; ++i)\t&#123;\t\tif(walt[j] &gt;= emt[i])&#123;\t\t\tans++;\t\t\tj++;\t\t&#125;\t&#125;\tprintf(\"%d\\n\", ans);\treturn 0;&#125;\nB题意\nB题：一个字符串只能交换0-1；1-2 问最小串\n\nB题解\n看得出来1可以到任何位置，0和2的位置只能固定。所以，记录一下0，2的位置。在输出完第一个2的前面的0之后，输出所有的1，再继续输出剩下的固定0,2位置。就是结果了。\n\n12345678910111213141516171819202122232425262728#include &lt;iostream&gt;#include &lt;cstdio&gt;#include &lt;cstring&gt;using namespace std;int t,n,m,emt[100007][3],len=0;int main(int argc, char const *argv[])&#123;\tios::sync_with_stdio(false);\tmemset(emt,0,sizeof(emt));\tstring s,s2;\tcin &gt;&gt; s;\tint cnt=0; // 1 nums\tfor (int i = 0; i &lt; s.length(); ++i)\t&#123;\t\tif(s[i]=='1') cnt++;\t\telse s2 += s[i];\t&#125;\tint j=0;\twhile(s2[j]=='0')&#123;\t\tcout &lt;&lt; 0;\t\tj++;\t&#125;\twhile(cnt--)&#123;\t\tcout &lt;&lt; 1;\t&#125;\tcout &lt;&lt; &amp;s2[j];&#125;\nC题意\nC题：每次对一个序列输入x,d；每个数都+x,选择一个点j，向外扩散增加d，分别加到对应的位置上。问最大的平均数是多少？\n\nC题解\n题也说的很清楚了。每次输入的值都加到一个总和里，最后在除n就行了。二者，如果d大于0，则应该尽量让他递增更多，如果d小于0，则应该让j的位置尽量靠中间。公式化简一下，套进去就做出来了。\n\n1234567891011121314151617#include &lt;iostream&gt;#include &lt;cstdio&gt;using namespace std;long long t,n,m,ans=0;int main(int argc, char const *argv[])&#123;\tscanf(\"%d%d\",&amp;n,&amp;m);\tfor (int i = 0; i &lt; m; ++i)\t&#123;\t\tint x,d;\t\tscanf(\"%d%d\",&amp;x,&amp;d);\t\tif(d&gt;0) ans += n*x + d*(n-1)*n/2;\t\telse ans += n*x + d*(n-(n+1)/2)*((n+1)/2);\t&#125;\tprintf(\"%.15f\\n\", 1.0*ans/n);\treturn 0;&#125;\nD题意\nD题：问能否建立一个连通图，这个连通图的所有边的两端点互质，n个点m条边\n\nD题解\n连通图首先得所有点都连上边。其次，所有数都和1互质，因此，直接判断一下n和m的关系，可以a掉部分数据。然后跑一边所有的N个数，对每个数判断大于i的点是否互质，是就加到边几何中，最后判断一下所加的所有边数是否大于了m条边。\n\n123456789101112131415161718192021222324252627282930313233#include &lt;bits/stdc++.h&gt;using namespace std;int t,n,m;struct node&#123;\tint x,y;&#125;emt[100007];int main()&#123;\tscanf(\"%d%d\",&amp;n,&amp;m);\tint len = m; // 需要加的边数\tfor (int i = 1; i &lt;= n &amp;&amp; len; ++i)\t&#123;\t\tfor (int j = i+1; j &lt;= n &amp;&amp; len; ++j)\t\t&#123;\t\t\tif (__gcd(i,j)==1)\t\t\t&#123;\t\t\t\tlen--;\t\t\t\temt[len] = (node)&#123;i,j&#125;;\t\t\t&#125;\t\t&#125;\t&#125;\tif(len || n&gt;m+1)&#123;\t\treturn !printf(\"Impossible\\n\");\t&#125;\tprintf(\"Possible\\n\");\tfor (int i = 0; i &lt; m; ++i)\t&#123;\t\tprintf(\"%d %d\\n\", emt[i].x,emt[i].y);\t&#125;\treturn 0;&#125;\nE题意\nE题： n千米，有n段路，共有n-1个可能可以休息的地方，则共有2^(n-1)种可能的休息方式; 计算 p⋅2^(n−1)\n\nE题解\n这道题就是简单的数论问题。。。但是就是没读懂题。这里的p代表的是期望，p2^(n-1)也就是计算所有的可能的休息方式下的消耗之和。也就分别算出不同ai对结果的贡献就行。最终可以找到规律**a[i]出现的次数是 2^(n-i) + 2^(n-i-1) \\ (n-i)**但是我看了一下大神的代码，更简短，因此贴个大神的超短代码。5 5 \n\n1234567891011121314#include &lt;cstdio&gt;const int p=998244353;int n,l,s,a=0,b=0;int main()&#123;\tint i,j;\tscanf(\"%d\",&amp;n);\tfor(i=1;i&lt;=n;i++)&#123;\t\tscanf(\"%d\",&amp;a);\t\tl=(l*2%p+b)%p;\t\ts=(s*2%p+l+a)%p;\t\tb=a;\t&#125;\tprintf(\"%d\\n\",s);&#125;\nF题意\nA题： 用钱包walt买价值emt的物品，顺序用钱，不找回，最多购买\n\nF题解\nF看题解说是用 DSU on tree。\n\n12\nG题意\nA题： 用钱包walt买价值emt的物品，顺序用钱，不找回，最多购买\n\nG题解\n顺序扫一遍，有满足的就加，并后移。一种卡尺操作。\n\n12\n","dateCreated":"2018-07-18T23:09:57+08:00","dateModified":"2018-12-01T21:40:35+08:00","datePublished":"2018-07-18T23:09:57+08:00","description":"","headline":"CodeForces Round 47 题解","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://jelech.gitee.io/posts/40135/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://jelech.gitee.io/posts/40135/","keywords":"刷题, acm"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\nEducational Codeforces Round 47 (Rated for Div. 2)\n原文链接ABCDEFG\n\nA题意\nA题： 用钱包walt买价值emt的物品，顺序用钱，不找回，最多购买\n\nA题解\n顺序扫一遍，有满足的就加，并后移。一种卡尺操作。\n\n12345678910111213141516171819202122232425#include &lt;iostream&gt;#include &lt;cstdio&gt;using namespace std;int t,n,m,emt[1007],walt[1007];int main(int argc, char const *argv[])&#123;\tscanf(\"%d%d\",&amp;n,&amp;m);\tfor (int i = 0; i &lt; n; ++i) &#123;\t\tscanf(\"%d\",&amp;emt[i]);\t&#125;\tfor (int i = 0; i &lt; m; ++i) &#123;\t\tscanf(\"%d\",&amp;walt[i]);\t&#125;\tint ans=0,j=0;// to the walt\tfor (int i = 0; i &lt; n; ++i)\t&#123;\t\tif(walt[j] &gt;= emt[i])&#123;\t\t\tans++;\t\t\tj++;\t\t&#125;\t&#125;\tprintf(\"%d\\n\", ans);\treturn 0;&#125;\nB题意\nB题：一个字符串只能交换0-1；1-2 问最小串\n\nB题解\n看得出来1可以到任何位置，0和2的位置只能固定。所以，记录一下0，2的位置。在输出完第一个2的前面的0之后，输出所有的1，再继续输出剩下的固定0,2位置。就是结果了。\n\n12345678910111213141516171819202122232425262728#include &lt;iostream&gt;#include &lt;cstdio&gt;#include &lt;cstring&gt;using namespace std;int t,n,m,emt[100007][3],len=0;int main(int argc, char const *argv[])&#123;\tios::sync_with_stdio(false);\tmemset(emt,0,sizeof(emt));\tstring s,s2;\tcin &gt;&gt; s;\tint cnt=0; // 1 nums\tfor (int i = 0; i &lt; s.length(); ++i)\t&#123;\t\tif(s[i]=='1') cnt++;\t\telse s2 += s[i];\t&#125;\tint j=0;\twhile(s2[j]=='0')&#123;\t\tcout &lt;&lt; 0;\t\tj++;\t&#125;\twhile(cnt--)&#123;\t\tcout &lt;&lt; 1;\t&#125;\tcout &lt;&lt; &amp;s2[j];&#125;\nC题意\nC题：每次对一个序列输入x,d；每个数都+x,选择一个点j，向外扩散增加d，分别加到对应的位置上。问最大的平均数是多少？\n\nC题解\n题也说的很清楚了。每次输入的值都加到一个总和里，最后在除n就行了。二者，如果d大于0，则应该尽量让他递增更多，如果d小于0，则应该让j的位置尽量靠中间。公式化简一下，套进去就做出来了。\n\n1234567891011121314151617#include &lt;iostream&gt;#include &lt;cstdio&gt;using namespace std;long long t,n,m,ans=0;int main(int argc, char const *argv[])&#123;\tscanf(\"%d%d\",&amp;n,&amp;m);\tfor (int i = 0; i &lt; m; ++i)\t&#123;\t\tint x,d;\t\tscanf(\"%d%d\",&amp;x,&amp;d);\t\tif(d&gt;0) ans += n*x + d*(n-1)*n/2;\t\telse ans += n*x + d*(n-(n+1)/2)*((n+1)/2);\t&#125;\tprintf(\"%.15f\\n\", 1.0*ans/n);\treturn 0;&#125;\nD题意\nD题：问能否建立一个连通图，这个连通图的所有边的两端点互质，n个点m条边\n\nD题解\n连通图首先得所有点都连上边。其次，所有数都和1互质，因此，直接判断一下n和m的关系，可以a掉部分数据。然后跑一边所有的N个数，对每个数判断大于i的点是否互质，是就加到边几何中，最后判断一下所加的所有边数是否大于了m条边。\n\n123456789101112131415161718192021222324252627282930313233#include &lt;bits/stdc++.h&gt;using namespace std;int t,n,m;struct node&#123;\tint x,y;&#125;emt[100007];int main()&#123;\tscanf(\"%d%d\",&amp;n,&amp;m);\tint len = m; // 需要加的边数\tfor (int i = 1; i &lt;= n &amp;&amp; len; ++i)\t&#123;\t\tfor (int j = i+1; j &lt;= n &amp;&amp; len; ++j)\t\t&#123;\t\t\tif (__gcd(i,j)==1)\t\t\t&#123;\t\t\t\tlen--;\t\t\t\temt[len] = (node)&#123;i,j&#125;;\t\t\t&#125;\t\t&#125;\t&#125;\tif(len || n&gt;m+1)&#123;\t\treturn !printf(\"Impossible\\n\");\t&#125;\tprintf(\"Possible\\n\");\tfor (int i = 0; i &lt; m; ++i)\t&#123;\t\tprintf(\"%d %d\\n\", emt[i].x,emt[i].y);\t&#125;\treturn 0;&#125;\nE题意\nE题： n千米，有n段路，共有n-1个可能可以休息的地方，则共有2^(n-1)种可能的休息方式; 计算 p⋅2^(n−1)\n\nE题解\n这道题就是简单的数论问题。。。但是就是没读懂题。这里的p代表的是期望，p2^(n-1)也就是计算所有的可能的休息方式下的消耗之和。也就分别算出不同ai对结果的贡献就行。最终可以找到规律**a[i]出现的次数是 2^(n-i) + 2^(n-i-1) \\ (n-i)**但是我看了一下大神的代码，更简短，因此贴个大神的超短代码。5 5 \n\n1234567891011121314#include &lt;cstdio&gt;const int p=998244353;int n,l,s,a=0,b=0;int main()&#123;\tint i,j;\tscanf(\"%d\",&amp;n);\tfor(i=1;i&lt;=n;i++)&#123;\t\tscanf(\"%d\",&amp;a);\t\tl=(l*2%p+b)%p;\t\ts=(s*2%p+l+a)%p;\t\tb=a;\t&#125;\tprintf(\"%d\\n\",s);&#125;\nF题意\nA题： 用钱包walt买价值emt的物品，顺序用钱，不找回，最多购买\n\nF题解\nF看题解说是用 DSU on tree。\n\n12\nG题意\nA题： 用钱包walt买价值emt的物品，顺序用钱，不找回，最多购买\n\nG题解\n顺序扫一遍，有满足的就加，并后移。一种卡尺操作。\n\n12\n","dateCreated":"2018-07-18T23:09:57+08:00","dateModified":"2018-12-01T21:40:35+08:00","datePublished":"2018-07-18T23:09:57+08:00","description":"","headline":"CodeForces Round 47 题解","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://jelech.top/posts/40135/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://jelech.top/posts/40135/","keywords":"刷题, acm"}</script>
     <meta name="keywords" content="刷题,acm">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="CodeForces Round 47 题解">
-<meta property="og:url" content="https://jelech.gitee.io/posts/40135/index.html">
+<meta property="og:url" content="https://jelech.top/posts/40135/index.html">
 <meta property="og:site_name" content="Jelech的博客">
 <meta property="og:locale" content="zh-cn">
 <meta property="og:updated_time" content="2018-12-01T13:40:35.835Z">
@@ -34,7 +34,7 @@
         
     
     
-        <meta property="og:image" content="https://jelech.gitee.io/assets/images/avatar.jpg"/>
+        <meta property="og:image" content="https://jelech.top/assets/images/avatar.jpg"/>
     
     
     
@@ -329,7 +329,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/40135/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.top/posts/40135/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -337,7 +337,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/40135/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.top/posts/40135/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -345,7 +345,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/40135/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.top/posts/40135/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -420,7 +420,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/40135/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.top/posts/40135/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -428,7 +428,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/40135/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.top/posts/40135/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -436,7 +436,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/40135/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.top/posts/40135/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -463,7 +463,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/40135/">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.top/posts/40135/">
                     <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
                 </a>
             </li>
@@ -471,7 +471,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/40135/">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.top/posts/40135/">
                     <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
                 </a>
             </li>
@@ -479,7 +479,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/40135/">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jelech.top/posts/40135/">
                     <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
                 </a>
             </li>

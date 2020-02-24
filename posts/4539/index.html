@@ -12,17 +12,17 @@
         <meta name="keywords" content="博客,算法,HTML/CSS/JS,游戏服务器,游戏,">
     
     
-        <link rel="icon" href="https://jelech.gitee.io/assets/images/favicon.ico">
+        <link rel="icon" href="https://jelech.top/assets/images/favicon.ico">
         <link rel="Shortcut Icon" type="image/x-icon" href="assets/images/favicon.ico">
     
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\nRedis key-value数据库（一）\n基础使用移植到单独的一篇文章中：《速查Redis》\n\n数据结构与对象\nredis中实现了一些redis自用的、快速的数据结构。他们组成了redis内部的运行结构，也展现了redis是如何存储key-value值的。他们分别为：\n\n\n简单动态字符串 | 对c语言字符串的封装，优化了许多特性\n链表 | 双向链表\n字典 | 哈希字典，可以进行扩展收缩操作\n跳跃表 | 快查节点，有序集合的底层与内部数据结构中使用\n整数集合 | 集合键的底层实现，只支持升级操作\n压缩列表 | 列表键与哈希键的底层实现\n对象 | 对以上结构进行包装，每个两种以上的编码方式，自带内存回收机制\n\n\n之后再详细更新数据结构的内容\n\n单机数据库操作\n基础使用移植到单独的一篇文章中：《速查Redis》\n\n\n数据库由dict和expires两个字典构成，dict负责保存键值对，expires负责键的过期时间\n主服务器发现过期键后会给所有的从服务器发送DEL命令，显式地删除键。而从服务器发现过期键后并不会删除，而是等待主节点发来DEL命令\n\n过期键的删除策略\n定时删除：（主动）创建一个定时器，让键在过期时间来临时，立即对键进行删除操作\n\n惰性删除：（被动）放任过期的键不管，只有在对键进行访问前，进行检查。如果过期，则删除并返回null\n\n定期删除：（主动）每隔一段时间对数据库进行全盘检查，删除过期的键\n  而我们常使用的是第二个与第三个的结合\n\n\nRDB持久化\nRedis是保存在内存上的数据库，如果断电，则数据会被完全清除。为了持久化数据，出现了RDB持久化技术。他的工作方法是对内存上的键值对数据进行二进制压缩后，写入到磁盘中。\n\nSAVE停止redis现在的工作，进行RDB保存，数据量大的时候会让数据库怠机\nBGSAVE创建一个子进程进行RDB保存，父进程继续进行数据接收返回操作，但操作的数据会暂时保存在RDB缓存空间\n自动保存则需要在配置文件中设置save选线项比如save 900 1代表如果900秒之内有进行1次操作，就进行保存。当然，他是可以设置多个的。\n如果不设置，redis会有默认的save 900 1save 300 10save 60 10000\n​    \ndirty计数器记录了距离上一次save/bgsave操作经历了多少次操作，lastsave保存的是时间\nRDB文件的结构\n\n\nREDIS\ndb_version\ndatabases\nEOF\ncheck_sum\n\n\n\n\n5字节\n4字节\n数据库大小字节\n1字节\n8字节\n\n\n字符’REDIS’\n0006版本号\n数据库号与保存的键值对\n结束符\n校验和\n\n\n\n\nSELECTDB 表示接下来要读一个数据库号\n\n\n\n\n\n\ndb_number 数据库号\n\n\n\n\n\n\nkey_value_pairs键值对[EXPIRESTIME_MS/]TYPE/key/values\n\n\n\n\nAOF持久化\n翻书更新累了。。休一下\n\n","dateCreated":"2019-05-08T11:15:09+08:00","dateModified":"2019-05-08T12:26:55+08:00","datePublished":"2019-05-08T11:15:09+08:00","description":"","headline":"Redis学习（一）","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://jelech.gitee.io/posts/4539/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://jelech.gitee.io/posts/4539/","keywords":"笔记, redis"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\nRedis key-value数据库（一）\n基础使用移植到单独的一篇文章中：《速查Redis》\n\n数据结构与对象\nredis中实现了一些redis自用的、快速的数据结构。他们组成了redis内部的运行结构，也展现了redis是如何存储key-value值的。他们分别为：\n\n\n简单动态字符串 | 对c语言字符串的封装，优化了许多特性\n链表 | 双向链表\n字典 | 哈希字典，可以进行扩展收缩操作\n跳跃表 | 快查节点，有序集合的底层与内部数据结构中使用\n整数集合 | 集合键的底层实现，只支持升级操作\n压缩列表 | 列表键与哈希键的底层实现\n对象 | 对以上结构进行包装，每个两种以上的编码方式，自带内存回收机制\n\n\n之后再详细更新数据结构的内容\n\n单机数据库操作\n基础使用移植到单独的一篇文章中：《速查Redis》\n\n\n数据库由dict和expires两个字典构成，dict负责保存键值对，expires负责键的过期时间\n主服务器发现过期键后会给所有的从服务器发送DEL命令，显式地删除键。而从服务器发现过期键后并不会删除，而是等待主节点发来DEL命令\n\n过期键的删除策略\n定时删除：（主动）创建一个定时器，让键在过期时间来临时，立即对键进行删除操作\n\n惰性删除：（被动）放任过期的键不管，只有在对键进行访问前，进行检查。如果过期，则删除并返回null\n\n定期删除：（主动）每隔一段时间对数据库进行全盘检查，删除过期的键\n  而我们常使用的是第二个与第三个的结合\n\n\nRDB持久化\nRedis是保存在内存上的数据库，如果断电，则数据会被完全清除。为了持久化数据，出现了RDB持久化技术。他的工作方法是对内存上的键值对数据进行二进制压缩后，写入到磁盘中。\n\nSAVE停止redis现在的工作，进行RDB保存，数据量大的时候会让数据库怠机\nBGSAVE创建一个子进程进行RDB保存，父进程继续进行数据接收返回操作，但操作的数据会暂时保存在RDB缓存空间\n自动保存则需要在配置文件中设置save选线项比如save 900 1代表如果900秒之内有进行1次操作，就进行保存。当然，他是可以设置多个的。\n如果不设置，redis会有默认的save 900 1save 300 10save 60 10000\n​    \ndirty计数器记录了距离上一次save/bgsave操作经历了多少次操作，lastsave保存的是时间\nRDB文件的结构\n\n\nREDIS\ndb_version\ndatabases\nEOF\ncheck_sum\n\n\n\n\n5字节\n4字节\n数据库大小字节\n1字节\n8字节\n\n\n字符’REDIS’\n0006版本号\n数据库号与保存的键值对\n结束符\n校验和\n\n\n\n\nSELECTDB 表示接下来要读一个数据库号\n\n\n\n\n\n\ndb_number 数据库号\n\n\n\n\n\n\nkey_value_pairs键值对[EXPIRESTIME_MS/]TYPE/key/values\n\n\n\n\nAOF持久化\n翻书更新累了。。休一下\n\n","dateCreated":"2019-05-08T11:15:09+08:00","dateModified":"2019-05-08T12:26:55+08:00","datePublished":"2019-05-08T11:15:09+08:00","description":"","headline":"Redis学习（一）","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://jelech.top/posts/4539/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://jelech.top/posts/4539/","keywords":"笔记, redis"}</script>
     <meta name="keywords" content="笔记,redis">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="Redis学习（一）">
-<meta property="og:url" content="https://jelech.gitee.io/posts/4539/index.html">
+<meta property="og:url" content="https://jelech.top/posts/4539/index.html">
 <meta property="og:site_name" content="Jelech的博客">
 <meta property="og:locale" content="zh-cn">
 <meta property="og:updated_time" content="2019-05-08T04:26:55.961Z">
@@ -34,7 +34,7 @@
         
     
     
-        <meta property="og:image" content="https://jelech.gitee.io/assets/images/avatar.jpg"/>
+        <meta property="og:image" content="https://jelech.top/assets/images/avatar.jpg"/>
     
     
     
@@ -370,7 +370,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/4539/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.top/posts/4539/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -378,7 +378,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/4539/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.top/posts/4539/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -386,7 +386,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/4539/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.top/posts/4539/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -461,7 +461,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/4539/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.top/posts/4539/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -469,7 +469,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/4539/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.top/posts/4539/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -477,7 +477,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/4539/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.top/posts/4539/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -504,7 +504,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/4539/">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.top/posts/4539/">
                     <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
                 </a>
             </li>
@@ -512,7 +512,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/4539/">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.top/posts/4539/">
                     <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
                 </a>
             </li>
@@ -520,7 +520,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/4539/">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jelech.top/posts/4539/">
                     <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
                 </a>
             </li>

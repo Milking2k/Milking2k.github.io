@@ -12,17 +12,17 @@
         <meta name="keywords" content="博客,算法,HTML/CSS/JS,游戏服务器,游戏,">
     
     
-        <link rel="icon" href="https://jelech.gitee.io/assets/images/favicon.ico">
+        <link rel="icon" href="https://jelech.top/assets/images/favicon.ico">
         <link rel="Shortcut Icon" type="image/x-icon" href="assets/images/favicon.ico">
     
     
         <link rel="alternate" type="application/atom+xml" title="RSS" href="/atom.xml">
     
-    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n开始前准备一下安装下载下载连接\nwindows 版本安装到一个比较好找的目录,比如 F:/Go\n配置Go PATH添加环境变量GOPATH，写入一个路径，这里是你写代码的地方，用户变量下也有GOPATH【有默认值】，需要更新一下\n新建 bin, pkg, src.\nbin路径加入PATH\n添加GOROOT 并设置为GO安装的目录（这里是自己出了问题才加上的）\n\n使用 go env 检查环境配置是否正确\n\n目录结构\nbin 存放编译后的二进制文件\npkg存放编译后的库文件\nsrc是放源代码的地方\n\n再src下以网站的形式构建文件夹：比如创建 jelech.top 名字的文件夹。 这里实际上是写的仓库连接名，所以可以写入github的连接地址\n在jelech.top下创建作者名，比如jelech\n在作者名下创建项目名\nIDE，用VSCODE，不多说了\n安装中文插件\n安装GO插件\n在写go时候，vscode会提示安装各种插件。而由于墙的原因会下载失败。需手动下载安装\n从release下载src包\n再额外从lint直接拉取 git clone https://github.com/golang/lint.git\n到src的根目录，也就是GOPATH上运行 go install golang.org/x/lint\n重新运行的时候安装就能成功。还是不行就手动复制到cmd中\n\n\n\n编译go build 编译到当前目录 -o 重新定义名字，默认名为项目名【文件夹】\ngo run path 可以直接编译完成后直接运行，但没有保存\ngo install 编译完成后放到GOPATH/bin路径下\n交叉编译交叉编译代表在一个平台编译其他平台的代码，需要设置一些东西：123SET CGO_ENABLED=0   # 禁用CGOSET GOOS=linux      # 目标平台SET GOARCH=amd64    # 目标处理架构为amd64\nGO辅助命令go doc builtin.delete 查看内置的go文档\nGO基础package main 当前包名\nimport &quot;name&quot; 导入其他包\n只可以可设置全局变量、函数。和python不一样, 他是和c++一样，main函数等。\n变量与常量\n标识符和其他语言一样\n\n关键字大部分和其他语言差不多，有一些特殊的，比如select, defer, func, chan...\n变量声明再使用go语言中变量声明后必须使用\nvar name string 声明一个保存字符串类型的变量，名字为name\n1234567891011121314// 批量声明var (    name string    age int    man bool)// 声明自动赋值【这里等号前的类型可以省略】var s1 = \"hi\"var i1 = 12// **函数内**使用简短变量声明s3 := \"hahah\"i2 := 15s1, s2 := 1, 2\n匿名变量一个下划线, 他不会占用空间，不会分配内存，所以不存在重复声明\n常量 const就是普通的常量，和c++类似性质如果某一行没有写值，则表示和上面是一样的。这个只有在const的批量声明时可用\niota常量计数器也就是可用代表为从0开始的enum, 一般使用在const批量声明中，每新增的一行时候，iota会自动+1来用列子检测学习一下：\n123456789const (    b1 = iota //0    b2 = iota //1    _    b3        // 3    b4 = 100  // 100    b5        // 100  记住和上面一样    b6 = iota // 6    记住iota是const每新增一行就+1)\n数据类型整型\nint8\nint16\nint32\nint64\n以上对应无符号uint**\nuintptr 存放指针\n\n进制无法直接定义二进制，八进制前为0，16进制前为0x\n浮点32长度和64长度，默认为float64。不能直接赋值，需要强转函数\nf1 := 123.123\n复数complex64 / complex128\n布尔值Go中不能将整形转为布尔类型，不能参与数值运算\n字符串UTF-8编码，天然自动支持中文，只能用双引号包括，单引号包括是字符\n\n注意名字是strings，有个s\n\n\n\\ 为转义字符\n&quot;`&quot; esc下面的字符用于表示多行字符串和整个转义, 注意这个前缀会加入\n\n+ 进行字符串拼接\n\nstrings.Split(string, str) 按照str进行分割\nstrings.Contains(string, str) 包含\nstrings.HasPrefix\nstrings.HasSuffix\nstrings.Index(str, c) 某个字符的位置，从前往后第一个\nstrings.LastIndex(str, c) 从后往前第一个\nstrings.Join(ret[], c) 字符串数组用c进行拼接起来\nstring 不可修改，必须强转为 []byte 或 []rune 类型后再做修改\n单引号存的是int32的整数（中文字符）  1fmt.Printf(\"%T %T\\n\", 'c', '测') // int32 int32\n\n\n打印打印的时候对应 %b:2 %d:10 %o:8 %x:16 %T:类型 %v:打印值(任何类型)1234import \"fmt\"fmt.Printf(\"name:%s\", name) //可以格式化println(\"name:\", name) // 只能序列打印s1 := fmt.Sprintf() // 格式化后返回为字符串\n判断语句是python和c++的结合体，没有小括号，但有大括号1234567891011if 1 &gt; 0 &#123;    println(\"Hello! Let's Go0!\")&#125; else if 2 &gt; 1 &#123;    println(\"Hello! Let's Go1!\")&#125; else &#123;    println(\"Hello! Let's Go2!\")&#125;if age := 19; age &gt; 18 &#123;    // 临时的age进行判断， 作用域只在if中&#125;\n循环循环语句只有for语句，但是有很多的变种。break, continue正常使用123456789101112for i := 0; i &lt; 10; i++ &#123; // go中没有++i&#125;for i &lt; 10 &#123;&#125;for &#123; // 无限循环&#125;s := \"123hihi\"for k, v := range s &#123; // 遍历数组&#125;\nswitch语句1234567891011121314151617switch variable:=3;variable &#123; // 赋值特性和上面的if所说的类似    case 1:        println(\"1\")    case 2:        println(\"2\")    default:        println(\"default\")&#125;switch &#123;    case age &lt; 25:        println(25)    case age &gt; 60:        println(60)&#125;fallthrough // 兼容c语言中的case穿透，意思是执行多个case\ngoto\n不鼓励使用\n\n设置一个标志位进行跳转\n运算符+ - * / % 基本运算符\n++, -- 是语句，不能放到=右侧\n== != &gt; &gt;= &lt; &lt;= 返回布尔值\n&amp;&amp; || ! 基本逻辑运算\n&amp; | ^ &lt;&lt; &gt;&gt; 位运算符\n= += -= *= /= %= &lt;&lt;= &gt;&gt;= &amp;= |= ^= 基本赋值运算符\n复合数据类型数组数组是值类型，赋值时会赋值一个新的过去\nlen() 求长度\n123456789101112var a [3]int // 存放大小为10，类型为int的数组// 初始化a = [3]int&#123;1, 2, 3&#125; //末尾补0b := [...]int&#123;1, 2, 3, 4&#125; // 根据初始值自动推断c := [5]int &#123;0:1, 4:2&#125; // 1,0,0,0,2 用【位置：值】赋值x := [...]int&#123;0: 1, 5: 2&#125; // 中间自动添0// 多维数组d := [1][2]int&#123;    [2]int&#123;1, 2&#125;&#125; // 3*2 的数组， 3行2列\n切片\n数组上做的一层封装，是一个可变长度的序列\n\n\n切片本质就是框住了一块连续的内存，所以在对切片的任何修改时，会影响到整个内存映射的数组上\n切片不能直接比较\n声明没初始化才是nil，len()和cap()为0时候并不一定是nil\n注意 切片是一个引用类型，都指向了底层的一个数组\n\n1234567// 基本和数组一样，但是中括号中没有任何东西var s []int // s默认值为nil//基本初始化和数组一样， 可以由数组来初始化s1 := [...]int&#123;1,2,3,4&#125;//不可超过原来的大小，类似python，可省略s2 := s1[1:3] //左闭右开\n切片长度用len()， 可扩充容量为cap()12fmt.Println(len(s2)) // 2 len为长度 取当前切片的长度fmt.Println(cap(s2)) // 3 cap为容量 取当前切片的第一个到切片源最后\n切片再切片1s3 := s2[2:] // 一个元素，3\nmake函数构造切片1s1 := make([]int, 5, 10) // int类型，长度5，容量5的切片\n切片的append() 与 copy()\ns = append(s, 1) 用于切片元素的添加，必须有接收变量\ns = append(s, s1...) 将s1切片拆开添加到s中\n切片的赋值=是引用赋值, 而copy是深拷贝 copy(des, src)\n没有删除函数, 需要自定义\na1 = append(a1[:1], a1[2:]...) 删除第一个\nsort函数对切片进行排序\ncap如果不够了会自动增倍.策略为:\n\n切片item不同类型的处理方式不一样\n新申请容量大于原来 2*old.cap, 最终容量就是新申请的\n如果旧的小于1024则新的翻倍\n如大于1024,则一直增加旧的1/4,直到大于需要的\n如果最终容量计算溢出,则最终容量就是新申请的\n\n指针&amp; 取地址\n* 根据地址取值\nnew, make区别\n两者都是申请内存的\nnew很少用,用于对基本数据int, string声明\nmake只用于slice, map, channel的初始化\n\nmapmap[keyType]valueType\nmap需要初始化后才能使用 mapname = make(map[keyType]valueType, len) 。尽量再开始就估算好容量，避免在之后进行动态的扩容\n返回值是value值与ok是否能查到值 v, ok := mapNmae[key]， 取不到会返回0值\nfor k,v := range mapName 遍历key值与value值\n删除不存在的key值时会直接跳过\n函数12func funName(参数)(返回值) &#123;&#125;\n如果返回值有值，则一定要写return，返回值代表在函数中提前声明了一个遍历，如果是命名了的返回值，则return后可以不写。\n参数简写：如果多个参数的类型一致，可以把前面的进行省略12func f(x,y,z int, a,b string) &#123;&#125;\n可变长参数：func f(a int, b ...string) 可以传多个同类型的。b的类型是切片。必须放在最后\n函数不可重载，意思是必须名字不一样\n函数中不嫩声明函数\ndefer语句把后面的跟着的函数延迟到函数即将返回的时候再执行\n比如说可以先用defer关闭一个文件、关闭数据库等操作。他会自动再推出函数的时候自动运行\n执行的顺序是逆序的，也就是说多个defer之间，先声明的defer会后执行\n机制：return语句不是原子操作，他会先返回值赋值，再RET指令，而defer语句就发生在这里两个操作之间。\n这里需要提醒一点，在返回值是在函数名后声明的，那么返回值是这个变量，而如果在defer语句对这个变量操作，会影响到返回值！而如果没有声明名字，是匿名的返回值，或者是在函数内声明的变量进行返回，这样返回值是赋值在其他地方的，defer并不会影响到返回值。12345678910func f1() (x int) &#123;    defer func(x int) &#123;x++&#125; // 会修改    return 1&#125;func f2() int &#123;    x := 1    defer func(x int) &#123;x++&#125; // 不会修改    return x&#125;\n函数类型与变量函数作为参数传入,也可以作为返回值：12345func f(ft func()int) &#123;&#125;func f(x func()int) (func(int, int) int) &#123;    return x&#125;\n有匿名函数，用法是直接省略函数名的声明，这样可以在函数内部声明一个函数。如果是直调用一次的函数，还可以简写成立即执行函数\n闭包一个函数包含了他外部作用域的其他变量的引用\n12345678910func adder(x int) func(int)int&#123;    return func(y int) int &#123;        x += y        return x    &#125;&#125;ret := adder(100)ret2 := ret(200) // 300ret3 := ret(3) // 303// 注意这里x是封装到了函数内部，这个函数就能带有一定的记忆性了\nlinuxzip [-AcdDfFghjJKlLmoqrSTuvVwXyz$][-b &lt;工作目录&gt;][-ll][-n &lt;字尾字符串&gt;][-t &lt;日期时间&gt;][-&lt;压缩效率&gt;][压缩文件][文件...][-i &lt;范本样式&gt;][-x &lt;范本样式&gt;]\n","dateCreated":"2019-11-03T18:09:33+08:00","dateModified":"2019-12-05T12:10:27+08:00","datePublished":"2019-11-03T18:09:33+08:00","description":"","headline":"一起学GO(一)","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://jelech.gitee.io/posts/41312/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://jelech.gitee.io/posts/41312/","keywords":"笔记, GO"}</script>
+    <script type="application/ld+json">{"@context":"http://schema.org","@type":"BlogPosting","author":{"@type":"Person","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg"},"articleBody":"\n\n开始前准备一下安装下载下载连接\nwindows 版本安装到一个比较好找的目录,比如 F:/Go\n配置Go PATH添加环境变量GOPATH，写入一个路径，这里是你写代码的地方，用户变量下也有GOPATH【有默认值】，需要更新一下\n新建 bin, pkg, src.\nbin路径加入PATH\n添加GOROOT 并设置为GO安装的目录（这里是自己出了问题才加上的）\n\n使用 go env 检查环境配置是否正确\n\n目录结构\nbin 存放编译后的二进制文件\npkg存放编译后的库文件\nsrc是放源代码的地方\n\n再src下以网站的形式构建文件夹：比如创建 jelech.top 名字的文件夹。 这里实际上是写的仓库连接名，所以可以写入github的连接地址\n在jelech.top下创建作者名，比如jelech\n在作者名下创建项目名\nIDE，用VSCODE，不多说了\n安装中文插件\n安装GO插件\n在写go时候，vscode会提示安装各种插件。而由于墙的原因会下载失败。需手动下载安装\n从release下载src包\n再额外从lint直接拉取 git clone https://github.com/golang/lint.git\n到src的根目录，也就是GOPATH上运行 go install golang.org/x/lint\n重新运行的时候安装就能成功。还是不行就手动复制到cmd中\n\n\n\n编译go build 编译到当前目录 -o 重新定义名字，默认名为项目名【文件夹】\ngo run path 可以直接编译完成后直接运行，但没有保存\ngo install 编译完成后放到GOPATH/bin路径下\n交叉编译交叉编译代表在一个平台编译其他平台的代码，需要设置一些东西：123SET CGO_ENABLED=0   # 禁用CGOSET GOOS=linux      # 目标平台SET GOARCH=amd64    # 目标处理架构为amd64\nGO辅助命令go doc builtin.delete 查看内置的go文档\nGO基础package main 当前包名\nimport &quot;name&quot; 导入其他包\n只可以可设置全局变量、函数。和python不一样, 他是和c++一样，main函数等。\n变量与常量\n标识符和其他语言一样\n\n关键字大部分和其他语言差不多，有一些特殊的，比如select, defer, func, chan...\n变量声明再使用go语言中变量声明后必须使用\nvar name string 声明一个保存字符串类型的变量，名字为name\n1234567891011121314// 批量声明var (    name string    age int    man bool)// 声明自动赋值【这里等号前的类型可以省略】var s1 = \"hi\"var i1 = 12// **函数内**使用简短变量声明s3 := \"hahah\"i2 := 15s1, s2 := 1, 2\n匿名变量一个下划线, 他不会占用空间，不会分配内存，所以不存在重复声明\n常量 const就是普通的常量，和c++类似性质如果某一行没有写值，则表示和上面是一样的。这个只有在const的批量声明时可用\niota常量计数器也就是可用代表为从0开始的enum, 一般使用在const批量声明中，每新增的一行时候，iota会自动+1来用列子检测学习一下：\n123456789const (    b1 = iota //0    b2 = iota //1    _    b3        // 3    b4 = 100  // 100    b5        // 100  记住和上面一样    b6 = iota // 6    记住iota是const每新增一行就+1)\n数据类型整型\nint8\nint16\nint32\nint64\n以上对应无符号uint**\nuintptr 存放指针\n\n进制无法直接定义二进制，八进制前为0，16进制前为0x\n浮点32长度和64长度，默认为float64。不能直接赋值，需要强转函数\nf1 := 123.123\n复数complex64 / complex128\n布尔值Go中不能将整形转为布尔类型，不能参与数值运算\n字符串UTF-8编码，天然自动支持中文，只能用双引号包括，单引号包括是字符\n\n注意名字是strings，有个s\n\n\n\\ 为转义字符\n&quot;`&quot; esc下面的字符用于表示多行字符串和整个转义, 注意这个前缀会加入\n\n+ 进行字符串拼接\n\nstrings.Split(string, str) 按照str进行分割\nstrings.Contains(string, str) 包含\nstrings.HasPrefix\nstrings.HasSuffix\nstrings.Index(str, c) 某个字符的位置，从前往后第一个\nstrings.LastIndex(str, c) 从后往前第一个\nstrings.Join(ret[], c) 字符串数组用c进行拼接起来\nstring 不可修改，必须强转为 []byte 或 []rune 类型后再做修改\n单引号存的是int32的整数（中文字符）  1fmt.Printf(\"%T %T\\n\", 'c', '测') // int32 int32\n\n\n打印打印的时候对应 %b:2 %d:10 %o:8 %x:16 %T:类型 %v:打印值(任何类型)1234import \"fmt\"fmt.Printf(\"name:%s\", name) //可以格式化println(\"name:\", name) // 只能序列打印s1 := fmt.Sprintf() // 格式化后返回为字符串\n判断语句是python和c++的结合体，没有小括号，但有大括号1234567891011if 1 &gt; 0 &#123;    println(\"Hello! Let's Go0!\")&#125; else if 2 &gt; 1 &#123;    println(\"Hello! Let's Go1!\")&#125; else &#123;    println(\"Hello! Let's Go2!\")&#125;if age := 19; age &gt; 18 &#123;    // 临时的age进行判断， 作用域只在if中&#125;\n循环循环语句只有for语句，但是有很多的变种。break, continue正常使用123456789101112for i := 0; i &lt; 10; i++ &#123; // go中没有++i&#125;for i &lt; 10 &#123;&#125;for &#123; // 无限循环&#125;s := \"123hihi\"for k, v := range s &#123; // 遍历数组&#125;\nswitch语句1234567891011121314151617switch variable:=3;variable &#123; // 赋值特性和上面的if所说的类似    case 1:        println(\"1\")    case 2:        println(\"2\")    default:        println(\"default\")&#125;switch &#123;    case age &lt; 25:        println(25)    case age &gt; 60:        println(60)&#125;fallthrough // 兼容c语言中的case穿透，意思是执行多个case\ngoto\n不鼓励使用\n\n设置一个标志位进行跳转\n运算符+ - * / % 基本运算符\n++, -- 是语句，不能放到=右侧\n== != &gt; &gt;= &lt; &lt;= 返回布尔值\n&amp;&amp; || ! 基本逻辑运算\n&amp; | ^ &lt;&lt; &gt;&gt; 位运算符\n= += -= *= /= %= &lt;&lt;= &gt;&gt;= &amp;= |= ^= 基本赋值运算符\n复合数据类型数组数组是值类型，赋值时会赋值一个新的过去\nlen() 求长度\n123456789101112var a [3]int // 存放大小为10，类型为int的数组// 初始化a = [3]int&#123;1, 2, 3&#125; //末尾补0b := [...]int&#123;1, 2, 3, 4&#125; // 根据初始值自动推断c := [5]int &#123;0:1, 4:2&#125; // 1,0,0,0,2 用【位置：值】赋值x := [...]int&#123;0: 1, 5: 2&#125; // 中间自动添0// 多维数组d := [1][2]int&#123;    [2]int&#123;1, 2&#125;&#125; // 3*2 的数组， 3行2列\n切片\n数组上做的一层封装，是一个可变长度的序列\n\n\n切片本质就是框住了一块连续的内存，所以在对切片的任何修改时，会影响到整个内存映射的数组上\n切片不能直接比较\n声明没初始化才是nil，len()和cap()为0时候并不一定是nil\n注意 切片是一个引用类型，都指向了底层的一个数组\n\n1234567// 基本和数组一样，但是中括号中没有任何东西var s []int // s默认值为nil//基本初始化和数组一样， 可以由数组来初始化s1 := [...]int&#123;1,2,3,4&#125;//不可超过原来的大小，类似python，可省略s2 := s1[1:3] //左闭右开\n切片长度用len()， 可扩充容量为cap()12fmt.Println(len(s2)) // 2 len为长度 取当前切片的长度fmt.Println(cap(s2)) // 3 cap为容量 取当前切片的第一个到切片源最后\n切片再切片1s3 := s2[2:] // 一个元素，3\nmake函数构造切片1s1 := make([]int, 5, 10) // int类型，长度5，容量5的切片\n切片的append() 与 copy()\ns = append(s, 1) 用于切片元素的添加，必须有接收变量\ns = append(s, s1...) 将s1切片拆开添加到s中\n切片的赋值=是引用赋值, 而copy是深拷贝 copy(des, src)\n没有删除函数, 需要自定义\na1 = append(a1[:1], a1[2:]...) 删除第一个\nsort函数对切片进行排序\ncap如果不够了会自动增倍.策略为:\n\n切片item不同类型的处理方式不一样\n新申请容量大于原来 2*old.cap, 最终容量就是新申请的\n如果旧的小于1024则新的翻倍\n如大于1024,则一直增加旧的1/4,直到大于需要的\n如果最终容量计算溢出,则最终容量就是新申请的\n\n指针&amp; 取地址\n* 根据地址取值\nnew, make区别\n两者都是申请内存的\nnew很少用,用于对基本数据int, string声明\nmake只用于slice, map, channel的初始化\n\nmapmap[keyType]valueType\nmap需要初始化后才能使用 mapname = make(map[keyType]valueType, len) 。尽量再开始就估算好容量，避免在之后进行动态的扩容\n返回值是value值与ok是否能查到值 v, ok := mapNmae[key]， 取不到会返回0值\nfor k,v := range mapName 遍历key值与value值\n删除不存在的key值时会直接跳过\n函数12func funName(参数)(返回值) &#123;&#125;\n如果返回值有值，则一定要写return，返回值代表在函数中提前声明了一个遍历，如果是命名了的返回值，则return后可以不写。\n参数简写：如果多个参数的类型一致，可以把前面的进行省略12func f(x,y,z int, a,b string) &#123;&#125;\n可变长参数：func f(a int, b ...string) 可以传多个同类型的。b的类型是切片。必须放在最后\n函数不可重载，意思是必须名字不一样\n函数中不嫩声明函数\ndefer语句把后面的跟着的函数延迟到函数即将返回的时候再执行\n比如说可以先用defer关闭一个文件、关闭数据库等操作。他会自动再推出函数的时候自动运行\n执行的顺序是逆序的，也就是说多个defer之间，先声明的defer会后执行\n机制：return语句不是原子操作，他会先返回值赋值，再RET指令，而defer语句就发生在这里两个操作之间。\n这里需要提醒一点，在返回值是在函数名后声明的，那么返回值是这个变量，而如果在defer语句对这个变量操作，会影响到返回值！而如果没有声明名字，是匿名的返回值，或者是在函数内声明的变量进行返回，这样返回值是赋值在其他地方的，defer并不会影响到返回值。12345678910func f1() (x int) &#123;    defer func(x int) &#123;x++&#125; // 会修改    return 1&#125;func f2() int &#123;    x := 1    defer func(x int) &#123;x++&#125; // 不会修改    return x&#125;\n函数类型与变量函数作为参数传入,也可以作为返回值：12345func f(ft func()int) &#123;&#125;func f(x func()int) (func(int, int) int) &#123;    return x&#125;\n有匿名函数，用法是直接省略函数名的声明，这样可以在函数内部声明一个函数。如果是直调用一次的函数，还可以简写成立即执行函数\n闭包一个函数包含了他外部作用域的其他变量的引用\n12345678910func adder(x int) func(int)int&#123;    return func(y int) int &#123;        x += y        return x    &#125;&#125;ret := adder(100)ret2 := ret(200) // 300ret3 := ret(3) // 303// 注意这里x是封装到了函数内部，这个函数就能带有一定的记忆性了\nlinuxzip [-AcdDfFghjJKlLmoqrSTuvVwXyz$][-b &lt;工作目录&gt;][-ll][-n &lt;字尾字符串&gt;][-t &lt;日期时间&gt;][-&lt;压缩效率&gt;][压缩文件][文件...][-i &lt;范本样式&gt;][-x &lt;范本样式&gt;]\n","dateCreated":"2019-11-03T18:09:33+08:00","dateModified":"2019-12-05T12:10:27+08:00","datePublished":"2019-11-03T18:09:33+08:00","description":"","headline":"一起学GO(一)","image":[],"mainEntityOfPage":{"@type":"WebPage","@id":"https://jelech.top/posts/41312/"},"publisher":{"@type":"Organization","name":"Jelech","sameAs":["https://github.com/jelech","mailto"],"image":"avatar.jpg","logo":{"@type":"ImageObject","url":"avatar.jpg"}},"url":"https://jelech.top/posts/41312/","keywords":"笔记, GO"}</script>
     <meta name="keywords" content="笔记,GO">
 <meta property="og:type" content="blog">
 <meta property="og:title" content="一起学GO(一)">
-<meta property="og:url" content="https://jelech.gitee.io/posts/41312/index.html">
+<meta property="og:url" content="https://jelech.top/posts/41312/index.html">
 <meta property="og:site_name" content="Jelech的博客">
 <meta property="og:locale" content="zh-cn">
 <meta property="og:updated_time" content="2019-12-05T04:10:27.040Z">
@@ -34,7 +34,7 @@
         
     
     
-        <meta property="og:image" content="https://jelech.gitee.io/assets/images/avatar.jpg"/>
+        <meta property="og:image" content="https://jelech.top/assets/images/avatar.jpg"/>
     
     
     
@@ -431,7 +431,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/41312/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.top/posts/41312/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -439,7 +439,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/41312/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.top/posts/41312/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -447,7 +447,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/41312/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.top/posts/41312/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -522,7 +522,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/41312/" title="分享到 Facebook">
+                <a class="post-action-btn btn btn--default" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.top/posts/41312/" title="分享到 Facebook">
                     <i class="fab fa-facebook" aria-hidden="true"></i>
                 </a>
             </li>
@@ -530,7 +530,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/41312/" title="分享到 Twitter">
+                <a class="post-action-btn btn btn--default" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.top/posts/41312/" title="分享到 Twitter">
                     <i class="fab fa-twitter" aria-hidden="true"></i>
                 </a>
             </li>
@@ -538,7 +538,7 @@
             
             
             <li class="post-action hide-xs">
-                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/41312/" title="分享到 Google+">
+                <a class="post-action-btn btn btn--default" target="new" href="https://plus.google.com/share?url=https://jelech.top/posts/41312/" title="分享到 Google+">
                     <i class="fab fa-google-plus" aria-hidden="true"></i>
                 </a>
             </li>
@@ -565,7 +565,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.gitee.io/posts/41312/">
+                <a class="share-option-btn" target="new" href="https://www.facebook.com/sharer/sharer.php?u=https://jelech.top/posts/41312/">
                     <i class="fab fa-facebook" aria-hidden="true"></i><span>分享到 Facebook</span>
                 </a>
             </li>
@@ -573,7 +573,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.gitee.io/posts/41312/">
+                <a class="share-option-btn" target="new" href="https://twitter.com/intent/tweet?text=https://jelech.top/posts/41312/">
                     <i class="fab fa-twitter" aria-hidden="true"></i><span>分享到 Twitter</span>
                 </a>
             </li>
@@ -581,7 +581,7 @@
             
             
             <li class="share-option">
-                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jelech.gitee.io/posts/41312/">
+                <a class="share-option-btn" target="new" href="https://plus.google.com/share?url=https://jelech.top/posts/41312/">
                     <i class="fab fa-google-plus" aria-hidden="true"></i><span>分享到 Google+</span>
                 </a>
             </li>
